@@ -30,6 +30,8 @@ Route::group(["middleware"=>"auth:sanctum"],function() {
         Route::put('/{slug}',[CategoryController::class,'update']);
         Route::delete('/{slug}',[CategoryController::class,'destroy']);
     });
+
+    Route::get('/user',[ApiAuthController::class,'user']);
 });
 
 

@@ -74,9 +74,9 @@ class MenuController extends Controller
         
         if ($menu->user_id !== $request->user()->id) return response("You are Not Authenticate",401);
         
-        $menu->categories()->sync($request->categories);
-        
         if(!$menu->update($request->except(['categories']))) return response("Update Fail",400);
+        
+        $menu->categories()->sync($request->categories);
         
         return response($menu->fresh(),201);
     }

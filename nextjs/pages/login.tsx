@@ -1,12 +1,41 @@
+import { setCookie } from "cookies-next";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai"
+import { login } from "../api";
+import { AppState } from "../context/AppProvider";
+import { LOGIN } from "../types";
+import { authLogin } from "../utils/localstorage";
+
 
 const Login: NextPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  
+  const [form, setForm] = useState<LOGIN>({email : "" , password : ""})
+  const route = useRouter();
+  const {setUser} = AppState();
+
+  const handleChange = (e : React.ChangeEvent<HTMLInputElement>)=>{
+    setForm({
+      ...form,
+      [e.target.name] : e.target.value
+    })
+  }
+
+  const handleSubmit = (e : React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault();
+    login(form)
+      .then((response:any)=> {
+        authLogin(response.data);
+        setUser(response.data.user);
+        setCookie('token',response.data.token)
+        route.push('/')
+      })
+      .catch((response)=> console.log(response))
+  }
+
   return (
     <div>
       <Head>
@@ -17,7 +46,7 @@ const Login: NextPage = () => {
       <div className="min-h-screen flex flex-col items-center py-3">
         <h1 className="text-3xl text-textGreen font-semibold mb-3">Signup</h1>
 
-        <form action="" className="w-4/6">
+        <form onSubmit={handleSubmit} className="w-4/6">
         
           <div className="flex flex-col w-full mb-2">
             <label className="mb-2 text-textGray" htmlFor="email">
@@ -28,6 +57,7 @@ const Login: NextPage = () => {
               name="email"
               id="email"
               className="h-10 rounded-md border border-bgGreen px-2 focus:outline-textGreen"
+              onChange={handleChange}
             />
           </div>
 
@@ -41,6 +71,7 @@ const Login: NextPage = () => {
                 name="password"
                 id="password"
                 className="w-full h-10 rounded-md border border-bgGreen px-2 focus-within:outline-textGreen"
+                onChange={handleChange}
               />
               <div onClick={()=> setShowPassword(!showPassword)} className="flex items-center justify-center absolute top-0 right-0 w-10 h-full">
                 {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} /> }

@@ -2,8 +2,8 @@ import { NextPage } from 'next'
 import React from 'react'
 
 interface Props {
-    title : string,
-    value : string
+    title? : string,
+    value? : string
 }
 
 const Detail : NextPage<Props> = ({title,value})=> {

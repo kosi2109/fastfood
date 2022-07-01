@@ -36,6 +36,8 @@ class ApiAuthController extends Controller
 
     public function register(Request $request)
     {
+        if($request->password != $request->password2) return response(["message"=>"Password not match"],400);
+
         $register_request = new RegisterRequest();
         
         $validate = Validator::make($request->all(),$register_request->rules(),$register_request->messages());
@@ -43,6 +45,11 @@ class ApiAuthController extends Controller
         if ($validate->fails()) return response($validate->errors(),400);
         
         return response(User::create($request->all()),201);
+    }
+
+    public function user(Request $request)
+    {
+        return response($request->user(),201);
     }
 
 }
