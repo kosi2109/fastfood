@@ -1,14 +1,40 @@
-import React from 'react'
+import React, { SetStateAction } from "react";
+import { CATEGORY } from "../types";
+
+const selected =
+  "flex items-center min-w-fit justify-center cursor-pointer mr-4 border-b-2 border-textGreen font-bold text-lg";
+const list = "flex min-w-fit items-center justify-center cursor-pointer mr-4 font-semibold text-md";
 
 
-const Category = ()=> {
+const Category = ({
+  categories,
+  selectedCategory,
+  setSelectedCategory,
+}: {
+  categories: CATEGORY[];
+  selectedCategory: string;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   return (
-    <ul className='flex mb-3 w-full overflow-auto py-2'>
-        <li className='cursor-pointer mr-4 border-b-2 border-textGreen font-bold text-lg'>All</li>
-        <li className='cursor-pointer mr-4 font-semibold text-md'>Feature</li>
-        <li className='cursor-pointer mr-4 font-semibold text-md'>Soup</li>
-    </ul>
-  )
-}
+      <ul className="w-full flex overflow-x-auto py-2 scrollbar-hide">
+        <li
+          onClick={() => setSelectedCategory("all")}
+          className={selectedCategory === "all" ? selected : list}
+        >
+          All
+        </li>
+        {categories.map((category) => (
+          <li
+            onClick={() => setSelectedCategory(category.slug)}
+            key={category.slug}
+            className={category.slug === selectedCategory ? selected : list}
+          >
+            {category.name}
+          </li>
+        ))}
+      </ul>
+  
+  );
+};
 
-export default Category
+export default Category;

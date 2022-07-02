@@ -20,7 +20,9 @@ export const defaultUser = {
 
 const defaultState = {
   user: defaultUser,
-  setUser: (state: USER) => {}
+  setUser: (state: USER) => {},
+  loading : true,
+  setLoading: (state: boolean) => {},
 };
 
 
@@ -29,17 +31,21 @@ const AppContext = createContext(defaultState);
 
 function AppProvider({children} : any) {
   const [user, setUser] = useState<USER>(defaultState.user);
+  const [loading, setLoading] = useState<boolean>(defaultState.loading)
   const router = useRouter();
   
   useEffect(() => {
     const auth = getLocalStorage("fastfood_auth");
     if (auth) {
-      setUser(auth.user);
+      setUser(auth);
+      setLoading(false);
+    }else{
+      setLoading(false);
     }
   }, [router.asPath]);
 
   return (
-    <AppContext.Provider value={{user,setUser}} >
+    <AppContext.Provider value={{user,setUser,loading,setLoading}} >
         {children}
     </AppContext.Provider>
   )

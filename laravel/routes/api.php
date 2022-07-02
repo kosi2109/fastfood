@@ -30,7 +30,7 @@ Route::group(["middleware"=>"auth:sanctum"],function() {
         Route::put('/{slug}',[CategoryController::class,'update']);
         Route::delete('/{slug}',[CategoryController::class,'destroy']);
     });
-
+    Route::post('/logout',[ApiAuthController::class,'logout']);
     Route::get('/user',[ApiAuthController::class,'user']);
 });
 

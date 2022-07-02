@@ -19,19 +19,17 @@ class ApiAuthController extends Controller
         
         if ($validate->fails()) return response($validate->errors(),400);
 
-        $user = User::where('email',$request->email)->first();
-        if(!$user || !Hash::check($request->password,$user->password)){   
+        if(!auth()->attempt($request->only('email','password'))){
             return response([
                 "message" => "You are Not Authenticated"
             ],404);
-
         }
+
+        $user = $request->user(); 
+
         $token = $user->createToken('secret')->plainTextToken;
-        
-        return response([
-            "user" => $user,
-            "token" => $token
-        ],201);
+        $cookie = cookie('jwt',$token,60 * 24);
+        return response($user,201)->withCookie($cookie);
     }
 
     public function register(Request $request)
@@ -49,7 +47,14 @@ class ApiAuthController extends Controller
 
     public function user(Request $request)
     {
-        return response($request->user(),201);
+
+        return response($request->cookie(),201);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return response("Logout complete",200);
     }
 
 }

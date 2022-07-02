@@ -29,8 +29,7 @@ const Login: NextPage = () => {
     login(form)
       .then((response:any)=> {
         authLogin(response.data);
-        setUser(response.data.user);
-        setCookie('token',response.data.token)
+        setUser(response.data);
         route.push('/')
       })
       .catch((response)=> console.log(response))

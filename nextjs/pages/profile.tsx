@@ -1,6 +1,7 @@
 import { deleteCookie } from "cookies-next";
 import { NextPage } from "next";
 import React from "react";
+import { logout } from "../api";
 import Auth from "../components/Auth";
 import AppLayout from "../components/Layouts/AppLayout";
 import Detail from "../components/Profile/Detail";
@@ -11,9 +12,10 @@ import { AppState, defaultUser } from "../context/AppProvider";
 const profile: NextPage = () => {
   const {user , setUser} = AppState();
   
-  const logout = ()=>{
-    deleteCookie('token')
+  const logoutController = async ()=>{
+    await logout()
     setUser(defaultUser);
+    localStorage.removeItem('fastfood_auth')
   }
   return (
     <AppLayout title="Profile">
@@ -25,7 +27,7 @@ const profile: NextPage = () => {
           <Detail title="Full Name" value={user?.name} />
           <Detail title="Email" value={user?.email} />
           <Detail title="Phone" value={user?.phone} />
-          <button className="h-10 bg-bgGreen text-textWhite w-full rounded-md" onClick={logout}>Logout</button>
+          <button className="h-10 bg-bgGreen text-textWhite w-full rounded-md" onClick={logoutController}>Logout</button>
         </div>
       </Auth>
       

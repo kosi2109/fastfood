@@ -9,7 +9,7 @@ const AppLayout = ({ children , title , back } : any)=> {
   return (
     <div className='px-10 md:px-28'>
         <TopNav title={title} back={back} />
-        <div className='pt-14 pb-20'>
+        <div className='pt-14 pb-20 w-full'>
             {children}
         </div>
         <BottomNav/>

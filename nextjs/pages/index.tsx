@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { allMenus } from '../api'
+import { allMenus, API } from '../api'
 import Baner from '../components/Baner'
 import ItemContainer from '../components/Items/ItemContainer'
 import AppLayout from '../components/Layouts/AppLayout'
@@ -13,13 +13,19 @@ interface Props{
 }
 
 const Home: NextPage<Props> = ({topOfWeek,malarShanKaw}) => {
-  
+  const testData = async ()=>{
+    const data = await API.get('user');
+    console.log(data);
+  }
   return (
     <AppLayout title="Home" >
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <button onClick={testData}>
+        Test
+      </button>
       <Search/>
       <Baner/>
       <ItemContainer title="Top Of Week" menus={topOfWeek} />
