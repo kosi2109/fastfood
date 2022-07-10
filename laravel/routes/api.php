@@ -3,6 +3,8 @@
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PriceController;
+use App\Http\Controllers\SizeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,10 +42,25 @@ Route::group(['prefix' => 'menus'], function() {
     Route::get('/{slug}',[MenuController::class,'show']);
 });
 
+Route::resource('size',SizeController::class);
 
 Route::group(['prefix' => 'categories'], function() {
     Route::get('/',[CategoryController::class,'index']);
 });
+
+Route::group(['prefix' => 'size'], function() {
+    Route::get('/',[SizeController::class,'index']);
+    Route::post('/',[SizeController::class,'store']);
+    Route::put('/{size}',[SizeController::class,'update']);
+    Route::delete('/{size}',[SizeController::class,'destroy']);
+});
+
+Route::group(['prefix' => 'price'], function() {
+    Route::post('/',[PriceController::class,'store']);
+    Route::put('/{size}',[PriceController::class,'update']);
+    Route::delete('/{size}',[PriceController::class,'destroy']);
+});
+
 
 
 Route::post('/login',[ApiAuthController::class,'login']);

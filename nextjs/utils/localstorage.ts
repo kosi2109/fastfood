@@ -11,15 +11,3 @@ export const getLocalStorage = (key : string)=>{
         return JSON.parse(data || "");
     }
 }
-
-
-
-
-export const auth = ()=>{
-    return getLocalStorage('fastfood_auth');
-}
-
-export const authLogin = (data : any)=>{
-    setLocalStorage("fastfood_auth",data)
-}
-

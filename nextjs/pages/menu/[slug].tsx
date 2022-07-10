@@ -1,48 +1,74 @@
 import { NextPage } from 'next'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { allMenus, showMenus } from '../../api'
 import AppLayout from '../../components/Layouts/AppLayout'
-import { CATEGORY, MENU } from '../../types'
+import { AppState, CART_ACTION } from '../../context/AppProvider'
+import { CATEGORY, MENU, SIZE } from '../../types'
+import AnimatedNumbers from "react-animated-numbers";
+import useAnimateNumber from 'use-animate-number';
 
 interface Props{
   menu : MENU
 }
 
+const selected = "w-full cursor-pointer text-center mb-2 font-semibold text-lg p-1 text-textGreen rounded-md border-2 border-bgGreen"
+const unselected = "w-full cursor-pointer text-center mb-2 font-semibold text-lg p-1 text-textGray rounded-md border-2"
+const animateOption = {
+  duration: 200,
+  enterance: true,
+  direct: false,
+  disabled: false,
+  decimals: 0
+}
+
 const Menu : NextPage<Props> = ({menu})=> {
-  
+  const {increaseItem} = AppState();
+  const [price, setPrice] = useAnimateNumber(menu.sizes[0].price.price,animateOption);
+  const [size, setSize] = useState(menu.sizes[0].name);
+
+  const sizeHandle = (size:SIZE)=>{
+    setPrice(size?.price.price,false);
+    setSize(size.name);
+  }
   return (
     <AppLayout title="Detail" back={true} >
       <div className='pt-2'>
         <div className='mb-2 w-full flex justify-center items-center'>
-          <img className='w-2/3 rounded-md' src={menu.cover_img} alt={menu.name} />
+          <img className='w-full rounded-md' src={menu?.cover_img} alt={menu?.name} />
         </div>
 
         <div>
           <h1 className='text-3xl font-semibold mb-2'>
-          {menu.name}
+          {menu?.name}
           </h1>
-          <h5 className='mb-3 text-lg font-semibold'>Category 
+          {/* <h5 className='mb-3 text-lg font-semibold'>Category 
             <ul className='font-medium text-md'>
-              {menu.categories.map((category:CATEGORY)=> (<li key={category.id}>- {category.name}</li>))}
+              {menu.categories?.map((category:CATEGORY)=> (<li key={category.id}>- {category.name}</li>))}
             </ul>
-          </h5>
-          <div className='columns-6 w-full mb-3 gap-4 mb-2'>
-            <div className='shadow-lg cursor-pointer text-center mb-2 font-semibold text-lg p-1 -my-1 text-textWhite rounded-md border-2 bg-bgGreen'>
-              <p>S</p>
-            </div>
-            <div className='cursor-pointer text-center mb-2 font-semibold text-lg p-1 text-textGreen rounded-md border-2 border-bgGreen'>
-              <p>M</p>
-            </div>
-            <div className='cursor-pointer text-center mb-2 font-semibold text-lg p-1 text-textGreen rounded-md border-2 border-bgGreen'>
-              <p>L</p>
-            </div>    
-          </div>
-          
+          </h5> */}
           <div className='mb-3'>
             <h2 className='font-semibold text-lg'>Description</h2>
-            <p className='text-md text-textBlack'>{menu.description}</p>
+            <p className='text-md text-textBlack'>{menu?.description}</p>
           </div>
-          <button className='w-full h-10 bg-bgGreen text-textWhite rounded-md'>Add To Cart</button>
+          
+          <div className='w-full flex mb-3'>
+            <div className='w-1/2 flex items-center justify-center text-center'>
+              <h5 className='font-bold text-3xl text-textGreen'>
+                {/* <AnimatedNumbers animateToNumber={price} />  */}
+                {price}
+                <span className='font-semibold text-xl'>Ks</span> </h5>
+            </div>
+            <div className='w-1/2 columns-3 md:columns-6 w-full gap-4'>
+              {menu?.sizes?.map(size =>(
+                <div onClick={()=> sizeHandle(size)} key={size?.id} className={size?.price.price === price ? selected : unselected}>
+                  <p>{size?.name}</p>
+                </div>
+              ))}    
+            </div>
+          </div>
+          
+          
+          <button className='w-full h-10 bg-bgGreen text-textWhite rounded-md' onClick={()=>increaseItem(menu,size,CART_ACTION.INCREASE)}>Add To Cart</button>
         </div>
       </div>
     </AppLayout>
@@ -50,10 +76,10 @@ const Menu : NextPage<Props> = ({menu})=> {
 }
 
 export async function getStaticPaths(){
-  const menus = await allMenus();
+  const menus = await allMenus(); 
   return {
-    paths : menus.data.map(({slug}:any)=> ({params:{slug}})),
-    fallback : false
+    paths : menus.data.map((menu:any)=> ({params:{slug:menu.slug}}) ),
+    fallback : true
   }
 }
 

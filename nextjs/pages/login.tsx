@@ -8,7 +8,6 @@ import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai"
 import { login } from "../api";
 import { AppState } from "../context/AppProvider";
 import { LOGIN } from "../types";
-import { authLogin } from "../utils/localstorage";
 
 
 const Login: NextPage = () => {
@@ -28,8 +27,11 @@ const Login: NextPage = () => {
     e.preventDefault();
     login(form)
       .then((response:any)=> {
-        authLogin(response.data);
         setUser(response.data);
+        localStorage.setItem("fastfood_auth",JSON.stringify(response.data))
+        setCookie('fastfood_auth',response.data,{
+          maxAge : 60 * 60 * 24 * 30 //1month
+        })
         route.push('/')
       })
       .catch((response)=> console.log(response))

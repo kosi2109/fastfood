@@ -1,3 +1,4 @@
+import { USER } from "../context/AppProvider"
 
 
 
@@ -18,4 +19,19 @@ export interface MENU{
     description : string,
     cover_img : string,
     categories : CATEGORY[],
+    user : USER,
+    sizes : SIZE[]
 }
+
+export interface PRICE {
+    menu_id: number,
+    size_id: number,
+    price: number
+}
+
+export interface SIZE{
+    id: number,
+    name: string,
+    price: PRICE
+}
+

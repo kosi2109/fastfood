@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Menu extends Model
 {
     use HasFactory;
-    protected $with = ["user","categories"];
+    protected $with = ["user","categories","sizes"];
 
     protected $guarded = [];
 
@@ -19,7 +19,7 @@ class Menu extends Model
 
     public function scopeByCategory($query,$filter){
         $query->when($filter["category"]??false,function ($query,$slug){
-            $query->whereHas('category',function ($query) use ($slug) {
+            $query->whereHas('categories',function ($query) use ($slug) {
                 $query->where("slug",$slug);
             });
         });
@@ -29,6 +29,11 @@ class Menu extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class)->withPivot('price')->as('price');
     }
 
     public function user()

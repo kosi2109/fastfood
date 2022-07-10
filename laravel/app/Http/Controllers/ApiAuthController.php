@@ -27,8 +27,8 @@ class ApiAuthController extends Controller
 
         $user = $request->user(); 
 
-        $token = $user->createToken('secret')->plainTextToken;
-        $cookie = cookie('jwt',$token,60 * 24);
+        $token = $user->createToken(env('JWT_SECRET'))->plainTextToken;
+        $cookie = cookie('jwt',$token,60 * 24 * 30);
         return response($user,201)->withCookie($cookie);
     }
 

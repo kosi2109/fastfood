@@ -15,14 +15,14 @@ const profile: NextPage = () => {
   const logoutController = async ()=>{
     await logout()
     setUser(defaultUser);
-    localStorage.removeItem('fastfood_auth')
+    deleteCookie('fastfood_auth')
   }
   return (
     <AppLayout title="Profile">
       <Auth>
         <div className="py-1 flex items-center flex-col w-full">
-          <div className="w-full flex items-center justify-center mb-3">
-            <ProfileImage size={150} />
+          <div className="w-3/5 flex items-center justify-center mb-3">
+            <ProfileImage/>
           </div>
           <Detail title="Full Name" value={user?.name} />
           <Detail title="Email" value={user?.email} />

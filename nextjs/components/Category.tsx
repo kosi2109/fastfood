@@ -16,7 +16,7 @@ const Category = ({
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   return (
-      <ul className="w-full flex overflow-x-auto py-2 scrollbar-hide">
+      <ul className="w-full flex overflow-x-auto py-2 scrollbar-hide mb-3">
         <li
           onClick={() => setSelectedCategory("all")}
           className={selectedCategory === "all" ? selected : list}
@@ -29,7 +29,7 @@ const Category = ({
             key={category.slug}
             className={category.slug === selectedCategory ? selected : list}
           >
-            {category.name}
+            {category.name.toUpperCase()}
           </li>
         ))}
       </ul>

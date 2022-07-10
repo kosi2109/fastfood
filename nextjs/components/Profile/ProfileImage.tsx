@@ -6,9 +6,9 @@ interface Props{
     size? : number
 }
 
-const ProfileImage : NextPage<Props> = ({size})=> {
+const ProfileImage : NextPage<Props> = ()=> {
   return (
-    <div style={{width : `${size}px` , height: `${size}px`}} className={`rounded-full overflow-hidden`}>
+    <div className='w-full aspect-square rounded-full overflow-hidden'>
         <img src={img.src} alt="img" />
     </div>
   )

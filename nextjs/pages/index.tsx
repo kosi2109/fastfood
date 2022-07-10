@@ -34,7 +34,9 @@ const Home: NextPage<Props> = ({topOfWeek,malarShanKaw}) => {
   )
 }
 
-export async function getStaticProps() {
+
+
+export async function getServerSideProps() {
   const topOfWeek = await allMenus('top-of-week');
   const malarShanKaw = await allMenus('malar-shan-kaw');
   
