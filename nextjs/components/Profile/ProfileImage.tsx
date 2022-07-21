@@ -8,7 +8,7 @@ interface Props{
 
 const ProfileImage : NextPage<Props> = ()=> {
   return (
-    <div className='w-full aspect-square rounded-full overflow-hidden'>
+    <div className='w-full md:w-1/2 aspect-square rounded-full overflow-hidden'>
         <img src={img.src} alt="img" />
     </div>
   )

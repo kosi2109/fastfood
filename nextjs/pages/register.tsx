@@ -2,9 +2,14 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { register } from "../api";
+import GoogleMap from "google-map-react"
+import {HiLocationMarker} from "react-icons/hi"
+
+
+const MapPointer = ({}:any) => <div><HiLocationMarker size={30}/></div>;
 
 const initialForm = {
   name: "",
@@ -22,7 +27,12 @@ const Register: NextPage = () => {
   const [showPassword2, setShowPassword2] = useState<boolean>(false);
   const router = useRouter();
   const [form, setForm] = useState<typeof initialForm>(initialForm);
-
+  const [coordinate, setCoordinate] = useState({lat : 20.1544 , lng : 94.9455});
+  
+  useEffect(()=>{
+    form.address = `${coordinate.lat},${coordinate.lng}`
+  },[coordinate])
+  
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     register(form)
@@ -87,19 +97,6 @@ const Register: NextPage = () => {
             />
           </div>
 
-          <div className="flex flex-col w-full mb-2">
-            <label className="mb-2 text-textGray" htmlFor="address">
-              Address
-            </label>
-            <input
-              type="text"
-              name="address"
-              id="address"
-              className="h-10 rounded-md border border-bgGreen px-2 focus:outline-textGreen"
-              onChange={handleChange}
-            />
-          </div>
-
           <div className="flex flex-col w-full mb-2 ">
             <label className="mb-2 text-textGray" htmlFor="password">
               Password
@@ -149,7 +146,24 @@ const Register: NextPage = () => {
               </div>
             </div>
           </div>
-
+          <div className="w-full h-40 md:h-80 mb-3 bg-bgGray border-2 rounded-md px-3 py-2">
+          <input type="hidden" name="address" value={`${coordinate.lat},${coordinate.lng}`}  />
+          <GoogleMap
+            bootstrapURLKeys={{key:"AIzaSyAWiuvmnGdI7dIdMX-I7JHWVhQV-8O9OyY"}}
+            defaultCenter={coordinate}
+            center={coordinate}
+            defaultZoom={14}
+            margin = {[50,50,50,50]}
+            options={{ disableDefaultUI: true, zoomControl: true }}
+            yesIWantToUseGoogleMapApiInternals
+            onChange={(e)=>  setCoordinate({lat: e.center.lat,lng : e.center.lng})}
+          >
+            <MapPointer
+              lat={coordinate.lat}
+              lng={coordinate.lng}
+            />
+          </GoogleMap>
+        </div>
           <button className="mb-5 bg-bgGreen w-full h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
             Sign Up
           </button>

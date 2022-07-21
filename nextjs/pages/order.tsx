@@ -56,6 +56,7 @@ const order: NextPage = () => {
           <h4 className="font-bold text-lg">Grand Total</h4>
           <h4 className="font-semibold text-lg">{deliFree + subTotal} Ks</h4>
         </div>
+        
         <button className="mt-3 w-full h-10 rounded-md bg-bgGreen text-textWhite">
           Comfirm Order
         </button>
