@@ -6,6 +6,7 @@ import { AppState, CART_ACTION } from '../../context/AppProvider'
 import { CATEGORY, MENU, SIZE } from '../../types'
 import AnimatedNumbers from "react-animated-numbers";
 import useAnimateNumber from 'use-animate-number';
+import Head from 'next/head'
 
 interface Props{
   menu : MENU
@@ -32,6 +33,9 @@ const Menu : NextPage<Props> = ({menu})=> {
   }
   return (
     <AppLayout title="Detail" back={true} >
+      <Head>
+        <title>{menu.name}</title>
+      </Head>
       <div className='pt-2'>
         <div className='mb-2 w-full flex justify-center items-center'>
           <img className='w-full rounded-md' src={menu?.cover_img} alt={menu?.name} />

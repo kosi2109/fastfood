@@ -69,4 +69,14 @@ class CategoryController extends Controller
 
         return response("Delete Success",200);
     }
+
+    /**
+     * Get Feature Category from storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getOnlyFeature()
+    {
+        return Category::with('menus')->where('feature',true)->get();
+    }
 }

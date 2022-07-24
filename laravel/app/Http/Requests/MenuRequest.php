@@ -25,11 +25,11 @@ class MenuRequest extends FormRequest
     public function rules()
     {
         return [
-            "user_id" => ["required",Rule::exists('users','id')],
             "name" => ["required"],
             "slug" => ["required",Rule::unique('menus','slug')],
             "description" => ["required"],
             "cover_img" => ["required"],
+            "prices" => ["required"],
         ];
     }
     

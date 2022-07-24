@@ -1,24 +1,24 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
-import { allCategory, allMenus } from "../../api";
+import { allCategory, allMenus, featureCategory } from "../../api";
 import Category from "../../components/Category";
 import ItemContainer from "../../components/Items/ItemContainer";
 import SingleItem from "../../components/Items/SingleItem";
 import AppLayout from "../../components/Layouts/AppLayout";
+import Loading from "../../components/Loading";
 import Search from "../../components/Search";
 import { CATEGORY, MENU } from "../../types/index";
 
 interface Props {
   categories: CATEGORY[];
-  topOfWeek: MENU[];
-  malarShanKaw: MENU[];
+  featureCate: CATEGORY[];
 }
 
-const menu: NextPage<Props> = ({ categories, topOfWeek, malarShanKaw }) => {
+const menu: NextPage<Props> = ({ categories, featureCate }) => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [menus, setMenus] = useState<MENU[]>([]);
-
+  const [loading, setLoading] = useState(false)
   
   const getMenuByCategory = async (category: string) => {
     const menu = await allMenus(category);
@@ -26,8 +26,10 @@ const menu: NextPage<Props> = ({ categories, topOfWeek, malarShanKaw }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     if (selectedCategory !== "all") {
       getMenuByCategory(selectedCategory);
+      setLoading(false)
     }
   }, [selectedCategory]);
 
@@ -46,16 +48,16 @@ const menu: NextPage<Props> = ({ categories, topOfWeek, malarShanKaw }) => {
         setSelectedCategory={setSelectedCategory}
       />
       {selectedCategory === "all" ? (
-        <>
-          <ItemContainer title="Top Of Week" menus={topOfWeek} />
-          <ItemContainer title="Malar Shan Kaw" menus={malarShanKaw} />
-        </>
+        featureCate.map((category:CATEGORY)=>(
+          <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
+        ))
       ) : (
+        loading ? "Loading"  : (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-1">
           {menus.map((menu) => (
             <SingleItem key={menu.slug} menu={menu} />
           ))}
-        </div>
+        </div>)
       )}
     </AppLayout>
   );
@@ -63,14 +65,12 @@ const menu: NextPage<Props> = ({ categories, topOfWeek, malarShanKaw }) => {
 
 export async function getStaticProps() {
   const categories = await allCategory();
-  const topOfWeek = await allMenus("top-of-week");
-  const malarShanKaw = await allMenus("malar-shan-kaw");
+  const featureCate = await featureCategory();
 
   return {
     props: {
       categories: categories.data,
-      topOfWeek: topOfWeek.data,
-      malarShanKaw: malarShanKaw.data,
+      featureCate: featureCate.data,
     },
   };
 }

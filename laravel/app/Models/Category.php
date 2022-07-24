@@ -15,4 +15,9 @@ class Category extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function menus ()
+    {
+        return $this->belongsToMany(Menu::class);
+    }
 }

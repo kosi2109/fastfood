@@ -20,18 +20,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+
 Route::group(["middleware"=>"auth:sanctum"],function() {
+    Route::group(['prefix' => 'categories'], function() {
+        Route::post('/',[CategoryController::class,'store']);
+        Route::put('/{slug}',[CategoryController::class,'update']);
+        Route::delete('/{slug}',[CategoryController::class,'destroy']);
+    });
     Route::group(['prefix' => 'menus'], function() {
         Route::post('/',[MenuController::class,'store']);
         Route::put('/{slug}',[MenuController::class,'update']);
         Route::delete('/{slug}',[MenuController::class,'destroy']);
     });
 
-    Route::group(['prefix' => 'categories'], function() {
-        Route::post('/',[CategoryController::class,'store']);
-        Route::put('/{slug}',[CategoryController::class,'update']);
-        Route::delete('/{slug}',[CategoryController::class,'destroy']);
-    });
     Route::post('/logout',[ApiAuthController::class,'logout']);
     Route::get('/user',[ApiAuthController::class,'user']);
 });
@@ -46,6 +47,7 @@ Route::resource('size',SizeController::class);
 
 Route::group(['prefix' => 'categories'], function() {
     Route::get('/',[CategoryController::class,'index']);
+    Route::get('/feature',[CategoryController::class,'getOnlyFeature']);
 });
 
 Route::group(['prefix' => 'size'], function() {

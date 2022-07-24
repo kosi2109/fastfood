@@ -1,22 +1,24 @@
+import { getCookie, hasCookie } from 'cookies-next'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { allMenus, API } from '../api'
+import { API, featureCategory } from '../api'
 import Baner from '../components/Baner'
 import ItemContainer from '../components/Items/ItemContainer'
 import AppLayout from '../components/Layouts/AppLayout'
 import Search from '../components/Search'
-import { MENU } from '../types'
+import { CATEGORY } from '../types'
 
 interface Props{
-  topOfWeek : MENU[],
-  malarShanKaw : MENU[]
+  categories : CATEGORY[],
 }
 
-const Home: NextPage<Props> = ({topOfWeek,malarShanKaw}) => {
+const Home: NextPage<Props> = ({categories}) => {
   const testData = async ()=>{
     const data = await API.get('user');
     console.log(data);
   }
+  
+  
   return (
     <AppLayout title="Home" >
       <Head>
@@ -28,22 +30,18 @@ const Home: NextPage<Props> = ({topOfWeek,malarShanKaw}) => {
       </button>
       <Search/>
       <Baner/>
-      <ItemContainer title="Top Of Week" menus={topOfWeek} />
-      <ItemContainer title="Malar Shan Kaw" menus={malarShanKaw} />
+      {categories.map((category:any) => (
+        <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
+        ))}
     </AppLayout>
   )
 }
 
-
-
 export async function getServerSideProps() {
-  const topOfWeek = await allMenus('top-of-week');
-  const malarShanKaw = await allMenus('malar-shan-kaw');
-  
+  const categories = await featureCategory();
   return {
     props: {
-      topOfWeek : topOfWeek.data,
-      malarShanKaw : malarShanKaw.data,
+      categories : categories.data
     },
   };
 }

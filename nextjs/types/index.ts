@@ -1,7 +1,5 @@
 import { USER } from "../context/AppProvider"
 
-
-
 export interface LOGIN{
     email : string,
     password : string
@@ -9,7 +7,8 @@ export interface LOGIN{
 export interface CATEGORY{
     id : number,
     name : string,
-    slug : string
+    slug : string,
+    menus : MENU[]
 }
 
 export interface MENU{
@@ -19,7 +18,6 @@ export interface MENU{
     description : string,
     cover_img : string,
     categories : CATEGORY[],
-    user : USER,
     sizes : SIZE[]
 }
 
@@ -32,6 +30,8 @@ export interface PRICE {
 export interface SIZE{
     id: number,
     name: string,
-    price: PRICE
+    price: {
+        price: number
+    }
 }
 

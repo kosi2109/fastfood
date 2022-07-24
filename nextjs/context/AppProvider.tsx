@@ -90,7 +90,7 @@ function AppProvider({children} : any) {
         items[ind].quantity -= 1
       }
       if(items[ind].quantity < 1){
-        items = items.filter((item)=> item.item.id !== items[ind].item.id)
+        items = items.filter((item)=> item.item !== items[ind].item)
       }
     }
     setCartItems(items);

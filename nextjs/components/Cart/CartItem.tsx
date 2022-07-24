@@ -8,8 +8,8 @@ const CartItem = ({menu,size,quantity}:{menu:MENU,size:string,quantity:number})=
     
   return (
     <div className='w-full flex py-3 border-b-2'>
-        <div className='w-2/6'>
-            <img className='md:h-40 rounded-md' src={menu.cover_img} alt="img" />
+        <div className='w-2/6 md:h-40'>
+            <img className='w-full h-full' src={menu.cover_img} alt="img" />
         </div>
         <div className='w-4/6 px-2 flex flex-col justify-between items-start'>
             <h2 className='text-lg font-semibold'>{menu.name} ({size})</h2>

@@ -18,9 +18,9 @@ class MenuController extends Controller
     {
         try {
             $menu = Menu::byCategory(request(['category']))->get();
-            return response($menu,200);
+            return response($menu, 200);
         } catch (\Throwable $th) {
-            return response("Something wrong",500);
+            return response("Something wrong", 500);
         }
     }
 
@@ -33,15 +33,21 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $menureq = new MenuRequest();
-        $validator = Validator::make($request->all(),$menureq->rules(),$menureq->messages());
+        $validator = Validator::make($request->all(), $menureq->rules(), $menureq->messages());
 
-        if($validator->fails()) return response($validator->errors(),422);
+        if ($validator->fails()) return response($validator->errors(), 422);
 
-        $menu = Menu::create($request->except(['categories']));
-        $menu->categories()->sync($request->categories);
-        
+        try {
+            $menu = Menu::create($request->except(['categories', 'prices']));
+            if ($menu) {
+                $menu->categories()->sync($request->categories);
+                $menu->sizes()->sync($request->prices);
+            }
 
-        return response($menu->fresh(),201);
+            return response($menu->fresh(), 201);
+        } catch (\Throwable $th) {
+            return response("Error in catch", 500);
+        }
     }
 
     /**
@@ -52,10 +58,10 @@ class MenuController extends Controller
      */
     public function show($slug)
     {
-        $menu = Menu::where('slug',$slug)->first();
-        
-        if(!$menu) return response("Menu with slug ' " .$slug. " ' Not Found",404);
-        
+        $menu = Menu::where('slug', $slug)->first();
+
+        if (!$menu) return response("Menu with slug ' " . $slug . " ' Not Found", 404);
+
         return response($menu);
     }
 
@@ -68,17 +74,17 @@ class MenuController extends Controller
      */
     public function update(Request $request, $slug)
     {
-        $menu = Menu::where('slug',$slug)->get()->first();
+        $menu = Menu::where('slug', $slug)->get()->first();
 
-        if(!$menu) return response("Menu with slug ' " .$slug. " ' Not Found",404);
-        
-        if ($menu->user_id !== $request->user()->id) return response("You are Not Authenticate",401);
-        
-        if(!$menu->update($request->except(['categories']))) return response("Update Fail",400);
-        
+        if (!$menu) return response("Menu with slug ' " . $slug . " ' Not Found", 404);
+
+        if (!$menu->update($request->except(['categories','prices']))) return response("Update Fail", 400);
+
         $menu->categories()->sync($request->categories);
         
-        return response($menu->fresh(),201);
+        $menu->sizes()->sync($request->prices);
+
+        return response($menu->fresh(), 201);
     }
 
     /**
@@ -87,16 +93,14 @@ class MenuController extends Controller
      * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request,$slug)
+    public function destroy(Request $request, $slug)
     {
-        $menu = Menu::where('slug',$slug)->get()->first();
+        $menu = Menu::where('slug', $slug)->get()->first();
 
-        if(!$menu) return response("Menu with slug ' " .$slug. " ' Not Found",404);
-        
-        if ($menu->user_id !== $request->user()->id) return response("You are Not Authenticate",401);
-        
-        if(!$menu->delete()) return response("Delete Fail",400);
+        if (!$menu) return response("Menu with slug ' " . $slug . " ' Not Found", 404);
 
-        return response("Delete Success",200);
+        if (!$menu->delete()) return response("Delete Fail", 400);
+
+        return response("Delete Success", 200);
     }
 }

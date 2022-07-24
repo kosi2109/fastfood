@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->oncascadeOnDelete();
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description');

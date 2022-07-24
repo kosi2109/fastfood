@@ -29,7 +29,10 @@ const Login: NextPage = () => {
       .then((response:any)=> {
         setUser(response.data);
         localStorage.setItem("fastfood_auth",JSON.stringify(response.data))
-        setCookie('fastfood_auth',response.data,{
+        setCookie('jwt',response.data.token,{
+          maxAge : 60 * 60 * 24 * 30 //1month
+        })
+        setCookie('fastfood_auth',response.data.user,{
           maxAge : 60 * 60 * 24 * 30 //1month
         })
         route.push('/')
