@@ -21,7 +21,8 @@ API.interceptors.request.use((req : any) => {
     return req;
   });
 
-export const allMenus = (category? : string)=> category ? API.get(`menus?category=${category}`) : API.get(`menus`) ;
+export const allMenus = (category? : string)=> category ? API.get(`menus?category=${category}`) : API.get(`menus`);
+export const searchMenus = (keyword? : string)=>  API.get(`menus?name=${keyword}`);
 export const showMenus = (slug : string)=>  API.get(`menus/${slug}`);
 export const allCategory = ()=> API.get(`categories`);
 export const featureCategory = ()=> API.get(`categories/feature`);

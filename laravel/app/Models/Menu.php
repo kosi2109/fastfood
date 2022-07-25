@@ -23,6 +23,9 @@ class Menu extends Model
                 $query->where("slug",$slug);
             });
         });
+        $query->when($filter["name"]??false,function ($query,$name){
+            $query->where("name",'LIKE','%'.$name.'%');
+        });
     }
 
 

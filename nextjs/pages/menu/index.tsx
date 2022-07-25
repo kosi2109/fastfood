@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { allCategory, allMenus, featureCategory } from "../../api";
 import Category from "../../components/Category";
 import ItemContainer from "../../components/Items/ItemContainer";
+import ItemGridContainer from "../../components/Items/ItemGridContainer";
 import SingleItem from "../../components/Items/SingleItem";
 import AppLayout from "../../components/Layouts/AppLayout";
 import Loading from "../../components/Loading";
@@ -52,12 +53,7 @@ const menu: NextPage<Props> = ({ categories, featureCate }) => {
           <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
         ))
       ) : (
-        loading ? "Loading"  : (
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-1">
-          {menus.map((menu) => (
-            <SingleItem key={menu.slug} menu={menu} />
-          ))}
-        </div>)
+        loading ? "Loading"  : <ItemGridContainer menus={menus} />
       )}
     </AppLayout>
   );

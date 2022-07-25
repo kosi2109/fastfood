@@ -17,7 +17,7 @@ class MenuController extends Controller
     public function index()
     {
         try {
-            $menu = Menu::byCategory(request(['category']))->get();
+            $menu = Menu::byCategory(request(['category','name']))->get();
             return response($menu, 200);
         } catch (\Throwable $th) {
             return response("Something wrong", 500);

@@ -13,11 +13,6 @@ interface Props{
 }
 
 const Home: NextPage<Props> = ({categories}) => {
-  const testData = async ()=>{
-    const data = await API.get('user');
-    console.log(data);
-  }
-  
   
   return (
     <AppLayout title="Home" >
@@ -25,9 +20,6 @@ const Home: NextPage<Props> = ({categories}) => {
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <button onClick={testData}>
-        Test
-      </button>
       <Search/>
       <Baner/>
       {categories.map((category:any) => (
