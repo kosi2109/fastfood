@@ -20,7 +20,8 @@ const profile: NextPage = () => {
   const logoutController = async ()=>{
     await logout()
     setUser(defaultUser);
-    deleteCookie('fastfood_auth')
+    deleteCookie('fastfood_auth');
+    deleteCookie('jwt');
   }
   useEffect(()=>{
     if(user?.address?.split(',')[0]){

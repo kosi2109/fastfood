@@ -14,7 +14,7 @@ module.exports = {
         bgWhite : "#FFFFFF",
         bgGreen : "#307A59",
         bgGray : "#FAFAFA",
-        bgLightGreen : "#EBF2EF",
+        bgLightGreen : "#c6e0d4",
         red : "#ff0000",
       }
     },

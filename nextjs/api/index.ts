@@ -17,7 +17,6 @@ API.interceptors.request.use((req : any) => {
     if (hasCookie('jwt')) {
       req.headers.Authorization = `Bearer ${getCookie('jwt')}`;
     }
-
     return req;
   });
 
@@ -26,6 +25,8 @@ export const searchMenus = (keyword? : string)=>  API.get(`menus?name=${keyword}
 export const showMenus = (slug : string)=>  API.get(`menus/${slug}`);
 export const allCategory = ()=> API.get(`categories`);
 export const featureCategory = ()=> API.get(`categories/feature`);
+export const allBanners = ()=> API.get(`banners`);
+
 
 // auth
 export const login = (data : LOGIN)=> {

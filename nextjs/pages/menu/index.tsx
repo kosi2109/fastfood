@@ -7,6 +7,7 @@ import ItemContainer from "../../components/Items/ItemContainer";
 import ItemGridContainer from "../../components/Items/ItemGridContainer";
 import AppLayout from "../../components/Layouts/AppLayout";
 import Loading from "../../components/Loading";
+import MenuLoading from "../../components/MenuLoading";
 import Search from "../../components/Search";
 import { AppState } from "../../context/AppProvider";
 import { CATEGORY, MENU } from "../../types/index";
@@ -27,12 +28,16 @@ const menu: NextPage<Props> = ({ categories, featureCate }) => {
   };
 
   useEffect(() => {
-    setLoading(true);
     if (selectedCategory !== "all") {
-      getMenuByCategory(selectedCategory);
-      setLoading(false)
+      setLoading(true);
+      getCategory();
     }
   }, [selectedCategory]);
+  
+  const getCategory = async ()=>{
+    await getMenuByCategory(selectedCategory);
+    setLoading(false);
+  }
 
   return (
     <AppLayout title="Menu">
@@ -53,7 +58,7 @@ const menu: NextPage<Props> = ({ categories, featureCate }) => {
           <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
         ))
       ) : (
-        loading ? "Loading"  : <ItemGridContainer menus={menus} />
+        loading ? <MenuLoading/>  : <ItemGridContainer menus={menus} />
       )}
     </AppLayout>
   );

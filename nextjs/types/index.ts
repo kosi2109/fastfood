@@ -50,3 +50,11 @@ export interface SIZE{
     }
 }
 
+
+export interface BANNER{
+    id: number,
+    title: string,
+    description: string,
+    image_url: string,
+    menu: MENU,
+}
