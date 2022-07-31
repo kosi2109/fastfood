@@ -13,7 +13,7 @@ const TopNav: NextPage<Props> = ({ title, back = false }) => {
   const router = useRouter();
   
   return (
-    <div className="z-20 px-10 md:px-28 fixed top-0 left-0 w-full bg-bgWhite h-14 flex justify-between items-center">
+    <div className="z-20 px-4 md:px-28 fixed top-0 left-0 w-full bg-bgWhite h-14 flex justify-between items-center">
       {back ? (
         <div className="w-1/5 flex justify-start">
           <div onClick={()=> router.back()} className="cursor-pointer relative w-10 h-10 flex items-center justify-start">

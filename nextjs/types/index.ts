@@ -1,9 +1,24 @@
-import { USER } from "../context/AppProvider"
-
 export interface LOGIN{
     email : string,
     password : string
 }
+
+export type USER = {
+    id : number,
+    name : string,
+    phone : string,
+    email : string,
+    address : string
+}
+
+
+export type CART_ITEM = {
+    item : MENU,
+    size : string;
+    quantity : number
+}
+
+
 export interface CATEGORY{
     id : number,
     name : string,

@@ -24,7 +24,7 @@ const Home: NextPage<Props> = ({categories}) => {
       <Baner/>
       {categories.map((category:any) => (
         <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
-        ))}
+      ))}
     </AppLayout>
   )
 }

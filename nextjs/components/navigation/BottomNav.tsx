@@ -20,6 +20,7 @@ const BottomNav : NextPage = ()=> {
             setAnimate("w-5 h-5");
         },1000)
     },[cartItemTotal])
+    
   return (
     <div className='z-20 md:px-28 fixed bottom-0 left-0 w-full bg-bgWhite h-16 flex justify-between items-center'>
         

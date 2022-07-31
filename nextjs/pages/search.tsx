@@ -1,22 +1,29 @@
-import { useEffect, useState } from "react";
+import { NextPage } from "next";
+import { useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { searchMenus } from "../api";
+import { IoMdClose } from "react-icons/io";
+import { featureCategory, searchMenus } from "../api";
+import ItemContainer from "../components/Items/ItemContainer";
 import ItemGridContainer from "../components/Items/ItemGridContainer";
-import SingleItem from "../components/Items/SingleItem";
 import AppLayout from "../components/Layouts/AppLayout";
-import { MENU } from "../types";
+import Loading from "../components/Loading";
+import { CATEGORY, MENU } from "../types";
 
-const Search = () => {
+interface Props {
+  categories: CATEGORY[];
+}
+
+const Search: NextPage<Props> = ({ categories }) => {
   const [menus, setMenus] = useState<MENU[]>([]);
   const [keyword, setKeyword] = useState("");
-  const [loading, setLoading] = useState(false)
-  useEffect(() => {
-    if (keyword !== ""){
-        setLoading(true);
-        const delayfunc = setTimeout(()=> search(keyword),1000)
-        setLoading(false);
+  const [loading, setLoading] = useState(false);
 
-        return ()=> clearTimeout(delayfunc)
+  useEffect(() => {
+    if (keyword !== "") {
+      setLoading(true);
+      const delayfunc = setTimeout(() => search(keyword), 1000);
+      setLoading(false);
+      return () => clearTimeout(delayfunc);
     }
   }, [keyword]);
 
@@ -25,7 +32,6 @@ const Search = () => {
     setMenus(res.data);
   };
 
-
   return (
     <AppLayout back={true} title="Search">
       <div className="w-full relative h-10 text-textGray mb-5">
@@ -33,17 +39,49 @@ const Search = () => {
           <FiSearch size={20} />
         </div>
         <input
+          placeholder="Search Menu"
           type="text"
-          className="pl-10 text-textBlack w-full h-full border border-textGray flex rounded-md focus:outline-textGray"
+          className="px-9 h-full text-textBlack w-full h-full border border-textGray flex rounded-md focus:outline-textGray"
           onChange={(e) => setKeyword(e.target.value)}
           value={keyword}
+          autoFocus
         />
+        {keyword.length > 0 && (
+          <div className="absolute right-0 top-0 h-full w-10 flex justify-center items-center">
+            <button
+              onClick={() => setKeyword("")}
+              className="flex items-center justify-center w-6 h-full"
+            >
+              <IoMdClose />
+            </button>
+          </div>
+        )}
       </div>
-      { loading ? "Loading" : 
-      <ItemGridContainer menus={menus} />
-      }
+
+      {keyword.length < 1 ? (
+        categories.map((category: any) => (
+          <ItemContainer
+            key={category.slug}
+            title={category.name}
+            menus={category.menus}
+          />
+        ))
+      ) : menus.length > 0 ? (
+        <ItemGridContainer menus={menus} />
+      ) : (
+        <h2>No Items</h2>
+      )}
     </AppLayout>
   );
 };
+
+export async function getServerSideProps() {
+  const categories = await featureCategory();
+  return {
+    props: {
+      categories: categories.data,
+    },
+  };
+}
 
 export default Search;

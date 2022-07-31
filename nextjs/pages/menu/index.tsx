@@ -5,10 +5,10 @@ import { allCategory, allMenus, featureCategory } from "../../api";
 import Category from "../../components/Category";
 import ItemContainer from "../../components/Items/ItemContainer";
 import ItemGridContainer from "../../components/Items/ItemGridContainer";
-import SingleItem from "../../components/Items/SingleItem";
 import AppLayout from "../../components/Layouts/AppLayout";
 import Loading from "../../components/Loading";
 import Search from "../../components/Search";
+import { AppState } from "../../context/AppProvider";
 import { CATEGORY, MENU } from "../../types/index";
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const menu: NextPage<Props> = ({ categories, featureCate }) => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const {selectedCategory,setSelectedCategory} = AppState();
   const [menus, setMenus] = useState<MENU[]>([]);
   const [loading, setLoading] = useState(false)
   
@@ -37,7 +37,7 @@ const menu: NextPage<Props> = ({ categories, featureCate }) => {
   return (
     <AppLayout title="Menu">
       <Head>
-        <title>Create Next App</title>
+        <title>Menu</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="text-md font-bold text-textGray">Our Food</h1>
