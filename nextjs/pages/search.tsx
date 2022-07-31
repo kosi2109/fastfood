@@ -1,12 +1,11 @@
 import { NextPage } from "next";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import { featureCategory, searchMenus } from "../api";
 import ItemContainer from "../components/Items/ItemContainer";
 import ItemGridContainer from "../components/Items/ItemGridContainer";
 import AppLayout from "../components/Layouts/AppLayout";
-import Loading from "../components/Loading";
 import { CATEGORY, MENU } from "../types";
 
 interface Props {
@@ -17,20 +16,22 @@ const Search: NextPage<Props> = ({ categories }) => {
   const [menus, setMenus] = useState<MENU[]>([]);
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
-
+  
   useEffect(() => {
     if (keyword !== "") {
       setLoading(true);
-      const delayfunc = setTimeout(() => search(keyword), 1000);
-      setLoading(false);
+      const delayfunc = setTimeout(() => {
+        search(keyword)
+      } , 500);
       return () => clearTimeout(delayfunc);
     }
   }, [keyword]);
-
-  const search = async (keyword: string) => {
+  
+  const search = useCallback(async (keyword: string)=>{
     const res = await searchMenus(keyword);
     setMenus(res.data);
-  };
+    setLoading(false);
+  },[])
 
   return (
     <AppLayout back={true} title="Search">
@@ -58,18 +59,22 @@ const Search: NextPage<Props> = ({ categories }) => {
         )}
       </div>
 
-      {keyword.length < 1 ? (
-        categories.map((category: any) => (
-          <ItemContainer
-            key={category.slug}
-            title={category.name}
-            menus={category.menus}
-          />
-        ))
-      ) : menus.length > 0 ? (
+      {keyword == "" ? (
+        <>
+          <h3 className="text-lg font-bold mb-3">Suggestion for you ...</h3>
+          {categories.map((category: any) => (
+            <ItemContainer
+              key={category.slug}
+              title={category.name}
+              menus={category.menus}
+            />
+          ))}
+        </>
+
+      ) : loading ? (
+        <h2>Loading</h2>
+        ) : (
         <ItemGridContainer menus={menus} />
-      ) : (
-        <h2>No Items</h2>
       )}
     </AppLayout>
   );
