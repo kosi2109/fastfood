@@ -2,47 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SizeRequest;
+use App\Http\Resources\SizeResource;
 use App\Models\Size;
+use App\Repositories\SizeRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class SizeController extends Controller
 {
+    public function __construct(
+        private SizeRepository $repository
+    )
+    {
+        //
+    }
+    /**
+     * @return ResourceCollection
+     */
     function index()
     {
-        return response(Size::all(),200);
+        return SizeResource::collection(Size::all());
     }
 
-    function store()
+    /**
+     * @param SizeRequest $request
+     * 
+     * @return SizeResource
+     */
+    function store(SizeRequest $request)
     {
-        $size = request('size');
-
-        if(!$size) return response(["message"=>"Size Fiels is required"],400);
-        
-        $new_size = new Size();
-        
-        $new_size->name = $size;
-        
-        if(!$new_size->save()) return response(["message"=>"Something wrong"],400);
-        
-        return response($new_size,200);
+        return new SizeResource($this->repository->create($request));
     }
 
-    function update(Size $size)
+
+    /**
+     * @param Size $size
+     * @param Request $request
+     * 
+     * @return SizeResource
+     */
+    function update(Size $size,Request $request)
     {
-        if(!$size) return response(["message"=>"Size Fiels is required"],400);
-        
-        $size->name = request('size');
-        
-        if(!$size->save()) return response(["message"=>"Something wrong"],400);
-        
-        return response($size->fresh(),200);
+        return new SizeResource($this->repository->update($size,$request));
     }
 
+    /**
+     * @param Size $size
+     * 
+     * @return mixed
+     */
     function destroy(Size $size)
     {
-        if(!$size) return response(["message"=>"Size Fiels is required"],400);
-        
-        if(!$size->delete()) return response(["message"=>"Something wrong"],400);
+        $this->repository->delete($size);
         
         return response(["message"=>"Delete Success"],200);
     }

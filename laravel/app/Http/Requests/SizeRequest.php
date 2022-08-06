@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CategoryRequest extends FormRequest
+class SizeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +24,7 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["required"],
-            "slug" => ["required",Rule::unique('categories','slug')]
+            'name' => ['required']
         ];
     }
 }

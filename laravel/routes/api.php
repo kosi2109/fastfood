@@ -22,26 +22,28 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(["middleware"=>"auth:sanctum"],function() {
-    Route::group(['prefix' => 'categories'], function() {
-        Route::post('/',[CategoryController::class,'store']);
-        Route::put('/{slug}/update',[CategoryController::class,'update']);
-        Route::delete('/{slug}/delete',[CategoryController::class,'destroy']);
-    });
-    Route::group(['prefix' => 'menus'], function() {
-        Route::post('/',[MenuController::class,'store']);
-        Route::put('/{slug}/update',[MenuController::class,'update']);
-        Route::delete('/{slug}/delete',[MenuController::class,'destroy']);
-    });
-
+    
     Route::post('/logout',[ApiAuthController::class,'logout']);
     Route::get('/user',[ApiAuthController::class,'user']);
+});
+
+Route::group(['prefix' => 'categories'], function() {
+    Route::post('/',[CategoryController::class,'store']);
+    Route::put('/{category:slug}/update',[CategoryController::class,'update']);
+    Route::delete('/{category:slug}/delete',[CategoryController::class,'destroy']);
+});
+Route::group(['prefix' => 'menus'], function() {
+    Route::post('/',[MenuController::class,'store']);
+    Route::put('/{menu:slug}/update',[MenuController::class,'update']);
+    Route::delete('/{menu:slug}/delete',[MenuController::class,'destroy']);
 });
 
 
 Route::group(['prefix' => 'menus'], function() {
     Route::get('/',[MenuController::class,'index']);
-    Route::get('/{slug}',[MenuController::class,'show']);
+    Route::get('/{menu:slug}',[MenuController::class,'show']);
 });
+
 
 Route::resource('size',SizeController::class);
 
@@ -61,8 +63,8 @@ Route::group(['prefix' => 'size'], function() {
 Route::group(['prefix' => 'banners'], function() {
     Route::get('/',[BannerController::class,'index']);
     Route::post('/',[BannerController::class,'store']);
-    Route::put('/{id}/update',[BannerController::class,'update']);
-    Route::delete('/{id}/delete',[BannerController::class,'destroy']);
+    Route::put('/{banner}/update',[BannerController::class,'update']);
+    Route::delete('/{banner}/delete',[BannerController::class,'destroy']);
 });
 
 

@@ -22,20 +22,22 @@ const animateOption = {
 }
 
 const Menu : NextPage<Props> = ({menu})=> {
-  const {increaseItem} = AppState();
-  const [price, setPrice] = useAnimateNumber(menu.sizes[0].price.price,animateOption);
-  const [size, setSize] = useState(menu.sizes[0].name);
+  console.log(menu);
+  
+  // const {increaseItem} = AppState();
+  // const [price, setPrice] = useAnimateNumber(menu.sizes[0].price,animateOption);
+  // const [size, setSize] = useState(menu.sizes[0].name);
 
-  const sizeHandle = (size:SIZE)=>{
-    setPrice(size?.price.price,false);
-    setSize(size.name);
-  }
+  // const sizeHandle = (size:SIZE)=>{
+  //   setPrice(size?.price,false);
+  //   setSize(size.name);
+  // }
   return (
     <AppLayout title="Detail" back={true} >
       <Head>
         <title>{menu.name}</title>
       </Head>
-      <div className='pt-2'>
+      {/* <div className='pt-2'>
         <div className='mb-2 w-full h-52 flex justify-center items-center'>
           <img className='w-full h-full object-cover rounded-md' src={menu?.cover_img} alt={menu?.name} />
         </div>
@@ -44,11 +46,6 @@ const Menu : NextPage<Props> = ({menu})=> {
           <h1 className='text-3xl font-semibold mb-2'>
           {menu?.name}
           </h1>
-          {/* <h5 className='mb-3 text-lg font-semibold'>Category 
-            <ul className='font-medium text-md'>
-              {menu.categories?.map((category:CATEGORY)=> (<li key={category.id}>- {category.name}</li>))}
-            </ul>
-          </h5> */}
           <div className='mb-3'>
             <h2 className='font-semibold text-lg'>Description</h2>
             <p className='text-md text-textBlack'>{menu?.description}</p>
@@ -73,7 +70,7 @@ const Menu : NextPage<Props> = ({menu})=> {
           
           <button className='w-full h-10 bg-bgGreen text-textWhite rounded-md' onClick={()=>increaseItem(menu,size,CART_ACTION.INCREASE)}>Add To Cart</button>
         </div>
-      </div>
+      </div> */}
     </AppLayout>
   )
 }
@@ -81,7 +78,7 @@ const Menu : NextPage<Props> = ({menu})=> {
 export async function getStaticPaths(){
   const menus = await allMenus(); 
   return {
-    paths : menus.data.map((menu:any)=> ({params:{slug:menu.slug}}) ),
+    paths : menus.data.data.map((menu:any)=> ({params:{slug:menu.slug}}) ),
     fallback : true
   }
 }

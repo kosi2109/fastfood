@@ -3,36 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\FeatureCategoryResource;
 use App\Models\Category;
+use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CategoryController extends Controller
 {
+    public function __construct(
+        private CategoryRepository $repostory
+    )
+    {
+        //
+    }
+
     /**
-     * Display a listing of the resource.
+     * Display a listing of the category.
      *
-     * @return \Illuminate\Http\Response
+     * @return ResourceCollection
      */
     public function index()
     {
-        return Category::orderBy('name')->get();
+        return CategoryResource::collection(Category::orderBy('name')->get());
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 
+     * @return CategoryResource
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $cate_req = new CategoryRequest();
-        $validate = Validator::make($request->all(),$cate_req->rules(),$cate_req->messages());
-        if($validate->fails()){
-            return response($validate->errors(),400);
-        }
-        return response(Category::create($request->all()),201);
+        return new CategoryResource($this->repostory->create($request)); 
     }
 
     /**
@@ -40,32 +46,24 @@ class CategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * 
+     * @return CategoryResource
      */
-    public function update(Request $request, $slug)
+    public function update(Request $request, Category $category)
     {
-        $category = Category::where("slug",$slug)->get()->first();
-        if(!$category){
-            return response("Category with slug ' " .$slug. " ' Not Found",404);
-        }
-        if(!$category->update($request->all())) return response("Update fail",400);
-
-        return $category;
+        return new CategoryResource($this->repostory->update($category,$request));
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Category  $category
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function destroy($slug)
+    public function destroy(Category $category)
     {
-        $category = Category::where('slug',$slug)->get()->first();
-
-        if(!$category) return response("Category with slug ' " .$slug. " ' Not Found",404);
-
-        if(!$category->delete()) return response("Delete Fail",400);
+        $this->repostory->delete($category);
 
         return response("Delete Success",200);
     }
@@ -73,10 +71,10 @@ class CategoryController extends Controller
     /**
      * Get Feature Category from storage.
      *
-     * @return \Illuminate\Http\Response
+     * @return FeatureCategoryResource
      */
     public function getOnlyFeature()
     {
-        return Category::with('menus')->where('feature',true)->get();
+        return FeatureCategoryResource::collection(Category::with('menus')->where('feature',true)->get());
     }
 }
