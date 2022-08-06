@@ -1,72 +1,17 @@
 <?php
 
 use App\Http\Controllers\ApiAuthController;
-use App\Http\Controllers\BannerController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\SizeController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-
+require __DIR__ . "/menu/api.php";
+require __DIR__. "/banner/api.php";
+require __DIR__ ."/category/api.php";
+require __DIR__. "/size/api.php";
 
 Route::group(["middleware"=>"auth:sanctum"],function() {
-    
     Route::post('/logout',[ApiAuthController::class,'logout']);
     Route::get('/user',[ApiAuthController::class,'user']);
 });
-
-Route::group(['prefix' => 'categories'], function() {
-    Route::post('/',[CategoryController::class,'store']);
-    Route::put('/{category:slug}/update',[CategoryController::class,'update']);
-    Route::delete('/{category:slug}/delete',[CategoryController::class,'destroy']);
-});
-Route::group(['prefix' => 'menus'], function() {
-    Route::post('/',[MenuController::class,'store']);
-    Route::put('/{menu:slug}/update',[MenuController::class,'update']);
-    Route::delete('/{menu:slug}/delete',[MenuController::class,'destroy']);
-});
-
-
-Route::group(['prefix' => 'menus'], function() {
-    Route::get('/',[MenuController::class,'index']);
-    Route::get('/{menu:slug}',[MenuController::class,'show']);
-});
-
-
-Route::resource('size',SizeController::class);
-
-Route::group(['prefix' => 'categories'], function() {
-    Route::get('/',[CategoryController::class,'index']);
-    Route::get('/feature',[CategoryController::class,'getOnlyFeature']);
-});
-
-Route::group(['prefix' => 'size'], function() {
-    Route::get('/',[SizeController::class,'index']);
-    Route::post('/',[SizeController::class,'store']);
-    Route::put('/{size}/update',[SizeController::class,'update']);
-    Route::delete('/{size}/delete',[SizeController::class,'destroy']);
-});
-
-
-Route::group(['prefix' => 'banners'], function() {
-    Route::get('/',[BannerController::class,'index']);
-    Route::post('/',[BannerController::class,'store']);
-    Route::put('/{banner}/update',[BannerController::class,'update']);
-    Route::delete('/{banner}/delete',[BannerController::class,'destroy']);
-});
-
 
 
 Route::post('/login',[ApiAuthController::class,'login']);
