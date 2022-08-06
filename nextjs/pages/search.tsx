@@ -6,6 +6,7 @@ import { featureCategory, searchMenus } from "../api";
 import ItemContainer from "../components/Items/ItemContainer";
 import ItemGridContainer from "../components/Items/ItemGridContainer";
 import AppLayout from "../components/Layouts/AppLayout";
+import MenuLoading from "../components/MenuLoading";
 import { CATEGORY, MENU } from "../types";
 
 interface Props {
@@ -29,7 +30,7 @@ const Search: NextPage<Props> = ({ categories }) => {
   
   const search = useCallback(async (keyword: string)=>{
     const res = await searchMenus(keyword);
-    setMenus(res.data);
+    setMenus(res.data.data);
     setLoading(false);
   },[])
 
@@ -72,7 +73,7 @@ const Search: NextPage<Props> = ({ categories }) => {
         </>
 
       ) : loading ? (
-        <h2>Loading</h2>
+        <MenuLoading/>
         ) : (
         <ItemGridContainer menus={menus} />
       )}
@@ -84,7 +85,7 @@ export async function getServerSideProps() {
   const categories = await featureCategory();
   return {
     props: {
-      categories: categories.data,
+      categories: categories.data.data,
     },
   };
 }

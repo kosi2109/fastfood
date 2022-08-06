@@ -3,46 +3,59 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BannerRequest;
+use App\Http\Resources\BannerResource;
 use App\Models\Banner;
+use App\Repositories\BannerRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class BannerController extends Controller
 {
+
+    public function __construct(
+        private BannerRepository $respository
+    )
+    {
+        //
+    }
+
+    /**
+     * @return ResourceCollection
+     */
     public function index ()
     {
-        return Banner::all();
+        return BannerResource::collection(Banner::all());
     }
 
+    /**
+     * @param BannerRequest $request
+     * 
+     * @return BannerResource
+     */
     public function store (BannerRequest $request)
     {
-        return Banner::create($request->input());
+        return new BannerResource($this->respository->create($request));
     }
 
-    public function update (Request $request,$id) 
+    /**
+     * @param Request $request
+     * @param Banner $banner
+     * 
+     * @return BannerResource
+     */
+    public function update (Request $request, Banner $banner) 
     {
-        $banner = Banner::where('id',$id)->get()->first();
-
-        if(!$banner){
-            return response("Banner with id ' " .$id. " ' Not Found",404);
-        }
-
-        if(!$banner->update($request->input())) return response("Update fail",400);
-
-        return $banner;
+        return new BannerResource($this->respository->update($banner,$request));
     }
 
-    public function destroy ($id) 
+    /**
+     * @param Banner $banner
+     */
+    public function destroy (Banner $banner) 
     {
-        $banner = Banner::where('id',$id)->get()->first();
-
-        if(!$banner){
-            return response("Banner with id ' " .$id. " ' Not Found",404);
-        }
-
-        if (!$banner->delete()) return response("Delete Fail", 400);
+        $this->respository->delete($banner);
 
         return response("Delete Success", 200);
-
     }
 
 }

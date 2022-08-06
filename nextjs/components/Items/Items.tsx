@@ -2,6 +2,7 @@ import React from "react";
 import SingleItem from "./SingleItem";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { MENU } from "../../types";
 
 const responsive = {
   superLargeDesktop: {
@@ -23,7 +24,7 @@ const responsive = {
   },
 };
 
-const Items = ({deviceType , menus}: any) => {
+const Items = ({deviceType , menus}: {deviceType : any | null , menus : MENU[] | null}) => {
   return (
     <Carousel
       responsive={responsive}
@@ -42,7 +43,7 @@ const Items = ({deviceType , menus}: any) => {
       renderButtonGroupOutside={false}
       renderDotsOutside={false}
     >
-      {menus.map((menu : any,i : number)=>(
+      {menus?.map((menu : any,i : number)=>(
         <SingleItem key={i} menu={menu} />
       ))}
     </Carousel>

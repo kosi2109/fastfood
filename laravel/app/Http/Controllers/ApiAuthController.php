@@ -10,13 +10,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiAuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $login_request = new LoginRequest();
-        
-        $validate = Validator::make($request->all(),$login_request->rules(),$login_request->messages());
-        
-        if ($validate->fails()) return response($validate->errors(),400);
 
         if(!auth()->attempt($request->only('email','password'))){
             return response([
@@ -49,7 +44,6 @@ class ApiAuthController extends Controller
 
     public function user(Request $request)
     {
-
         return response($request->header(),201);
     }
 

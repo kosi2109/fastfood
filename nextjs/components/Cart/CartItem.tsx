@@ -25,7 +25,7 @@ const CartItem = ({menu,size,quantity}:{menu:MENU,size:string,quantity:number})=
                         <AiOutlinePlus size={15}/>
                     </div>
                 </div>
-                <h5 className='font-semibold text-textGreen text-lg'>{menu.sizes.filter((s)=> s.name == size)[0].price.price * quantity}</h5>
+                <h5 className='font-semibold text-textGreen text-lg'>{menu.sizes.filter((s)=> s.name == size)[0].price * quantity}</h5>
             </div>
         </div>
     </div>

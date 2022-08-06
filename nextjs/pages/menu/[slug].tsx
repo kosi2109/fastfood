@@ -1,9 +1,9 @@
 import { NextPage } from 'next'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { allMenus, showMenus } from '../../api'
 import AppLayout from '../../components/Layouts/AppLayout'
 import { AppState, CART_ACTION } from '../../context/AppProvider'
-import { CATEGORY, MENU, SIZE } from '../../types'
+import { MENU, SIZE } from '../../types'
 import useAnimateNumber from 'use-animate-number';
 import Head from 'next/head'
 
@@ -22,14 +22,16 @@ const animateOption = {
 }
 
 const Menu : NextPage<Props> = ({menu})=> {
+    
   const {increaseItem} = AppState();
-  const [price, setPrice] = useAnimateNumber(menu.sizes[0].price.price,animateOption);
+  const [price, setPrice] = useAnimateNumber(menu.sizes[0].price,animateOption);
   const [size, setSize] = useState(menu.sizes[0].name);
 
-  const sizeHandle = (size:SIZE)=>{
-    setPrice(size?.price.price,false);
+  const sizeHandle = useCallback((size:SIZE)=>{
+    setPrice(size?.price,false);
     setSize(size.name);
-  }
+  },[size])
+
   return (
     <AppLayout title="Detail" back={true} >
       <Head>
@@ -44,11 +46,6 @@ const Menu : NextPage<Props> = ({menu})=> {
           <h1 className='text-3xl font-semibold mb-2'>
           {menu?.name}
           </h1>
-          {/* <h5 className='mb-3 text-lg font-semibold'>Category 
-            <ul className='font-medium text-md'>
-              {menu.categories?.map((category:CATEGORY)=> (<li key={category.id}>- {category.name}</li>))}
-            </ul>
-          </h5> */}
           <div className='mb-3'>
             <h2 className='font-semibold text-lg'>Description</h2>
             <p className='text-md text-textBlack'>{menu?.description}</p>
@@ -57,13 +54,12 @@ const Menu : NextPage<Props> = ({menu})=> {
           <div className='w-full flex mb-3'>
             <div className='w-1/2 flex items-center justify-center text-center'>
               <h5 className='font-bold text-3xl text-textGreen'>
-                {/* <AnimatedNumbers animateToNumber={price} />  */}
                 {price}
                 <span className='font-semibold text-xl'>Ks</span> </h5>
             </div>
             <div className='w-1/2 columns-3 md:columns-6 w-full gap-4'>
               {menu?.sizes?.map(size =>(
-                <div onClick={()=> sizeHandle(size)} key={size?.id} className={size?.price.price === price ? selected : unselected}>
+                <div onClick={()=> sizeHandle(size)} key={size?.id} className={size?.price === price ? selected : unselected}>
                   <p>{size?.name}</p>
                 </div>
               ))}    
@@ -81,7 +77,7 @@ const Menu : NextPage<Props> = ({menu})=> {
 export async function getStaticPaths(){
   const menus = await allMenus(); 
   return {
-    paths : menus.data.map((menu:any)=> ({params:{slug:menu.slug}}) ),
+    paths : menus.data.data.map((menu:any)=> ({params:{slug:menu.slug}}) ),
     fallback : true
   }
 }
@@ -89,7 +85,7 @@ export async function getStaticPaths(){
 export async function getStaticProps({params}:any){
   const menu = await showMenus(params.slug);
   return {
-    props : {menu:menu.data}
+    props : {menu:menu.data.data}
   }
 }
 

@@ -3,22 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MenuRequest;
+use App\Http\Resources\MenuResource;
 use App\Models\Menu;
+use App\Repositories\MenuRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class MenuController extends Controller
 {
+    public function __construct(
+        private MenuRepository $repository
+    )
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return ResourceCollection
      */
     public function index()
     {
         try {
             $menu = Menu::byCategory(request(['category','name']))->get();
-            return response($menu, 200);
+            return MenuResource::collection($menu);
         } catch (\Throwable $th) {
             return response("Something wrong", 500);
         }
@@ -28,25 +37,17 @@ class MenuController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 
+     * @return MenuResource
      */
-    public function store(Request $request)
+    public function store(MenuRequest $request)
     {
-        $menureq = new MenuRequest();
-        $validator = Validator::make($request->all(), $menureq->rules(), $menureq->messages());
-
-        if ($validator->fails()) return response($validator->errors(), 422);
-
         try {
-            $menu = Menu::create($request->except(['categories', 'prices']));
-            if ($menu) {
-                $menu->categories()->sync($request->categories);
-                $menu->sizes()->sync($request->prices);
-            }
+            $menu = $this->repository->create($request);
 
-            return response($menu->fresh(), 201);
+            return new MenuResource($menu->fresh());
         } catch (\Throwable $th) {
-            return response("Error in catch", 500);
+            return response($th, 500);
         }
     }
 
@@ -54,15 +55,12 @@ class MenuController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Menu  $menu
-     * @return \Illuminate\Http\Response
+     * 
+     * @return MenuResource
      */
-    public function show($slug)
+    public function show(Menu $menu)
     {
-        $menu = Menu::where('slug', $slug)->first();
-
-        if (!$menu) return response("Menu with slug ' " . $slug . " ' Not Found", 404);
-
-        return response($menu);
+        return new MenuResource($menu);
     }
 
     /**
@@ -70,36 +68,30 @@ class MenuController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Menu  $menu
-     * @return \Illuminate\Http\Response
+     * 
+     * @return MenuResource
      */
-    public function update(Request $request, $slug)
+    public function update(Request $request, Menu $menu)
     {
-        $menu = Menu::where('slug', $slug)->get()->first();
+        try {
 
-        if (!$menu) return response("Menu with slug ' " . $slug . " ' Not Found", 404);
+            return new MenuResource($this->repository->update($menu,$request));
 
-        if (!$menu->update($request->except(['categories','prices']))) return response("Update Fail", 400);
-
-        $menu->categories()->sync($request->categories);
-        
-        $menu->sizes()->sync($request->prices);
-
-        return response($menu->fresh(), 201);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Menu  $menu
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $slug)
+    public function destroy(Menu $menu)
     {
-        $menu = Menu::where('slug', $slug)->get()->first();
-
-        if (!$menu) return response("Menu with slug ' " . $slug . " ' Not Found", 404);
-
-        if (!$menu->delete()) return response("Delete Fail", 400);
+        $this->repository->delete($menu);
 
         return response("Delete Success", 200);
     }

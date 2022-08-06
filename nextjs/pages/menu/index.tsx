@@ -24,7 +24,7 @@ const menu: NextPage<Props> = ({ categories, featureCate }) => {
   
   const getMenuByCategory = async (category: string) => {
     const menu = await allMenus(category);
-    setMenus(menu.data);
+    setMenus(menu.data.data);
   };
 
   useEffect(() => {
@@ -70,8 +70,8 @@ export async function getStaticProps() {
 
   return {
     props: {
-      categories: categories.data,
-      featureCate: featureCate.data,
+      categories: categories.data.data,
+      featureCate: featureCate.data.data,
     },
   };
 }
