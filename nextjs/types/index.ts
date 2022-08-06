@@ -48,4 +48,5 @@ export type CATEGORY = {
   name: string;
   slug: string;
   feature: number;
+  menus : null | MENU[]
 }

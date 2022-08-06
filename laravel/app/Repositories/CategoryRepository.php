@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\GeneralJsonException;
 use App\Models\Category;
 use App\Models\Menu;
 
@@ -16,7 +17,7 @@ class CategoryRepository extends BaseRepository
     {
         $category = Category::create($attributes->all());
 
-        if (!$category) return response('Create Fail');
+        if (!$category) return new GeneralJsonException('Create Fail',400);
 
         return $category;
     }
@@ -31,7 +32,7 @@ class CategoryRepository extends BaseRepository
     public function update($category,$attributes)
     {
 
-        if(!$category->update($attributes->input())) return response("Update fail",400);
+        if(!$category->update($attributes->input())) return new GeneralJsonException("Update fail",400);
 
         return $category->fresh();
     }
@@ -46,7 +47,7 @@ class CategoryRepository extends BaseRepository
     {
         $deleted = $category->delete(); 
         
-        if(!$deleted) return response("Delete Fail",400);
+        if(!$deleted) return new GeneralJsonException("Delete Fail",400);
 
         return $deleted;
     }

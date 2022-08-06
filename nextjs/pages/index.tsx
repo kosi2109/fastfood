@@ -37,8 +37,8 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      categories : categories.data,
-      banners : banners.data
+      categories : categories.data.data,
+      banners : banners.data.data
     },
   };
 }

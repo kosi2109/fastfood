@@ -19,7 +19,7 @@ class MenuResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
-            'cover_img' => $this->cover_image,
+            'cover_img' => $this->cover_img,
             'categories' => CategoryResource::collection($this->categories),
             'sizes' => SizeWithPriceResource::collection($this->sizes),
         ];

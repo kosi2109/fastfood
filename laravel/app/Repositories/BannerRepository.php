@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\GeneralJsonException;
 use App\Models\Banner;
-use App\Models\Menu;
 
 class BannerRepository extends BaseRepository
 {
@@ -16,7 +16,7 @@ class BannerRepository extends BaseRepository
     {
         $banner = Banner::create($attributes->input());
 
-        if (!$banner) return response('Error');
+        if (!$banner) return new GeneralJsonException('Create Fail.',400);
 
         return $banner;
     }
@@ -31,7 +31,7 @@ class BannerRepository extends BaseRepository
     public function update($banner, $attributes)
     {
             
-        if(!$banner->update($attributes->input())) return response("Update fail",400);
+        if(!$banner->update($attributes->input())) return new GeneralJsonException("Update fail",400);
     
         return $banner->fresh();
     }
@@ -46,7 +46,7 @@ class BannerRepository extends BaseRepository
     {
         $deleted = $banner->delete(); 
 
-        if (!$deleted) return response("Delete Fail", 400);
+        if (!$deleted) return new GeneralJsonException("Delete Fail.", 400);
 
         return $deleted;
     }

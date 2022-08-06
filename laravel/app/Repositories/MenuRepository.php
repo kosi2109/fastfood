@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\GeneralJsonException;
 use App\Models\Menu;
 
 class MenuRepository extends BaseRepository
@@ -16,10 +17,10 @@ class MenuRepository extends BaseRepository
 
         $menu = Menu::create($attributes->except(['categories', 'prices']));
 
-        if ($menu) {
-            $menu->categories()->sync($attributes->categories);
-            $menu->sizes()->sync($attributes->prices);
-        }
+        if (!$menu) return new GeneralJsonException('Create Fail.',400);
+        
+        $menu->categories()->sync($attributes->categories);
+        $menu->sizes()->sync($attributes->prices);
 
         return $menu;
     }
@@ -33,7 +34,7 @@ class MenuRepository extends BaseRepository
      */
     public function update($menu, $attributes)
     {
-        if (!$menu->update($attributes->except(['categories', 'prices']))) return response("Update Fail", 400);
+        if (!$menu->update($attributes->except(['categories', 'prices']))) return new GeneralJsonException("Update Fail.", 400);
 
         $menu->categories()->sync($attributes->categories);
         
@@ -54,7 +55,7 @@ class MenuRepository extends BaseRepository
     {
         $deleted = $menu->delete(); 
 
-        if (!$deleted) return response()->json("Can't delete");
+        if (!$deleted) return new GeneralJsonException('Delete Fail.',400);
 
         return $deleted;
     }

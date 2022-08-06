@@ -7,51 +7,10 @@ import Auth from "../components/Auth";
 import { AppState } from "../context/AppProvider";
 import GoogleMap from "google-map-react"
 import { HiLocationMarker } from "react-icons/hi";
+import { caculateDeliPricePerDistance, calcCrow, findCenter } from "../utils/mapCaculation";
 
 const MapPointer = ({}:any) => <div><HiLocationMarker size={30}/></div>;
 const Shop = ({}:any) => <div><HiLocationMarker color="green" size={30}/></div>;
-
-
-//This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
-function calcCrow(lat1:number, lon1 : number, lat2 : number , lon2 : number) 
-{
-  var R = 6371; // km
-  var dLat = toRad(lat2-lat1);
-  var dLon = toRad(lon2-lon1);
-  var lat1 = toRad(lat1);
-  var lat2 = toRad(lat2);
-
-  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-  var d = R * c;
-  return d;
-}
-
-// Converts numeric degrees to radians
-function toRad(Value : number) 
-{
-    return Value * Math.PI / 180;
-}
-
-function caculateDeliPricePerDistance(distance : number) {
-  return distance * 1000
-}
-
-function findCenter(markers:any) {
-  let lat = 0;
-  let lng = 0;
-  
-  for(let i = 0; i < markers.length; ++i) {
-      lat += markers[i].lat;
-      lng += markers[i].lng;
-  }
-
-  lat /= markers.length;
-  lng /= markers.length;
-
-  return {lat: lat, lng: lng}
-}
 
 const order: NextPage = () => {
   const {cartItems} = AppState();
@@ -81,7 +40,7 @@ const order: NextPage = () => {
         <GoogleMap
             bootstrapURLKeys={{key:"AIzaSyAWiuvmnGdI7dIdMX-I7JHWVhQV-8O9OyY"}}
             defaultCenter={coordinate}
-            center={coordinate}
+            center={mapCenter}
             resetBoundsOnResize={true}
             defaultZoom={15}
             margin = {[50,50,50,50]}
@@ -111,7 +70,7 @@ const order: NextPage = () => {
         <div className="p-2 border-2 bg-bgGray rounded-md">
           <div className="border-b py-3">
             {cartItems.map((item,i)=>{
-              const total = item.quantity * item.item.sizes.filter((s)=> s.name == item.size)[0].price.price;
+              const total = item.quantity * item.item.sizes.filter((s)=> s.name == item.size)[0].price;
               subTotal += total;
               return <OrderItem key={i} size={item.size} quantity={item.quantity} name={item.item.name} total={total} />
             })}

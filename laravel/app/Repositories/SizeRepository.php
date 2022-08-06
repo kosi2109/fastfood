@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\GeneralJsonException;
 use App\Models\Size;
 
 class SizeRepository extends BaseRepository
@@ -15,7 +16,7 @@ class SizeRepository extends BaseRepository
     {
         $create = Size::create($attributes->input());
 
-        if(!$create) return response(["message"=>"Something wrong"],400);
+        if(!$create) return new GeneralJsonException("Create Fail.",400);
 
         return $create;
     }
@@ -30,7 +31,7 @@ class SizeRepository extends BaseRepository
     public function update($size,$attributes)
     {
         
-        if(!$size->update($attributes->input())) return response("Update fail",400);
+        if(!$size->update($attributes->input())) return new GeneralJsonException("Update fail.",400);
 
         return $size->fresh();
     }
@@ -45,7 +46,7 @@ class SizeRepository extends BaseRepository
     {
         $deleted = $size->delete(); 
         
-        if(!$deleted) return response("Delete Fail",400);
+        if(!$deleted) return new GeneralJsonException("Delete Fail.",400);
 
         return $deleted;
     }
