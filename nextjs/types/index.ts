@@ -14,7 +14,10 @@ export type USER = {
 
 export type CART_ITEM = {
     item : MENU,
-    size : string;
+    size : {
+      id : number,
+      name : string
+    };
     quantity : number
 }
 
@@ -49,4 +52,30 @@ export type CATEGORY = {
   slug: string;
   feature: number;
   menus : null | MENU[]
+}
+
+
+export type ORDER = {
+  id: number;
+  user: ORDER_USER;
+  grand_total: number;
+  deli_fee: number;
+  address: string;
+  status : string;
+  items: ORDER_ITEM[];
+}
+
+export type ORDER_ITEM = {
+  menu_name: string;
+  quantity: number;
+  size: string;
+  price: number;
+}
+
+export type ORDER_USER = {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
 }

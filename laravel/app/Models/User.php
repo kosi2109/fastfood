@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         $this->attributes["password"] = bcrypt($password);
     }
+
+    public function orders ()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

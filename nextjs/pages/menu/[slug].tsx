@@ -25,11 +25,11 @@ const Menu : NextPage<Props> = ({menu})=> {
     
   const {increaseItem} = AppState();
   const [price, setPrice] = useAnimateNumber(menu.sizes[0].price,animateOption);
-  const [size, setSize] = useState(menu.sizes[0].name);
+  const [size, setSize] = useState(menu.sizes[0]);
 
   const sizeHandle = useCallback((size:SIZE)=>{
     setPrice(size?.price,false);
-    setSize(size.name);
+    setSize(size);
   },[size])
 
   return (

@@ -13,15 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('menu_size', function (Blueprint $table) {
-            $table->primary(['menu_id','size_id']);
+        Schema::create('orders', function (Blueprint $table) {
+            $table->id();
 
-            $table->foreignId("menu_id");
-            
-            $table->foreignId("size_id");
+            $table->foreignId('user_id');
 
-            $table->integer("price");
-            
+            $table->integer('grand_total');
+
+            $table->integer('deli_fee');
+
+            $table->string('address');
+
+            $table->enum('status',[1, 2, 3])->default(1);
+
             $table->timestamps();
         });
     }
@@ -33,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('menu_size');
+        Schema::dropIfExists('orders');
     }
 };

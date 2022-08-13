@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('menu_size', function (Blueprint $table) {
-            $table->primary(['menu_id','size_id']);
-
-            $table->foreignId("menu_id");
+        Schema::create('order_items', function (Blueprint $table) {
+            $table->id();
             
-            $table->foreignId("size_id");
+            $table->foreignId('order_id')->onCascadeOnDelete();
+            
+            $table->foreignId('menu_id')->onCascadeOnDelete();
 
-            $table->integer("price");
+            $table->foreignId('size_id')->onCascadeOnDelete();
+
+            $table->integer('quantity');
             
             $table->timestamps();
         });
@@ -33,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('menu_size');
+        Schema::dropIfExists('order_items');
     }
 };
