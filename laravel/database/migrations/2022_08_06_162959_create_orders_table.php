@@ -18,9 +18,13 @@ return new class extends Migration
 
             $table->foreignId('user_id');
 
-            $table->date('order_date');
+            $table->integer('grand_total');
 
-            $table->time('order_time');
+            $table->integer('deli_fee');
+
+            $table->string('address');
+
+            $table->enum('status',[1, 2, 3])->default(1);
 
             $table->timestamps();
         });

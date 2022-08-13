@@ -45,7 +45,7 @@ class MenuController extends Controller
         try {
             $menu = $this->repository->create($request);
 
-            return new MenuResource($menu->fresh());
+            return new MenuResource($menu);
         } catch (\Throwable $th) {
             return response($th, 500);
         }

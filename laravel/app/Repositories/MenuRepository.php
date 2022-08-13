@@ -14,7 +14,6 @@ class MenuRepository extends BaseRepository
      */
     public function create($attributes)
     {
-
         $menu = Menu::create($attributes->except(['categories', 'prices']));
 
         if (!$menu) return new GeneralJsonException('Create Fail.',400);
@@ -22,7 +21,7 @@ class MenuRepository extends BaseRepository
         $menu->categories()->sync($attributes->categories);
         $menu->sizes()->sync($attributes->prices);
 
-        return $menu;
+        return $menu->fresh();
     }
 
 

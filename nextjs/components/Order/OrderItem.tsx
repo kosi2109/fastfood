@@ -8,7 +8,7 @@ interface Props{
     total : number
 }
 
-const OrderItem: NextPage<Props> = ({size,quantity , name , total}) => {
+const OrderItem: NextPage<Props> = ({size, quantity , name , total}) => {
   return (
     <div className="w-full flex mb-1">
       <div className="w-1/6">

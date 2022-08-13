@@ -27,6 +27,10 @@ export const allCategory = ()=> API.get(`categories`);
 export const featureCategory = ()=> API.get(`categories/feature`);
 export const allBanners = ()=> API.get(`banners`);
 
+// order
+export const storeOrder = (data:any)=> API.post(`orders`,data);
+export const getOrders = (status:string)=> API.get(`orders?status=${status}`);
+
 
 // auth
 export const login = (data : LOGIN)=> {

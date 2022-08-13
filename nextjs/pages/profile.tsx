@@ -9,6 +9,7 @@ import ProfileImage from "../components/Profile/ProfileImage";
 import { AppState, defaultUser } from "../context/AppProvider";
 import GoogleMap from "google-map-react"
 import {HiLocationMarker} from "react-icons/hi"
+import { useRouter } from "next/router";
 
 
 const MapPointer = ({}:any) => <div><HiLocationMarker size={30}/></div>;
@@ -16,6 +17,7 @@ const MapPointer = ({}:any) => <div><HiLocationMarker size={30}/></div>;
 
 const profile: NextPage = () => {
   const {user , setUser} = AppState();
+  const router = useRouter();
   const [coordinate, setCoordinate] = useState({lat : 0 , lng : 0});
   const logoutController = async ()=>{
     await logout()
@@ -55,6 +57,7 @@ const profile: NextPage = () => {
             />
           </GoogleMap>
         </div>
+          <button onClick={()=> router.push('/orderhistory')} className="h-10 bg-bgGray font-semibold border-2 text-bgGreen w-full md:w-1/2 rounded-md mb-3">History</button>
           <button className="h-10 bg-bgGreen text-textWhite w-full md:w-1/2 rounded-md" onClick={logoutController}>Logout</button>
         </div>
       </Auth>
