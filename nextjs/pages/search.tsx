@@ -3,10 +3,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import { featureCategory, searchMenus } from "../api";
-import ItemContainer from "../components/Items/ItemContainer";
-import ItemGridContainer from "../components/Items/ItemGridContainer";
+import ItemContainer from "../components/client/Items/ItemContainer";
+import ItemGridContainer from "../components/client/Items/ItemGridContainer";
 import AppLayout from "../components/Layouts/AppLayout";
-import MenuLoading from "../components/MenuLoading";
+import MenuLoading from "../components/client/MenuLoading";
 import { CATEGORY, MENU } from "../types";
 
 interface Props {

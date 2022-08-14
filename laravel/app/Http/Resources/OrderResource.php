@@ -21,6 +21,7 @@ class OrderResource extends JsonResource
             "deli_fee" => $this->deli_fee,
             "address" => $this->address,
             'status' => $this->status,
+            'date' => $this->created_at,
             "items" => OrderItemResource::collection($this->items) ,
         ];
     }

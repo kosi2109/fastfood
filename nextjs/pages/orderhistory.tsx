@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { getOrders } from "../api";
 import Auth from "../components/Auth";
 import AppLayout from "../components/Layouts/AppLayout";
-import MenuLoading from "../components/MenuLoading";
-import OrderHistoryCard from "../components/OrderHistory/OrderHistoryCard";
+import MenuLoading from "../components/client/MenuLoading";
+import OrderHistoryCard from "../components/client/OrderHistory/OrderHistoryCard";
 import { AppState } from "../context/AppProvider";
 import { ORDER } from "../types";
 

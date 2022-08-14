@@ -5,7 +5,7 @@ import { AiFillShop, AiOutlineUnorderedList } from 'react-icons/ai'
 import {ImHome} from "react-icons/im"
 import {FaShoppingCart, FaUserAlt} from "react-icons/fa"
 import { useRouter } from 'next/router'
-import { AppState } from '../../context/AppProvider'
+import { AppState } from '../../../context/AppProvider'
 
 const classN = "w-1/4 relative cursor-pointer flex items-center justify-center flex-col";
 const active = "w-1/4 relative cursor-pointer text-textGreen flex items-center justify-center flex-col";

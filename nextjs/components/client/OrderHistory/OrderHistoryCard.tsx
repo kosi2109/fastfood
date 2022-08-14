@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import { TbTruckDelivery } from "react-icons/tb";
-import { GrLocation } from "react-icons/gr";
 import OrderHistoryItem from "./OrderHistoryItem";
-import { ORDER } from "../../types";
+import { ORDER } from "../../../types";
+import moment from "moment";
 
 interface Props {
   order : ORDER
@@ -20,18 +20,17 @@ const OrderHistoryCard: NextPage<Props> = ({ order }) => {
             <h6>{order.status == "1" ? "In Progress" : "Shipped"}</h6>
           </div>
         </div>
-        <div>
-          <h5>February 16,2022</h5>
+        <div className="flex flex-col items-end">
+          <h5>{moment(order.date).format('dddd D, MM-YYYY')}</h5>
+          <h5 className="font-semibold">{moment(order.date).format('h:mm a')}</h5>
         </div>
       </div>
       {order.items.map((item,i) => <OrderHistoryItem key={i} item={item} /> )}
       
       <div className="p-3 bg-bgGrey border-t-2 flex item-center justify-between">
         <div className="flex items-center">
-          <GrLocation />
-          <h6 className="font-bold">Palo Alto</h6>
         </div>
-        <h5>Total {order.grand_total}</h5>
+        <h5>Total : <span className="font-bold">{order.grand_total} Ks</span></h5>
       </div>
     </div>
   );

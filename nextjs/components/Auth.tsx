@@ -1,6 +1,6 @@
 import { AppState, defaultUser } from "../context/AppProvider";
 import Loading from "./Loading";
-import LoginRequire from "./LoginRequire";
+import LoginRequire from "./client/LoginRequire";
 
 const Auth = ({ children }: any) => {
   const {user , loading} = AppState();

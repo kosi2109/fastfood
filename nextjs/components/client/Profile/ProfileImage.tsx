@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import React from 'react'
-import img from "../../public/assets/profile.jpg"
+import img from "../../../public/assets/profile.jpg"
 
 interface Props{
     size? : number

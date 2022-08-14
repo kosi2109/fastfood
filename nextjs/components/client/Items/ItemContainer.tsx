@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import React from 'react'
-import { MENU } from '../../types'
+import { MENU } from '../../../types'
 import Items from './Items'
 
 interface Props {

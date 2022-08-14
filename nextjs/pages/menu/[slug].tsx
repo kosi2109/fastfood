@@ -6,6 +6,7 @@ import { AppState, CART_ACTION } from '../../context/AppProvider'
 import { MENU, SIZE } from '../../types'
 import useAnimateNumber from 'use-animate-number';
 import Head from 'next/head'
+import {motion} from "framer-motion"
 
 interface Props{
   menu : MENU
@@ -24,8 +25,8 @@ const animateOption = {
 const Menu : NextPage<Props> = ({menu})=> {
     
   const {increaseItem} = AppState();
-  const [price, setPrice] = useAnimateNumber(menu.sizes[0].price,animateOption);
-  const [size, setSize] = useState(menu.sizes[0]);
+  const [price, setPrice] = useAnimateNumber(menu?.sizes[0].price,animateOption);
+  const [size, setSize] = useState(menu?.sizes[0]);
 
   const sizeHandle = useCallback((size:SIZE)=>{
     setPrice(size?.price,false);
@@ -35,11 +36,11 @@ const Menu : NextPage<Props> = ({menu})=> {
   return (
     <AppLayout title="Detail" back={true} >
       <Head>
-        <title>{menu.name}</title>
+        <title>{menu?.name}</title>
       </Head>
-      <div className='pt-2'>
-        <div className='mb-2 w-full h-52 flex justify-center items-center'>
-          <img className='w-full h-full object-cover rounded-md' src={menu?.cover_img} alt={menu?.name} />
+      <motion.div exit={{opacity : 0}} className='pt-2'>
+        <div className='mb-2 w-full h-60 flex justify-center items-center'>
+          <motion.img layoutId={menu?.name} className='w-full h-full object-contain rounded-md' src={menu?.cover_img} alt={menu?.name} />
         </div>
 
         <div>
@@ -69,7 +70,7 @@ const Menu : NextPage<Props> = ({menu})=> {
           
           <button className='w-full h-10 bg-bgGreen text-textWhite rounded-md' onClick={()=>increaseItem(menu,size,CART_ACTION.INCREASE)}>Add To Cart</button>
         </div>
-      </div>
+      </motion.div>
     </AppLayout>
   )
 }

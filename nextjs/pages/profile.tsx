@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { logout } from "../api";
 import Auth from "../components/Auth";
 import AppLayout from "../components/Layouts/AppLayout";
-import Detail from "../components/Profile/Detail";
-import ProfileImage from "../components/Profile/ProfileImage";
+import Detail from "../components/client/Profile/Detail";
+import ProfileImage from "../components/client/Profile/ProfileImage";
 import { AppState, defaultUser } from "../context/AppProvider";
 import GoogleMap from "google-map-react"
 import {HiLocationMarker} from "react-icons/hi"

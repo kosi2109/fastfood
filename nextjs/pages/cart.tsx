@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import React from "react";
 import AppLayout from "../components/Layouts/AppLayout";
 import Link from "next/link";
-import CartItemContainer from "../components/Cart/CartItemContainer";
+import CartItemContainer from "../components/client/Cart/CartItemContainer";
 import { AppState } from "../context/AppProvider";
 
 const cart: NextPage = () => {

@@ -19,8 +19,6 @@ class MenuFactory extends Factory
     public function definition()
     {
         return [
-            "user_id" => User::factory(),
-            "category_id" => Category::factory(),
             "name" => $this->faker->name(),
             "slug" => $this->faker->unique()->slug(),
             "description" => $this->faker->text(),

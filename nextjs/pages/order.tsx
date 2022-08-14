@@ -1,8 +1,8 @@
 import { NextPage } from "next";
 import React, { useEffect, useState } from "react";
-import OrderItem from "../components/Order/OrderItem";
+import OrderItem from "../components/client/Order/OrderItem";
 import AppLayout from "../components/Layouts/AppLayout";
-import ProfileImage from "../components/Profile/ProfileImage";
+import ProfileImage from "../components/client/Profile/ProfileImage";
 import Auth from "../components/Auth";
 import { AppState } from "../context/AppProvider";
 import GoogleMap from "google-map-react";

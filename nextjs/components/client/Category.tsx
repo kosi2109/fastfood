@@ -1,5 +1,5 @@
 import React, { SetStateAction } from "react";
-import { CATEGORY } from "../types";
+import { CATEGORY } from "../../types";
 
 const selected =
   "flex items-center min-w-fit justify-center cursor-pointer mr-4 border-b-2 border-textGreen font-bold text-lg";
@@ -13,7 +13,7 @@ const Category = ({
 }: {
   categories: CATEGORY[];
   selectedCategory: string;
-  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedCategory: any;
 }) => {
   return (
       <ul className="w-full flex overflow-x-auto py-2 scrollbar-hide mb-3">

@@ -1,5 +1,5 @@
 import React from "react";
-import sorryImg from "../public/assets/sorry.svg";
+import sorryImg from "../../public/assets/sorry.svg";
 import Link from "next/link";
 
 const LoginRequire = () => {

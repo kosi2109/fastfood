@@ -2,13 +2,13 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import { allCategory, allMenus, featureCategory } from "../../api";
-import Category from "../../components/Category";
-import ItemContainer from "../../components/Items/ItemContainer";
-import ItemGridContainer from "../../components/Items/ItemGridContainer";
+import Category from "../../components/client/Category";
+import ItemContainer from "../../components/client/Items/ItemContainer";
+import ItemGridContainer from "../../components/client/Items/ItemGridContainer";
 import AppLayout from "../../components/Layouts/AppLayout";
 import Loading from "../../components/Loading";
-import MenuLoading from "../../components/MenuLoading";
-import Search from "../../components/Search";
+import MenuLoading from "../../components/client/MenuLoading";
+import Search from "../../components/client/Search";
 import { AppState } from "../../context/AppProvider";
 import { CATEGORY, MENU } from "../../types/index";
 
@@ -29,12 +29,13 @@ const menu: NextPage<Props> = ({ categories, featureCate }) => {
 
   useEffect(() => {
     if (selectedCategory !== "all") {
-      setLoading(true);
       getCategory();
     }
+    
   }, [selectedCategory]);
   
   const getCategory = async ()=>{
+    setLoading(true);
     await getMenuByCategory(selectedCategory);
     setLoading(false);
   }
@@ -45,21 +46,23 @@ const menu: NextPage<Props> = ({ categories, featureCate }) => {
         <title>Menu</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className="text-md font-bold text-textGray">Our Food</h1>
-      <h2 className="text-xl mb-2 font-bold text-textGreen">Special For You</h2>
-      <Search />
-      <Category
-        categories={categories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
-      {selectedCategory === "all" ? (
-        featureCate.map((category:CATEGORY)=>(
-          <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
-        ))
-      ) : (
-        loading ? <MenuLoading/>  : <ItemGridContainer menus={menus} />
-      )}
+      <div>
+        <h1 className="text-md font-bold text-textGray">Our Food</h1>
+        <h2 className="text-xl mb-2 font-bold text-textGreen">Special For You</h2>
+        <Search />
+        <Category
+          categories={categories}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+        {selectedCategory === "all" ? (
+          featureCate.map((category:CATEGORY)=>(
+            <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
+          ))
+        ) : (
+          loading ? <MenuLoading/>  : <ItemGridContainer menus={menus} />
+        )}
+      </div>
     </AppLayout>
   );
 };
