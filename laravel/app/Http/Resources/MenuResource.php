@@ -22,6 +22,7 @@ class MenuResource extends JsonResource
             'cover_img' => $this->cover_img,
             'categories' => CategoryResource::collection($this->categories),
             'sizes' => SizeWithPriceResource::collection($this->sizes),
+            'discount' => new DiscountResource($this->discount)
         ];
     }
 }

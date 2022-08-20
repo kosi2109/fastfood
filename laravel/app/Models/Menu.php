@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Menu extends Model
 {
     use HasFactory;
-    protected $with = ["categories","sizes"];
+    protected $with = ["categories", "sizes", "discount"];
 
     protected $guarded = [];
 
@@ -42,5 +42,10 @@ class Menu extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function discount ()
+    {
+        return $this->hasOne(Discount::class);
     }
 }
