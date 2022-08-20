@@ -2,8 +2,8 @@ import React, { SetStateAction } from "react";
 import { CATEGORY } from "../../types";
 
 const selected =
-  "flex items-center min-w-fit justify-center cursor-pointer mr-4 border-b-2 border-textGreen font-bold text-lg";
-const list = "flex min-w-fit items-center justify-center cursor-pointer mr-4 font-semibold text-md";
+  "flex items-center min-w-fit md:mb-2 justify-center md:justify-start cursor-pointer mr-4 border-b-2 border-textGreen font-bold text-lg";
+const list = "flex min-w-fit md:mb-2 items-center justify-center md:justify-start cursor-pointer mr-4 font-semibold text-md";
 
 
 const Category = ({
@@ -16,7 +16,7 @@ const Category = ({
   setSelectedCategory: any;
 }) => {
   return (
-      <ul className="w-full flex overflow-x-auto py-2 scrollbar-hide mb-3">
+      <ul className="w-full flex md:flex-col overflow-x-auto py-2 scrollbar-hide mb-3">
         <li
           onClick={() => setSelectedCategory("all")}
           className={selectedCategory === "all" ? selected : list}

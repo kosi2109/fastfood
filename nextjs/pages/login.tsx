@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai"
 import { login } from "../api";
+import AppLayout from "../components/Layouts/AppLayout";
 import { AppState } from "../context/AppProvider";
 import { LOGIN } from "../types";
 
@@ -41,16 +42,16 @@ const Login: NextPage = () => {
   }
 
   return (
-    <div>
+    <AppLayout>
       <Head>
         <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="min-h-screen flex flex-col items-center py-3">
+      <div className="min-h-screen md:w-1/2 md:mx-auto flex flex-col items-center py-3">
         <h1 className="text-3xl text-textGreen font-semibold mb-3">Signup</h1>
 
-        <form onSubmit={handleSubmit} className="w-4/6">
+        <form onSubmit={handleSubmit} className="w-full">
         
           <div className="flex flex-col w-full mb-2">
             <label className="mb-2 text-textGray" htmlFor="email">
@@ -89,19 +90,19 @@ const Login: NextPage = () => {
           </button>
         </form>
         <p className="mb-3">You Don't have an Account ? <Link href="/register"><span className="text-textGreen font-semibold cursor-pointer">Register</span></Link></p>
-        <div className="w-4/6 mb-3 text-center relative flex justify-center items-center">
+        <div className="w-full mb-3 text-center relative flex justify-center items-center">
           <h5 className="bg-bgWhite z-10 w-10">OR</h5>
           <div className="z-1 border-b border-textGreen w-full h-1/2 absolute top-0"></div>
         </div>
 
-        <button className="mb-3 bg-bgGreen w-4/6 h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
+        <button className="mb-3 bg-bgGreen w-full h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
           Login with Google
         </button>
-        <button className="mb-3 border border-bgGreen w-4/6 h-10 rounded-md text-textGreen font-bold hover:bg-bgGreen hover:text-textWhite">
+        <button className="mb-3 border border-bgGreen w-full h-10 rounded-md text-textGreen font-bold hover:bg-bgGreen hover:text-textWhite">
           Login with Facebook
         </button>
       </div>
-    </div>
+    </AppLayout>
   );
 };
 

@@ -26,7 +26,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Category::orderBy('name')->get());
+        return CategoryResource::collection(Category::where('feature',false)->orderBy('name')->get());
     }
 
     /**

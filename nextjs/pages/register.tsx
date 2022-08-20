@@ -7,6 +7,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { register } from "../api";
 import GoogleMap from "google-map-react"
 import {HiLocationMarker} from "react-icons/hi"
+import AppLayout from "../components/Layouts/AppLayout";
 
 
 const MapPointer = ({}:any) => <div><HiLocationMarker size={30}/></div>;
@@ -18,6 +19,7 @@ const initialForm = {
   address: "",
   password: "",
   password2: "",
+  profile_img : "",
 }
 
 export type REGISTER = typeof initialForm;
@@ -48,16 +50,16 @@ const Register: NextPage = () => {
   };
 
   return (
-    <div>
+    <AppLayout>
       <Head>
         <title>Register</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="min-h-screen flex flex-col items-center py-3">
+      <div className="min-h-screen md:w-1/2 md:mx-auto flex flex-col items-center py-3">
         <h1 className="text-3xl mb-3 text-textGreen font-semibold">Signup</h1>
 
-        <form onSubmit={handleSubmit} className="w-4/6">
+        <form onSubmit={handleSubmit} className="w-full">
           <div className="flex flex-col w-full mb-2">
             <label className="mb-2 text-textGray" htmlFor="name">
               Full Name
@@ -176,19 +178,19 @@ const Register: NextPage = () => {
             </span>
           </Link>
         </p>
-        <div className="w-4/6 mb-3 text-center relative flex justify-center items-center">
+        <div className="mb-3 text-center relative flex justify-center items-center">
           <h5 className="bg-bgWhite z-10 w-10">OR</h5>
           <div className="z-1 border-b border-textGreen w-full h-1/2 absolute top-0"></div>
         </div>
 
-        <button className="mb-3 bg-bgGreen w-4/6 h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
+        <button className="mb-3 bg-bgGreen h-10 w-full rounded-md text-textWhite font-bold hover:bg-textGreen">
           Sign Up with Google
         </button>
-        <button className="mb-3 border border-bgGreen w-4/6 h-10 rounded-md text-textGreen font-bold hover:bg-bgGreen hover:text-textWhite">
+        <button className="mb-3 border border-bgGreen w-full h-10 rounded-md text-textGreen font-bold hover:bg-bgGreen hover:text-textWhite">
           Sign Up with Facebook
         </button>
       </div>
-    </div>
+    </AppLayout>
   );
 };
 

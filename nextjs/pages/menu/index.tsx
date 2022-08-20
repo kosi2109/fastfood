@@ -46,22 +46,29 @@ const menu: NextPage<Props> = ({ categories, featureCate }) => {
         <title>Menu</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
-        <h1 className="text-md font-bold text-textGray">Our Food</h1>
-        <h2 className="text-xl mb-2 font-bold text-textGreen">Special For You</h2>
-        <Search />
-        <Category
-          categories={categories}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
-        {selectedCategory === "all" ? (
-          featureCate.map((category:CATEGORY)=>(
-            <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
-          ))
-        ) : (
-          loading ? <MenuLoading/>  : <ItemGridContainer menus={menus} />
-        )}
+      <div className="flex flex-col md:flex-row">
+        <div className="md:w-1/6 md:fixed md:top-20">
+          <h1 className="text-md font-bold text-textGray">Our Food</h1>
+          <h2 className="text-xl mb-2 font-bold text-textGreen">Special For You</h2>
+          <Search />
+          <Category
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+        </div>
+        <div className="hidden md:block w-1/6">
+
+        </div>
+        <div className="md:w-5/6 md:p-2">
+          {selectedCategory === "all" ? (
+            featureCate.map((category:CATEGORY)=>(
+              <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
+            ))
+          ) : (
+            loading ? <MenuLoading/>  : <ItemGridContainer menus={menus} />
+          )}
+        </div>
       </div>
     </AppLayout>
   );

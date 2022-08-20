@@ -10,7 +10,7 @@ const Search : NextPage = ()=> {
     router.push('search')
   }
   return (
-    <div className='w-full relative h-10 text-textGray mb-5'>
+    <div className='md:hidden w-full relative h-10 text-textGray mb-5'>
         <div className='absolute left-0 top-0 h-full w-10 flex justify-center items-center'>
             <FiSearch size={20} />
         </div>
