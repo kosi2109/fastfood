@@ -1,4 +1,4 @@
-import { MENU } from "../../types";
+import { MENU } from "../../../types";
 import SingleItem from "./SingleItem";
 
 const ItemGridContainer = ({ menus }: { menus: MENU[] }) => {

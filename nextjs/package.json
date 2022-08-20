@@ -4,13 +4,15 @@
   "scripts": {
     "dev": "next dev -H 127.0.0.1",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -H 127.0.0.1"
   },
   "dependencies": {
     "@types/google-map-react": "^2.1.7",
     "axios": "^0.27.2",
     "cookies-next": "^2.1.1",
+    "framer-motion": "^7.1.0",
     "google-map-react": "^2.2.0",
+    "moment": "^2.29.4",
     "next": "latest",
     "react-animated-numbers": "^0.13.0",
     "react-icons": "^4.4.0",

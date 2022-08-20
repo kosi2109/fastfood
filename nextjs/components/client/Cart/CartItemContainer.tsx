@@ -1,5 +1,5 @@
 import React from 'react'
-import { CART_ITEM } from '../../types'
+import { CART_ITEM } from '../../../types'
 import CartItem from './CartItem'
 
 const CartItemContainer = ({cartItems}:{cartItems : CART_ITEM[]})=> {

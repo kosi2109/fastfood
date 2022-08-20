@@ -3,10 +3,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import { featureCategory, searchMenus } from "../api";
-import ItemContainer from "../components/Items/ItemContainer";
-import ItemGridContainer from "../components/Items/ItemGridContainer";
+import ItemContainer from "../components/client/Items/ItemContainer";
+import ItemGridContainer from "../components/client/Items/ItemGridContainer";
 import AppLayout from "../components/Layouts/AppLayout";
-import MenuLoading from "../components/MenuLoading";
+import MenuLoading from "../components/client/MenuLoading";
 import { CATEGORY, MENU } from "../types";
 
 interface Props {
@@ -36,7 +36,7 @@ const Search: NextPage<Props> = ({ categories }) => {
 
   return (
     <AppLayout back={true} title="Search">
-      <div className="w-full relative h-10 text-textGray mb-5">
+      <div className="w-full md:mx-auto md:w-2/3 lg:w-1/2 relative h-10 text-textGray mb-5">
         <div className="absolute left-0 top-0 h-full w-10 flex justify-center items-center">
           <FiSearch size={20} />
         </div>
@@ -61,7 +61,7 @@ const Search: NextPage<Props> = ({ categories }) => {
       </div>
 
       {keyword == "" ? (
-        <>
+        <div className="w-full md:mx-auto md:w-2/3">
           <h3 className="text-lg font-bold mb-3">Suggestion for you ...</h3>
           {categories.map((category: any) => (
             <ItemContainer
@@ -70,12 +70,14 @@ const Search: NextPage<Props> = ({ categories }) => {
               menus={category.menus}
             />
           ))}
-        </>
+        </div>
 
       ) : loading ? (
         <MenuLoading/>
         ) : (
-        <ItemGridContainer menus={menus} />
+          <div className="w-full md:mx-auto md:w-2/3">
+            <ItemGridContainer menus={menus} />
+          </div>
       )}
     </AppLayout>
   );

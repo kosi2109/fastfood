@@ -2,10 +2,10 @@ import { getCookie, hasCookie } from 'cookies-next'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { allBanners, API, featureCategory } from '../api'
-import Baner from '../components/Baner'
-import ItemContainer from '../components/Items/ItemContainer'
+import Baner from '../components/client/Baner'
+import ItemContainer from '../components/client/Items/ItemContainer'
 import AppLayout from '../components/Layouts/AppLayout'
-import Search from '../components/Search'
+import Search from '../components/client/Search'
 import { BANNER, CATEGORY } from '../types'
 
 interface Props{

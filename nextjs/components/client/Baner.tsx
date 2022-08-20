@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 import Carousel from "react-multi-carousel";
-import { BANNER } from "../types";
+import { BANNER } from "../../types";
 
 interface Props {
   banners: BANNER[];

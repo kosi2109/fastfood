@@ -2,7 +2,7 @@ import React from "react";
 import SingleItem from "./SingleItem";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { MENU } from "../../types";
+import { MENU } from "../../../types";
 
 const responsive = {
   superLargeDesktop: {
@@ -24,7 +24,7 @@ const responsive = {
   },
 };
 
-const Items = ({deviceType , menus}: {deviceType : any | null , menus : MENU[] | null}) => {
+const Items = ({deviceType , menus}: {deviceType? : any, menus : MENU[] | null}) => {
   return (
     <Carousel
       responsive={responsive}

@@ -26,6 +26,14 @@ return new class extends Migration
 
             $table->enum('status',[1, 2, 3])->default(1);
 
+            $table->enum('role',[1, 2, 3])->default(1);
+
+            $table->timestamp('shipped_at')->nullable();
+
+            $table->foreignId('shipped_by')->nullable();
+
+            $table->text('note')->nullable();
+
             $table->timestamps();
         });
     }

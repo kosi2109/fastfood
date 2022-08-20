@@ -1,15 +1,15 @@
 import React from 'react'
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
-import { AppState, CART_ACTION } from '../../context/AppProvider'
-import { MENU, SIZE } from '../../types'
+import { AppState, CART_ACTION } from '../../../context/AppProvider'
+import { MENU, SIZE } from '../../../types'
 
 const CartItem = ({menu,size,quantity}:{menu:MENU,size:SIZE,quantity:number})=> {
     const {increaseItem} = AppState();
     
   return (
     <div className='w-full flex py-3 border-b-2'>
-        <div className='w-2/6 md:h-40'>
-            <img className='w-full h-full' src={menu.cover_img} alt="img" />
+        <div className='w-2/6 h-20 md:h-40 rounded-md overflow-hidden'>
+            <img className='object-cover w-full h-full' src={menu.cover_img} alt="img" />
         </div>
         <div className='w-4/6 px-2 flex flex-col justify-between items-start'>
             <h2 className='text-lg font-semibold'>{menu.name} ({size.name})</h2>
