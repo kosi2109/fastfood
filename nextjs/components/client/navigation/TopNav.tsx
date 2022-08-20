@@ -48,7 +48,11 @@ const TopNav: NextPage<Props> = ({ title, back = false }) => {
           <div className="w-1/5"></div>
         )}
         <div className="w-3/5 justify-center">
-          <h5 className="font-semibold text-xl text-center">{title}</h5>
+          <Link href="/">
+            <h5 className="text-textGreen text-center text-2xl font-bold">
+              FastFood
+            </h5>
+          </Link>
         </div>
         <div className="w-1/5 flex justify-end">
           <div className="cursor-pointer relative w-10 h-10 flex items-center justify-end">

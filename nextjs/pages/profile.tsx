@@ -32,7 +32,7 @@ const profile: NextPage = () => {
   },[user])
   
   return (
-    <AppLayout title="Profile">
+    <AppLayout>
       <Auth>
         <div className="py-1 flex items-center flex-col w-full">
           <div className="w-3/5 flex items-center justify-center mb-3">

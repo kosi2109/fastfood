@@ -35,6 +35,11 @@ export type MENU = {
   cover_img?: any;
   categories: CATEGORY[];
   sizes: SIZE[];
+  discount : {
+    discount : number,
+    discount_from : string,
+    discount_to : string
+  }
 }
 
 export type SIZE = {

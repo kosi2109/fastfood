@@ -91,7 +91,7 @@ const order: NextPage = () => {
   };
 
   return (
-    <AppLayout back={true} title="Order Status">
+    <AppLayout back={true}>
       <Auth>
         <div className="w-full py-2 mx-auto md:w-2/3 lg:w-1/2 2xl:w-1/3 flex flex-col">
           <div className="mb-3 w-full h-40 rounded-md bg-textGray">

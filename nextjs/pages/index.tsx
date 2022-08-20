@@ -16,16 +16,20 @@ interface Props{
 const Home: NextPage<Props> = ({categories,banners}) => {
   
   return (
-    <AppLayout title="Home" >
+    <AppLayout>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Search/>
-      <Baner banners={banners} />
-      {categories.map((category:any) => (
-        <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
-      ))}
+      <div className='w-full md:mx-auto md:w-2/3'>
+        <Baner banners={banners} />
+        <div className='w-full md:w'>
+          {categories.map((category:any) => (
+            <ItemContainer key={category.slug} title={category.name} menus={category.menus} />
+          ))}
+        </div>
+      </div>
     </AppLayout>
   )
 }

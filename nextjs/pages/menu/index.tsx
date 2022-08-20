@@ -41,7 +41,7 @@ const menu: NextPage<Props> = ({ categories, featureCate }) => {
   }
 
   return (
-    <AppLayout title="Menu">
+    <AppLayout>
       <Head>
         <title>Menu</title>
         <link rel="icon" href="/favicon.ico" />
