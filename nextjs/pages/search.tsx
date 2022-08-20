@@ -35,7 +35,7 @@ const Search: NextPage<Props> = ({ categories }) => {
   },[])
 
   return (
-    <AppLayout back={true} title="Search">
+    <AppLayout back={true}>
       <div className="w-full md:mx-auto md:w-2/3 lg:w-1/2 relative h-10 text-textGray mb-5">
         <div className="absolute left-0 top-0 h-full w-10 flex justify-center items-center">
           <FiSearch size={20} />

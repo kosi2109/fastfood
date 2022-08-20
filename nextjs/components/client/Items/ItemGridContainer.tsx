@@ -4,9 +4,9 @@ import SingleItem from "./SingleItem";
 const ItemGridContainer = ({ menus }: { menus: MENU[] }) => {
   return (
     <>
-    {menus.length > 0 ?
+    {menus?.length > 0 ?
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-1">
-        {menus.map((menu) => (
+        {menus?.map((menu) => (
           <SingleItem key={menu.slug} menu={menu} />
         ))}
       </div>

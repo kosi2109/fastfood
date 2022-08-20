@@ -30,7 +30,7 @@ const orderhistory: NextPage<Props> = () => {
   };
 
   return (
-    <AppLayout title="History" back={true}>
+    <AppLayout back={true}>
       <Auth>
         <div className="flex w-full md:mx-auto md:w-2/3 lg:w-1/2 mb-3 border-2">
           <button onClick={()=> setStatus('1')} className={`w-1/2 h-10 ${status == '1' && "bg-bgGreen text-white"}`}>In Progress</button>
