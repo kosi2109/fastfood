@@ -14,6 +14,7 @@ import {
 } from "../utils/mapCaculation";
 import { storeOrder } from "../api";
 import { useRouter } from "next/router";
+import { MENU, SIZE } from "../types";
 
 const MapPointer = ({}: any) => (
   <div>
@@ -90,6 +91,25 @@ const order: NextPage = () => {
     });    
   };
 
+  const getPrice = (size: SIZE,menu : any) => {
+    let price = size?.price;
+    if (isDiscountActive(menu)) {
+      price = size?.price - size?.price * (menu?.discount.discount / 100);
+    }
+    return price;
+  };
+
+  function isDiscountActive (menu : MENU) {
+    let today = new Date();
+    let from = new Date(menu?.discount?.discount_from);
+    let to = new Date(menu?.discount?.discount_to);
+    if (from <= today && today <= to ) {
+      return true;
+    }
+    return false;
+  }
+
+
   return (
     <AppLayout back={true}>
       <Auth>
@@ -133,7 +153,7 @@ const order: NextPage = () => {
               {cartItems.map((item, i) => {
                 const total =
                   item.quantity *
-                  item.item.sizes.filter((s) => s.id == item.size.id)[0].price;
+                  getPrice(item.item.sizes.filter((s) => s.id == item.size.id)[0],item.item)
                 subTotal += total;
                 return (
                   <OrderItem

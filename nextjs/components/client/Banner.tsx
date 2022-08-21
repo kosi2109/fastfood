@@ -15,7 +15,7 @@ const responsive = {
   },
 };
 
-const Baner: NextPage<Props> = ({ banners }) => {
+const Banner: NextPage<Props> = ({ banners }) => {
   return (
     <Carousel
       responsive={responsive}
@@ -31,10 +31,10 @@ const Baner: NextPage<Props> = ({ banners }) => {
       {banners.map((banner: any, i: number) => (
         <div key={i} className="w-full h-40 md:h-80 px-5 md:px-20 py-2 mb-3 bg-bgLightGreen flex items-start rounded-md shadow-sm">
           <div className="w-4/6 flex flex-col items-start justify-center">
-            <h4 className="font-semibold mb-2 text-xl md:text-6xl text-textBlack">
+            <h4 className="font-semibold mb-3 text-xl md:text-4xl text-textBlack">
               {banner.title}
             </h4>
-            <h5 className="font-medium mb-2 text-textBlack mb-2 md:text-3xl">
+            <h5 className="font-medium mb-2 text-textBlack mb-2 md:text-xl">
               {banner.description}
             </h5>
             {banner.menu && (
@@ -68,4 +68,4 @@ const Baner: NextPage<Props> = ({ banners }) => {
   );
 };
 
-export default Baner;
+export default Banner;
