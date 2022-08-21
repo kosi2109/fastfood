@@ -1,12 +1,11 @@
-import { getCookie, hasCookie } from 'cookies-next'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { allBanners, API, featureCategory } from '../api'
-import Baner from '../components/client/Baner'
+import { allBanners, featureCategory } from '../api'
 import ItemContainer from '../components/client/Items/ItemContainer'
 import AppLayout from '../components/Layouts/AppLayout'
 import Search from '../components/client/Search'
 import { BANNER, CATEGORY } from '../types'
+import Banner from '../components/client/Banner'
 
 interface Props{
   categories : CATEGORY[],
@@ -23,7 +22,7 @@ const Home: NextPage<Props> = ({categories,banners}) => {
       </Head>
       <Search/>
       <div className='w-full md:mx-auto md:w-2/3'>
-        <Baner banners={banners} />
+        <Banner banners={banners} />
         <div className='w-full md:w'>
           {categories.map((category:any) => (
             <ItemContainer key={category.slug} title={category.name} menus={category.menus} />

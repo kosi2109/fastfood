@@ -5,7 +5,25 @@ import { MENU, SIZE } from '../../../types'
 
 const CartItem = ({menu,size,quantity}:{menu:MENU,size:SIZE,quantity:number})=> {
     const {increaseItem} = AppState();
+
+    const getPrice = (size: SIZE) => {
+        let price = size?.price;
+        if (isDiscountActive()) {
+          price = size?.price - size?.price * (menu?.discount.discount / 100);
+        }
+        return price;
+      };
     
+      function isDiscountActive () {
+        let today = new Date();
+        let from = new Date(menu?.discount?.discount_from);
+        let to = new Date(menu?.discount?.discount_to);
+        if (from <= today && today <= to ) {
+          return true;
+        }
+        return false;
+      }
+      
   return (
     <div className='w-full flex py-3 border-b-2'>
         <div className='w-2/6 h-20 md:h-40 rounded-md overflow-hidden'>
@@ -25,7 +43,7 @@ const CartItem = ({menu,size,quantity}:{menu:MENU,size:SIZE,quantity:number})=> 
                         <AiOutlinePlus size={15}/>
                     </div>
                 </div>
-                <h5 className='font-semibold text-textGreen text-lg'>{menu.sizes.filter((s)=> s.name == size.name)[0]?.price * quantity}</h5>
+                <h5 className='font-semibold text-textGreen text-lg'>{getPrice(menu.sizes.filter((s)=> s.name == size.name)[0]) * quantity}</h5>
             </div>
         </div>
     </div>
