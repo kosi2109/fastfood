@@ -31,7 +31,9 @@ const defaultState = {
   setCartItemTotal: (state: number) => {},
   selectedCategory: "all",
   setSelectedCategory: (state: string) => {},
-  clearCart : ()=> {}
+  clearCart : ()=> {},
+  error : "",
+  setError : (state:string) => {}
 };
 
 const AppContext = createContext(defaultState);
@@ -40,6 +42,7 @@ function AppProvider({ children }: any) {
   const [user, setUser] = useState<USER>(defaultState.user);
   const [loading, setLoading] = useState<boolean>(defaultState.loading);
   const [cartItems, setCartItems] = useState<CART_ITEM[]>([]);
+  const [error, setError] = useState<string>("");
   const [cartItemTotal, setCartItemTotal] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(
     defaultState.selectedCategory
@@ -119,7 +122,9 @@ function AppProvider({ children }: any) {
         setCartItemTotal,
         selectedCategory,
         setSelectedCategory,
-        clearCart
+        clearCart,
+        error,
+        setError
       }}
     >
       {children}

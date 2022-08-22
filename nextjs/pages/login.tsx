@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai"
 import { login } from "../api";
+import Error from "../components/Error";
 import AppLayout from "../components/Layouts/AppLayout";
 import { AppState } from "../context/AppProvider";
 import { LOGIN } from "../types";
@@ -14,6 +15,7 @@ import { LOGIN } from "../types";
 const Login: NextPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [form, setForm] = useState<LOGIN>({email : "" , password : ""})
+  const [error, setError] = useState('');
   const route = useRouter();
   const {setUser} = AppState();
 
@@ -29,7 +31,6 @@ const Login: NextPage = () => {
     login(form)
       .then((response:any)=> {
         setUser(response.data);
-        localStorage.setItem("fastfood_auth",JSON.stringify(response.data))
         setCookie('jwt',response.data.token,{
           maxAge : 60 * 60 * 24 * 30 //1month
         })
@@ -38,9 +39,9 @@ const Login: NextPage = () => {
         })
         route.push('/')
       })
-      .catch((response)=> console.log(response))
+      .catch((response)=> setError(response.response.data.message))
   }
-
+  
   return (
     <AppLayout>
       <Head>
@@ -63,6 +64,7 @@ const Login: NextPage = () => {
               id="email"
               className="h-10 rounded-md border border-bgGreen px-2 focus:outline-textGreen"
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -77,6 +79,7 @@ const Login: NextPage = () => {
                 id="password"
                 className="w-full h-10 rounded-md border border-bgGreen px-2 focus-within:outline-textGreen"
                 onChange={handleChange}
+                required
               />
               <div onClick={()=> setShowPassword(!showPassword)} className="flex items-center justify-center absolute top-0 right-0 w-10 h-full">
                 {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} /> }
@@ -84,7 +87,9 @@ const Login: NextPage = () => {
               </div>
             </div>
           </div>
-
+          
+          {error !== "" && <Error error={error} />}
+          
           <button className="mb-5 bg-bgGreen w-full h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
             Login
           </button>

@@ -8,6 +8,8 @@ import { register } from "../api";
 import GoogleMap from "google-map-react"
 import {HiLocationMarker} from "react-icons/hi"
 import AppLayout from "../components/Layouts/AppLayout";
+import Error from "../components/Error";
+import Input from "../components/Form/Input";
 
 
 const MapPointer = ({}:any) => <div><HiLocationMarker size={30}/></div>;
@@ -30,7 +32,8 @@ const Register: NextPage = () => {
   const router = useRouter();
   const [form, setForm] = useState<typeof initialForm>(initialForm);
   const [coordinate, setCoordinate] = useState({lat : 20.1544 , lng : 94.9455});
-  
+  const [errors, setErrors] = useState<any>([]);
+
   useEffect(()=>{
     form.address = `${coordinate.lat},${coordinate.lng}`
   },[coordinate])
@@ -39,7 +42,7 @@ const Register: NextPage = () => {
     e.preventDefault();
     register(form)
     .then(()=> router.push('/login'))
-    .catch((error)=> console.log(error))
+    .catch((res)=> setErrors(res.response.data))
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,44 +63,31 @@ const Register: NextPage = () => {
         <h1 className="text-3xl mb-3 text-textGreen font-semibold">Signup</h1>
 
         <form onSubmit={handleSubmit} className="w-full">
-          <div className="flex flex-col w-full mb-2">
-            <label className="mb-2 text-textGray" htmlFor="name">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              className="h-10 rounded-md border border-bgGreen px-2 focus:outline-textGreen"
-              onChange={handleChange}
-            />
-          </div>
+          <Input
+            title="Name"
+            id="name"
+            name="name"
+            handleChange={handleChange}
+            errors={errors}
+          />
 
-          <div className="flex flex-col w-full mb-2">
-            <label className="mb-2 text-textGray" htmlFor="email">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className="h-10 rounded-md border border-bgGreen px-2 focus:outline-textGreen"
-              onChange={handleChange}
-            />
-          </div>
+          <Input
+            title="Email"
+            id="email"
+            name="email"
+            type="email"
+            handleChange={handleChange}
+            errors={errors}
+          />
 
-          <div className="flex flex-col w-full mb-2">
-            <label className="mb-2 text-textGray" htmlFor="phone">
-              Phone
-            </label>
-            <input
-              type="text"
-              name="phone"
-              id="phone"
-              className="h-10 rounded-md border border-bgGreen px-2 focus:outline-textGreen"
-              onChange={handleChange}
-            />
-          </div>
+          <Input
+            title="Phone"
+            id="phone"
+            name="phone"
+            type="phone"
+            handleChange={handleChange}
+            errors={errors}
+          />
 
           <div className="flex flex-col w-full mb-2 ">
             <label className="mb-2 text-textGray" htmlFor="password">
@@ -110,6 +100,7 @@ const Register: NextPage = () => {
                 name="password"
                 id="password"
                 className="w-full h-10 rounded-md border border-bgGreen px-2 focus-within:outline-textGreen"
+                required
               />
               <div
                 onClick={() => setShowPassword(!showPassword)}
@@ -134,6 +125,7 @@ const Register: NextPage = () => {
                 type={showPassword2 ? "text" : "password"}
                 name="password2"
                 id="password2"
+                required
                 className="w-full h-10 rounded-md border border-bgGreen px-2 focus-within:outline-textGreen"
               />
               <div
@@ -148,8 +140,9 @@ const Register: NextPage = () => {
               </div>
             </div>
           </div>
+
           <div className="w-full h-40 md:h-80 mb-3 bg-bgGray border-2 rounded-md px-3 py-2">
-          <input type="hidden" name="address" value={`${coordinate.lat},${coordinate.lng}`}  />
+          <input type="hidden" name="address" value={`${coordinate.lat},${coordinate.lng}`} required  />
           <GoogleMap
             bootstrapURLKeys={{key:"AIzaSyAWiuvmnGdI7dIdMX-I7JHWVhQV-8O9OyY"}}
             defaultCenter={coordinate}
@@ -166,6 +159,7 @@ const Register: NextPage = () => {
             />
           </GoogleMap>
         </div>
+          
           <button className="mb-5 bg-bgGreen w-full h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
             Sign Up
           </button>
