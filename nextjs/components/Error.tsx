@@ -7,7 +7,7 @@ interface Props {
 const Error: NextPage<Props> = ({error}) => {
   
   return (
-    <div className="w-full text-center text-red py-2">
+    <div className="w-full text-start text-red py-2">
       <p>{error}</p>
     </div>
   );

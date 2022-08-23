@@ -11,7 +11,6 @@ import AppLayout from "../components/Layouts/AppLayout";
 import { AppState } from "../context/AppProvider";
 import { LOGIN } from "../types";
 
-
 const Login: NextPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [form, setForm] = useState<LOGIN>({email : "" , password : ""})
@@ -48,9 +47,8 @@ const Login: NextPage = () => {
         <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <div className="min-h-screen md:w-1/2 md:mx-auto flex flex-col items-center py-3">
-        <h1 className="text-3xl text-textGreen font-semibold mb-3">Signup</h1>
+        <h1 className="text-3xl text-textGreen font-semibold mb-3">Login</h1>
 
         <form onSubmit={handleSubmit} className="w-full">
         

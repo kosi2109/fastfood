@@ -5,7 +5,7 @@ import { LOGIN } from "../types";
 
 
 export const API = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/',
+    baseURL: 'https://fastfoodtest.herokuapp.com/api/',
     withCredentials : true,
     headers: {
         'Content-Type': 'application/json',

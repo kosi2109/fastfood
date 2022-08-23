@@ -4,6 +4,7 @@ import AppLayout from "../components/Layouts/AppLayout";
 import Link from "next/link";
 import CartItemContainer from "../components/client/Cart/CartItemContainer";
 import { AppState } from "../context/AppProvider";
+import EmptyCart from "../components/client/EmptyCart";
 
 const cart: NextPage = () => {
   const { cartItems } = AppState();
@@ -21,12 +22,7 @@ const cart: NextPage = () => {
               </Link>
             </>
           ) : (
-            <div className="w-full flex items-center justify-center flex-col mt-20">
-              <h1 className="font-semibold text-2xl mb-3">Empty Cart</h1>
-              <Link href="/menu" >
-                <button className="bg-bgGreen w-full text-textWhite h-10 rounded-md">Shop Now</button>
-              </Link>
-            </div>
+            <EmptyCart />
           )}
         </div>
     </AppLayout>

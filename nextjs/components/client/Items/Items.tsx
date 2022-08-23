@@ -31,7 +31,7 @@ const Items = ({deviceType , menus}: {deviceType? : any, menus : MENU[] | null})
       additionalTransfrom={0}
       arrows
       centerMode={false}
-      className=""
+      className="z-10"
       containerClass="container-with-dots"
       dotListClass=""
       draggable={deviceType == "mobile" || deviceType == "tablet" ? true : false}

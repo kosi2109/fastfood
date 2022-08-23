@@ -34,7 +34,7 @@ const TopNav: NextPage<Props> = ({ title, back = false }) => {
   return (
     <>
       {/* for smaller device */}
-      <div className="md:hidden z-20 px-4 fixed top-0 left-0 w-full bg-bgWhite h-14 flex justify-between items-center">
+      <div className="md:hidden z-50 px-4 fixed top-0 left-0 w-full bg-bgWhite h-14 flex justify-between items-center">
         {back ? (
           <div className="w-1/5 flex justify-start">
             <div
