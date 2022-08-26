@@ -1,8 +1,6 @@
 import React from "react";
 
-const Input = ({title, id, name,type = 'text', handleChange , errors} : any) => {
-    console.log(name in errors);
-    
+const Input = ({title, id, name,type = 'text', handleChange , errors} : any) => {    
   return (
     <div className="flex flex-col w-full mb-2">
       <label className="mb-2 text-textGray" htmlFor={id}>

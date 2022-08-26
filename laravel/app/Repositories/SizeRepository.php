@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 use App\Exceptions\GeneralJsonException;
 use App\Models\Size;
+use Illuminate\Support\Facades\Cache;
 
 class SizeRepository extends BaseRepository
 {
+    CONST CACHE_KEY = "Size.";
     /**
      * @param $attribute
      * 
@@ -17,6 +19,10 @@ class SizeRepository extends BaseRepository
         $create = Size::create($attributes->input());
 
         if(!$create) return new GeneralJsonException("Create Fail.",400);
+
+        if (Cache::has(self::CACHE_KEY."All")) {
+            Cache::forget(self::CACHE_KEY."All");
+        }
 
         return $create;
     }
@@ -33,6 +39,10 @@ class SizeRepository extends BaseRepository
         
         if(!$size->update($attributes->input())) return new GeneralJsonException("Update fail.",400);
 
+        if (Cache::has(self::CACHE_KEY."All")) {
+            Cache::forget(self::CACHE_KEY."All");
+        }
+
         return $size->fresh();
     }
 
@@ -47,6 +57,10 @@ class SizeRepository extends BaseRepository
         $deleted = $size->delete(); 
         
         if(!$deleted) return new GeneralJsonException("Delete Fail.",400);
+
+        if (Cache::has(self::CACHE_KEY."All")) {
+            Cache::forget(self::CACHE_KEY."All");
+        }
 
         return $deleted;
     }

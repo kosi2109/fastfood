@@ -8,8 +8,9 @@ import { register } from "../api";
 import GoogleMap from "google-map-react"
 import {HiLocationMarker} from "react-icons/hi"
 import AppLayout from "../components/Layouts/AppLayout";
-import Error from "../components/Error";
 import Input from "../components/Form/Input";
+import { ClipLoader } from "react-spinners";
+import { toast } from 'react-toastify';
 
 
 const MapPointer = ({}:any) => <div><HiLocationMarker size={30}/></div>;
@@ -33,16 +34,25 @@ const Register: NextPage = () => {
   const [form, setForm] = useState<typeof initialForm>(initialForm);
   const [coordinate, setCoordinate] = useState({lat : 20.1544 , lng : 94.9455});
   const [errors, setErrors] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(()=>{
     form.address = `${coordinate.lat},${coordinate.lng}`
   },[coordinate])
   
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     e.preventDefault();
     register(form)
-    .then(()=> router.push('/login'))
-    .catch((res)=> setErrors(res.response.data))
+    .then(()=> {
+      router.push('/login')
+      toast.success("Account was scuuessfully created.")
+    })
+    .catch((res)=> {
+      setErrors(res.response.data)
+      setLoading(false)
+      toast.error("Register Fail.")
+    })
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +69,7 @@ const Register: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="min-h-screen md:w-1/2 md:mx-auto flex flex-col items-center py-3">
+      <div className="md:w-1/2 lg:w-1/3 md:mx-auto flex flex-col items-center py-3">
         <h1 className="text-3xl mb-3 text-textGreen font-semibold">Signup</h1>
 
         <form onSubmit={handleSubmit} className="w-full">
@@ -161,7 +171,7 @@ const Register: NextPage = () => {
         </div>
           
           <button className="mb-5 bg-bgGreen w-full h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
-            Sign Up
+            {loading ? <ClipLoader size={20} color="#ffffff" /> : "Register"}
           </button>
         </form>
         <p className="mb-3">

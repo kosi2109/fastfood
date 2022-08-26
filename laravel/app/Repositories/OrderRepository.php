@@ -5,9 +5,11 @@ namespace App\Repositories;
 use App\Exceptions\GeneralJsonException;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Cache;
 
 class OrderRepository extends BaseRepository
 {
+    CONST CACHE_KEY = "Order.";
     /**
      * @param $attribute
      * 
@@ -22,6 +24,10 @@ class OrderRepository extends BaseRepository
         foreach ($attributes->items as $item) {
             $item['order_id'] = $order->id;
             OrderItem::create($item);
+        }
+
+        if (Cache::has(self::CACHE_KEY."All")) {
+            Cache::forget(self::CACHE_KEY."All");
         }
 
         return $order->fresh();

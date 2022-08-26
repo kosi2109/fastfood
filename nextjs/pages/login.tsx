@@ -6,13 +6,16 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai"
 import { login } from "../api";
-import Error from "../components/Error";
 import AppLayout from "../components/Layouts/AppLayout";
 import { AppState } from "../context/AppProvider";
 import { LOGIN } from "../types";
+import ClipLoader from "react-spinners/ClipLoader"
+import { toast } from 'react-toastify';
+
 
 const Login: NextPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState<LOGIN>({email : "" , password : ""})
   const [error, setError] = useState('');
   const route = useRouter();
@@ -27,6 +30,7 @@ const Login: NextPage = () => {
 
   const handleSubmit = (e : React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
+    setLoading(true);
     login(form)
       .then((response:any)=> {
         setUser(response.data);
@@ -38,7 +42,10 @@ const Login: NextPage = () => {
         })
         route.push('/')
       })
-      .catch((response)=> setError(response.response.data.message))
+      .catch((response)=> {
+        setLoading(false)
+        toast.error(response.response.data.message);
+      })
   }
   
   return (
@@ -47,7 +54,7 @@ const Login: NextPage = () => {
         <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="min-h-screen md:w-1/2 md:mx-auto flex flex-col items-center py-3">
+      <div className="md:w-1/2 lg:w-1/3 md:mx-auto flex flex-col items-center py-3">
         <h1 className="text-3xl text-textGreen font-semibold mb-3">Login</h1>
 
         <form onSubmit={handleSubmit} className="w-full">
@@ -85,11 +92,9 @@ const Login: NextPage = () => {
               </div>
             </div>
           </div>
-          
-          {error !== "" && <Error error={error} />}
-          
-          <button className="mb-5 bg-bgGreen w-full h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
-            Login
+                    
+          <button className="mb-5 bg-bgGreen w-full flex items-center justify-center h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
+            {loading ? <ClipLoader size={20} color="#ffffff" /> : "login"}
           </button>
         </form>
         <p className="mb-3">You Don't have an Account ? <Link href="/register"><span className="text-textGreen font-semibold cursor-pointer">Register</span></Link></p>
