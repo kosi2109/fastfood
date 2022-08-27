@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\GeneralJsonException;
 use App\Http\Requests\SizeRequest;
 use App\Http\Resources\SizeResource;
 use App\Models\Size;
@@ -22,7 +23,11 @@ class SizeController extends Controller
      */
     function index()
     {
-        return SizeResource::collection(Size::all());
+        try {
+            return SizeResource::collection($this->repository->getAll());
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
     /**
@@ -32,7 +37,11 @@ class SizeController extends Controller
      */
     function store(SizeRequest $request)
     {
-        return new SizeResource($this->repository->create($request));
+        try {
+            return new SizeResource($this->repository->create($request));
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
 
@@ -44,7 +53,11 @@ class SizeController extends Controller
      */
     function update(Size $size,Request $request)
     {
-        return new SizeResource($this->repository->update($size,$request));
+        try {
+            return new SizeResource($this->repository->update($size,$request));
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
     /**
@@ -54,9 +67,13 @@ class SizeController extends Controller
      */
     function destroy(Size $size)
     {
-        $this->repository->delete($size);
-        
-        return response(["message"=>"Delete Success"],200);
+        try {
+            $this->repository->delete($size);
+            
+            return response(["message"=>"Delete Success"], 200);
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
 }

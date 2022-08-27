@@ -9,6 +9,23 @@ use Illuminate\Support\Facades\Cache;
 class SizeRepository extends BaseRepository
 {
     CONST CACHE_KEY = "Size.";
+
+    /**
+     * @return Size
+     */
+    public function getAll()
+    {
+        if (Cache::has(self::CACHE_KEY."All")) {
+            $sizes = Cache::get(self::CACHE_KEY."All");
+        } else {
+            $sizes = Cache::rememberForever(self::CACHE_KEY."All", function() {
+                return Size::all();
+            });
+        }
+
+        return $sizes;
+    }
+
     /**
      * @param $attribute
      * 
@@ -32,7 +49,7 @@ class SizeRepository extends BaseRepository
      * @param Size $size
      * @param $attribute
      * 
-     * @return Menu
+     * @return Size
      */
     public function update($size,$attributes)
     {
