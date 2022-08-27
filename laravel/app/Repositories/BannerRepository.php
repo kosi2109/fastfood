@@ -11,6 +11,22 @@ class BannerRepository extends BaseRepository
     CONST CACHE_KEY = "Banner.";
     
     /**
+     * @return Banner
+     */
+    public function getAll()
+    {
+        if (Cache::has(self::CACHE_KEY."All")) {
+            $banners = Cache::get(self::CACHE_KEY."All");
+        } else {
+            $banners = Cache::rememberForever(self::CACHE_KEY."All", function() {
+                return Banner::all();
+            });
+        }
+
+        return $banners;
+    }
+
+    /**
      * @param $attribute
      * 
      * @return Banner

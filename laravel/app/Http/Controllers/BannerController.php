@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\GeneralJsonException;
 use App\Http\Requests\BannerRequest;
 use App\Http\Resources\BannerResource;
 use App\Models\Banner;
@@ -24,7 +25,11 @@ class BannerController extends Controller
      */
     public function index ()
     {
-        return BannerResource::collection(Banner::all());
+        try {
+            return BannerResource::collection($this->respository->getAll());
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
     /**
@@ -34,7 +39,11 @@ class BannerController extends Controller
      */
     public function store (BannerRequest $request)
     {
-        return new BannerResource($this->respository->create($request));
+        try {
+            return new BannerResource($this->respository->create($request));
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
     /**
@@ -45,7 +54,11 @@ class BannerController extends Controller
      */
     public function update (Request $request, Banner $banner) 
     {
-        return new BannerResource($this->respository->update($banner,$request));
+        try {
+            return new BannerResource($this->respository->update($banner,$request));
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
     /**
@@ -53,9 +66,13 @@ class BannerController extends Controller
      */
     public function destroy (Banner $banner) 
     {
-        $this->respository->delete($banner);
-
-        return response("Delete Success", 200);
+        try {
+            $this->respository->delete($banner);
+    
+            return response("Delete Success", 200);
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
 }
