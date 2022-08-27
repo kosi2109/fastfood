@@ -9,11 +9,15 @@ import { login } from "../api";
 import AppLayout from "../components/Layouts/AppLayout";
 import { AppState } from "../context/AppProvider";
 import { LOGIN } from "../types";
+import ClipLoader from "react-spinners/ClipLoader"
+import { toast } from 'react-toastify';
 
 
 const Login: NextPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState<LOGIN>({email : "" , password : ""})
+  const [error, setError] = useState('');
   const route = useRouter();
   const {setUser} = AppState();
 
@@ -26,10 +30,10 @@ const Login: NextPage = () => {
 
   const handleSubmit = (e : React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
+    setLoading(true);
     login(form)
       .then((response:any)=> {
         setUser(response.data);
-        localStorage.setItem("fastfood_auth",JSON.stringify(response.data))
         setCookie('jwt',response.data.token,{
           maxAge : 60 * 60 * 24 * 30 //1month
         })
@@ -38,18 +42,20 @@ const Login: NextPage = () => {
         })
         route.push('/')
       })
-      .catch((response)=> console.log(response))
+      .catch((response)=> {
+        setLoading(false)
+        toast.error(response.response.data.message);
+      })
   }
-
+  
   return (
     <AppLayout>
       <Head>
         <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <div className="min-h-screen md:w-1/2 md:mx-auto flex flex-col items-center py-3">
-        <h1 className="text-3xl text-textGreen font-semibold mb-3">Signup</h1>
+      <div className="md:w-1/2 lg:w-1/3 md:mx-auto flex flex-col items-center py-3">
+        <h1 className="text-3xl text-textGreen font-semibold mb-3">Login</h1>
 
         <form onSubmit={handleSubmit} className="w-full">
         
@@ -63,6 +69,7 @@ const Login: NextPage = () => {
               id="email"
               className="h-10 rounded-md border border-bgGreen px-2 focus:outline-textGreen"
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -77,6 +84,7 @@ const Login: NextPage = () => {
                 id="password"
                 className="w-full h-10 rounded-md border border-bgGreen px-2 focus-within:outline-textGreen"
                 onChange={handleChange}
+                required
               />
               <div onClick={()=> setShowPassword(!showPassword)} className="flex items-center justify-center absolute top-0 right-0 w-10 h-full">
                 {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} /> }
@@ -84,9 +92,9 @@ const Login: NextPage = () => {
               </div>
             </div>
           </div>
-
-          <button className="mb-5 bg-bgGreen w-full h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
-            Login
+                    
+          <button className="mb-5 bg-bgGreen w-full flex items-center justify-center h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
+            {loading ? <ClipLoader size={20} color="#ffffff" /> : "login"}
           </button>
         </form>
         <p className="mb-3">You Don't have an Account ? <Link href="/register"><span className="text-textGreen font-semibold cursor-pointer">Register</span></Link></p>

@@ -26,7 +26,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Category::where('feature',false)->orderBy('name')->get());
+        return CategoryResource::collection($this->repostory->getByFeature(false));
     }
 
     /**
@@ -75,6 +75,6 @@ class CategoryController extends Controller
      */
     public function getOnlyFeature()
     {
-        return FeatureCategoryResource::collection(Category::with('menus')->where('feature',true)->get());
+        return FeatureCategoryResource::collection($this->repostory->getByFeature());
     }
 }

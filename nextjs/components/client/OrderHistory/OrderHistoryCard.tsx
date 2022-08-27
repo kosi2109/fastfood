@@ -10,8 +10,6 @@ interface Props {
 }
 
 const OrderHistoryCard: NextPage<Props> = ({ order }) => {
-  console.log(order.items.length);
-
   return (
     <div className="border-2 w-full md:mx-auto md:w-2/3 lg:w-1/2 shadow-md mb-4">
       <div className="flex justify-between border-b-2 border-bgLightGreen border-dashed items-start border-3 p-3">

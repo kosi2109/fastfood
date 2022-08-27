@@ -15,8 +15,8 @@ class ApiAuthController extends Controller
 
         if(!auth()->attempt($request->only('email','password'))){
             return response([
-                "message" => "You are Not Authenticated"
-            ],404);
+                "message" => "Wrong User crenditial."
+            ],401);
         }
 
         $user = $request->user(); 

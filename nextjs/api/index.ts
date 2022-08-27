@@ -3,9 +3,10 @@ import { hasCookie , getCookie } from "cookies-next";
 import { REGISTER } from "../pages/register";
 import { LOGIN } from "../types";
 
+const URL = process.env.BACKEND_URL || 'http://localhost:8000' ;
 
 export const API = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/',
+    baseURL: `${URL}/api/`,
     withCredentials : true,
     headers: {
         'Content-Type': 'application/json',
@@ -39,7 +40,7 @@ export const getOrders = (status:string)=> API.get(`orders?status=${status}`);
 
 // auth
 export const login = (data : LOGIN)=> {
-        axios.get('http://localhost:8000/sanctum/csrf-cookie')
+        axios.get(`${URL}/sanctum/csrf-cookie`)
         return API.post(`login`,data)
 };
 export const register = (data : REGISTER)=> API.post(`register`,data);

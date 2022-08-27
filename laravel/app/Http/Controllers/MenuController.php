@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\GeneralJsonException;
 use App\Http\Requests\MenuRequest;
 use App\Http\Resources\MenuResource;
 use App\Models\Menu;
@@ -9,6 +10,9 @@ use App\Repositories\MenuRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/**
+ * Controller : Menu
+ */
 class MenuController extends Controller
 {
     public function __construct(
@@ -26,10 +30,12 @@ class MenuController extends Controller
     public function index()
     {
         try {
-            $menu = Menu::byCategory(request(['category','name']))->get();
-            return MenuResource::collection($menu);
+
+            return MenuResource::collection($this->repository->filterOrAll());
+
         } catch (\Throwable $th) {
-            return response("Something wrong", 500);
+
+            return new GeneralJsonException($th->getMessage(), 500);
         }
     }
 
@@ -43,11 +49,12 @@ class MenuController extends Controller
     public function store(MenuRequest $request)
     {
         try {
-            $menu = $this->repository->create($request);
 
-            return new MenuResource($menu);
+            return new MenuResource($this->repository->create($request));
+
         } catch (\Throwable $th) {
-            return response($th, 500);
+
+            return new GeneralJsonException($th->getMessage(), 500);
         }
     }
 
@@ -58,9 +65,9 @@ class MenuController extends Controller
      * 
      * @return MenuResource
      */
-    public function show(Menu $menu)
+    public function show($slug)
     {
-        return new MenuResource($menu);
+        return new MenuResource($this->repository->detail($slug));
     }
 
     /**
@@ -78,7 +85,8 @@ class MenuController extends Controller
             return new MenuResource($this->repository->update($menu,$request));
 
         } catch (\Throwable $th) {
-            //throw $th;
+
+            return new GeneralJsonException($th->getMessage(), 500);
         }
     }
 
@@ -91,8 +99,15 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
-        $this->repository->delete($menu);
+        try {
 
-        return response("Delete Success", 200);
+            $this->repository->delete($menu);
+    
+            return response("Delete Success", 200);
+
+        } catch (\Throwable $th) {
+
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 }

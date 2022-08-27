@@ -17,12 +17,14 @@ class Menu extends Model
         'updated_at',
     ];
 
-    public function scopeByCategory($query,$filter){
+    public function scopeByFilter($query,$filter){
+
         $query->when($filter["category"]??false,function ($query,$slug){
             $query->whereHas('categories',function ($query) use ($slug) {
                 $query->where("slug",$slug);
             });
         });
+        
         $query->when($filter["name"]??false,function ($query,$name){
             $query->where("name",'LIKE','%'.$name.'%');
         });

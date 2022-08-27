@@ -4,9 +4,28 @@ namespace App\Repositories;
 
 use App\Exceptions\GeneralJsonException;
 use App\Models\Banner;
+use Illuminate\Support\Facades\Cache;
 
 class BannerRepository extends BaseRepository
 {
+    CONST CACHE_KEY = "Banner.";
+    
+    /**
+     * @return Banner
+     */
+    public function getAll()
+    {
+        if (Cache::has(self::CACHE_KEY."All")) {
+            $banners = Cache::get(self::CACHE_KEY."All");
+        } else {
+            $banners = Cache::rememberForever(self::CACHE_KEY."All", function() {
+                return Banner::all();
+            });
+        }
+
+        return $banners;
+    }
+
     /**
      * @param $attribute
      * 
@@ -17,6 +36,10 @@ class BannerRepository extends BaseRepository
         $banner = Banner::create($attributes->input());
 
         if (!$banner) return new GeneralJsonException('Create Fail.',400);
+
+        if (Cache::has(self::CACHE_KEY."All")) {
+            Cache::forget(self::CACHE_KEY."All");
+        }
 
         return $banner;
     }
@@ -30,9 +53,12 @@ class BannerRepository extends BaseRepository
      */
     public function update($banner, $attributes)
     {
-            
         if(!$banner->update($attributes->input())) return new GeneralJsonException("Update fail",400);
-    
+        
+        if (Cache::has(self::CACHE_KEY."All")) {
+            Cache::forget(self::CACHE_KEY."All");
+        }
+
         return $banner->fresh();
     }
 
@@ -47,6 +73,10 @@ class BannerRepository extends BaseRepository
         $deleted = $banner->delete(); 
 
         if (!$deleted) return new GeneralJsonException("Delete Fail.", 400);
+
+        if (Cache::has(self::CACHE_KEY."All")) {
+            Cache::forget(self::CACHE_KEY."All");
+        }
 
         return $deleted;
     }
