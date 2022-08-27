@@ -26,7 +26,14 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return OrderResource::collection(request()->user()->orders()->byStatus(request('status'))->get());
+        try {
+            if (request()->user()->role == 3) {
+                return OrderResource::collection($this->repository->getOrdersByAdmin());
+            }
+            return OrderResource::collection($this->repository->getOrdersByUser());
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
     /**
@@ -37,19 +44,27 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
-        return new OrderResource($this->repository->create($request));
+        try {
+            return new OrderResource($this->repository->create($request));
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Order  $order
+     * @param  int  $id
      * 
      * @return OrderResource
      */
-    public function show(Order $order)
+    public function show($id)
     {
-        return new OrderResource($order);
+        try {
+            return new OrderResource($this->repository->detail($id));
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
     /**
@@ -61,7 +76,11 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        try {
+            return new OrderResource($this->repository->update($order, $request));
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 
     /**
@@ -72,6 +91,12 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        try {
+            $this->repository->delete($order);
+
+            return response(["message" => "Order was successfully deleted."]);
+        } catch (\Throwable $th) {
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
     }
 }

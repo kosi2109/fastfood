@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('address');
             $table->string('profile_img')->nullable();
+            $table->enum('role',[1, 2, 3])->default(1)->comment('1 = normal,2 = delivery,3 = admin');
             $table->rememberToken();
             $table->timestamps();
         });
