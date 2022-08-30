@@ -202,11 +202,6 @@ class DatabaseSeeder extends Seeder
                 "menu_id" => $item10->id,
                 "category_id" => $burger->id
             ],
-            [
-                "menu_id" => $item10->id,
-                "category_id" => $hot->id
-            ],
-            
         ]);
 
         DB::table('menu_size')->insert([

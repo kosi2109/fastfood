@@ -4,14 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class ApiAuthController extends Controller
 {
     public function login(LoginRequest $request)
     {
+        $user = User::where('email',request('email'))->first();
+
+        if (!$user->email_verified_at) {
+            return response([
+                "message" => "Your Email is not verified yet."
+            ],401);
+        }
 
         if(!auth()->attempt($request->only('email','password'))){
             return response([
@@ -22,7 +31,7 @@ class ApiAuthController extends Controller
         $user = $request->user(); 
 
         $token = $user->createToken(env('JWT_SECRET'))->plainTextToken;
-    
+        
         return response([
             "user"=>$user,
             "token" =>  $token
@@ -39,7 +48,11 @@ class ApiAuthController extends Controller
         
         if ($validate->fails()) return response($validate->errors(),400);
         
-        return response(User::create($request->all()),201);
+        $user = User::create($request->all());
+
+        Mail::to($user)->send(new WelcomeMail(['name' => $user->name]));
+
+        return response($user,201);
     }
 
     public function user(Request $request)

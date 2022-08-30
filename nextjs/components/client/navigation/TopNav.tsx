@@ -56,8 +56,8 @@ const TopNav: NextPage<Props> = ({ title, back = false }) => {
         </div>
         <div className="w-1/5 flex justify-end">
           <div className="cursor-pointer relative w-10 h-10 flex items-center justify-end">
-            <BsBell size={20} />
-            <div className="w-2 h-2 rounded-full absolute top-1 right-0 bg-red"></div>
+            {/* <BsBell size={20} />
+            <div className="w-2 h-2 rounded-full absolute top-1 right-0 bg-red"></div> */}
           </div>
         </div>
       </div>

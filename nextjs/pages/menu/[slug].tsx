@@ -8,7 +8,6 @@ import useAnimateNumber from "use-animate-number";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import moment from "moment";
-import ItemGridContainer from "../../components/client/Items/ItemGridContainer";
 
 interface Props {
   menu: MENU;
@@ -78,7 +77,6 @@ const Menu: NextPage<Props> = ({ menu }) => {
       <motion.div exit={{ opacity: 0 }} className="pt-2 w-full md:flex">
         <div className="mb-2 relative w-full md:w-1/2 h-60 flex justify-center items-center">
           <motion.img
-            layoutId={menu?.name}
             className="w-full h-full object-contain rounded-md"
             src={menu?.cover_img}
             alt={menu?.name}
@@ -164,6 +162,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: any) {
   const menu = await showMenus(params.slug);
+  
   return {
     props: { menu: menu.data.data },
   };

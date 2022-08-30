@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\OrderController;
+use App\Mail\WelcomeMail;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__ . "/menu/api.php";
@@ -21,4 +22,3 @@ Route::group(["middleware"=>"auth:sanctum"],function() {
 
 Route::post('/login',[ApiAuthController::class,'login']);
 Route::post('/register',[ApiAuthController::class,'register']);
-
