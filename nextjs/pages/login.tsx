@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { login } from "../api";
 import { AppState } from "../context/AppProvider";
@@ -54,6 +54,24 @@ const Login: NextPage = () => {
         });
     }
   };
+
+  const googleLogin = ()=> {
+    fetch('http://localhost:8000/api/google-auth', {
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Something went wrong!');
+            })
+            .then((data) => route.push(data.url))
+            .catch((error) => console.error(error));
+  }
+
 
   return (
     <GuestLayout>
@@ -136,7 +154,7 @@ const Login: NextPage = () => {
             <div className="border-2 p-2 rounded-full mx-2 cursor-pointer">
               <FaFacebookF size={22}/>
             </div>
-            <div className="border-2 p-2 rounded-full mx-2 cursor-pointer">
+            <div onClick={googleLogin} className="border-2 p-2 rounded-full mx-2 cursor-pointer">
               <FcGoogle size={22} />
             </div>
           </div>
