@@ -3,9 +3,9 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { login } from "../api";
+import { googleAuth, login } from "../api";
 import { AppState } from "../context/AppProvider";
 import { LOGIN } from "../types";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -55,23 +55,11 @@ const Login: NextPage = () => {
     }
   };
 
-  const googleLogin = ()=> {
-    fetch('http://localhost:8000/api/google-auth', {
-            headers : {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Something went wrong!');
-            })
-            .then((data) => route.push(data.url))
-            .catch((error) => console.error(error));
-  }
-
+  const googleLogin = () => {
+    googleAuth()
+      .then((res) => route.push(res.data.url))
+      .catch((error) => console.error(error));
+  };
 
   return (
     <GuestLayout>
@@ -81,15 +69,20 @@ const Login: NextPage = () => {
       </Head>
       <div className="w-full h-screen flex items-center">
         <div className="fixed blur-sm	md:blur-none top-20 md:top-0 md:relative md:w-1/2 flex items-center justify-center">
-          <Image src={image} alt="Image"  />
+          <Image src={image} alt="Image" />
         </div>
         <div className="w-full z-10 md:w-1/2 flex flex-col justify-center items-center md:p-3 py-10 h-full overflow-auto">
-          <h1 className="text-3xl text-textGreen font-bold mb-3">Login Into Fastfood</h1>
+          <h1 className="text-3xl text-textGreen font-bold mb-3">
+            Login Into Fastfood
+          </h1>
 
           <form onSubmit={handleSubmit} className="w-full md:w-2/3">
             <div className="flex flex-col w-full mb-2">
-              <label className="mb-2 text-textGray flex items-center" htmlFor="email">
-               <HiOutlineMail className="mr-2" />  Email
+              <label
+                className="mb-2 text-textGray flex items-center"
+                htmlFor="email"
+              >
+                <HiOutlineMail className="mr-2" /> Email
               </label>
               <input
                 type="email"
@@ -103,8 +96,11 @@ const Login: NextPage = () => {
 
             <div className="flex flex-col w-full mb-5">
               <div className="flex justify-between items-center">
-                <label className="mb-2 text-textGray flex items-center" htmlFor="password">
-                 <BsKey className="mr-2" /> Password
+                <label
+                  className="mb-2 text-textGray flex items-center"
+                  htmlFor="password"
+                >
+                  <BsKey className="mr-2" /> Password
                 </label>
                 <Link href="/forgot-password" className="text-md font-semibold">
                   Forgot password?
@@ -151,14 +147,16 @@ const Login: NextPage = () => {
           </div>
 
           <div className="w-2/3 flex items-center justify-center">
-            <div className="border-2 p-2 rounded-full mx-2 cursor-pointer">
-              <FaFacebookF size={22}/>
+            <div onClick={()=> toast.warn("Sorry! , This Feature isn't available now.")} className="border-2 p-2 rounded-full mx-2 cursor-pointer">
+              <FaFacebookF size={22} />
             </div>
-            <div onClick={googleLogin} className="border-2 p-2 rounded-full mx-2 cursor-pointer">
+            <div
+              onClick={googleLogin}
+              className="border-2 p-2 rounded-full mx-2 cursor-pointer"
+            >
               <FcGoogle size={22} />
             </div>
           </div>
-        
         </div>
       </div>
     </GuestLayout>

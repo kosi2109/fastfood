@@ -5,7 +5,6 @@ import Auth from "../components/Auth";
 import AppLayout from "../components/Layouts/AppLayout";
 import MenuLoading from "../components/client/MenuLoading";
 import OrderHistoryCard from "../components/client/OrderHistory/OrderHistoryCard";
-import { AppState } from "../context/AppProvider";
 import { ORDER } from "../types";
 
 interface Props {
@@ -13,7 +12,6 @@ interface Props {
 }
 
 const orderhistory: NextPage<Props> = () => {
-  const { user } = AppState();
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState<ORDER[]>([]);
   const [status, setStatus] = useState('1');

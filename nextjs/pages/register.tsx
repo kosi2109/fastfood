@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { register } from "../api";
+import { googleAuth, register } from "../api";
 import GoogleMap from "google-map-react";
 import { HiLocationMarker } from "react-icons/hi";
 import Input from "../components/Form/Input";
@@ -75,6 +75,11 @@ const Register: NextPage = () => {
     });
   };
 
+  const googleLogin = () => {
+    googleAuth()
+      .then((res) => router.push(res.data.url))
+      .catch((error) => console.error(error));
+  };
   return (
     <GuestLayout>
       <Head>
@@ -214,10 +219,10 @@ const Register: NextPage = () => {
           </div>
 
           <div className="w-full md:w-2/3 flex items-center justify-center">
-            <div className="border-2 p-2 rounded-full mx-2 cursor-pointer">
+            <div onClick={()=> toast.warn("Sorry! , This Feature isn't available now.")} className="border-2 p-2 rounded-full mx-2 cursor-pointer">
               <FaFacebookF size={22}/>
             </div>
-            <div className="border-2 p-2 rounded-full mx-2 cursor-pointer">
+            <div onClick={googleLogin} className="border-2 p-2 rounded-full mx-2 cursor-pointer">
               <FcGoogle size={22} />
             </div>
           </div>

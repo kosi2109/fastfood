@@ -17,6 +17,8 @@ import { useRouter } from "next/router";
 import { MENU, SIZE } from "../types";
 import test from "../public/assets/delivery.gif";
 import EmptyCart from "../components/client/EmptyCart";
+import { ClipLoader } from "react-spinners";
+import { toast } from "react-toastify";
 
 const MapPointer = ({}: any) => (
   <div>
@@ -41,7 +43,7 @@ const order: NextPage = () => {
   const { cartItems, clearCart } = AppState();
   const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
   const [showAnimation, setShowAnimation] = useState(false);
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [shopCoordinate, setShopCoordinate] = useState({
     lat: 20.14505605784014,
     lng: 94.91828780720611,
@@ -75,6 +77,7 @@ const order: NextPage = () => {
   let subTotal = 0;
 
   const makeOrder = async () => {
+    setLoading(true);
     const data: CREATE_ORDER = {
       user_id: user.id,
       grand_total: deliFee + subTotal,
@@ -90,9 +93,10 @@ const order: NextPage = () => {
     };
 
     storeOrder(data).then(() => {
-      setShowAnimation(true);
       clearCart();
-    });
+      setLoading(false);
+      setShowAnimation(true);
+    }).catch((res) => toast.error(res.data.message));
   };
 
   const getPrice = (size: SIZE, menu: any) => {
@@ -209,7 +213,7 @@ const order: NextPage = () => {
               onClick={makeOrder}
               className="mt-3 w-full h-10 rounded-md bg-bgGreen text-textWhite"
             >
-              Comfirm Order
+              {loading ? <ClipLoader size={20} color="#ffffff" /> : "Comfirm Order"}
             </button>
           </div>
         ) : (
