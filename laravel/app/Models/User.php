@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -23,7 +23,9 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'address'
+        'address',
+        'google_id',
+        'profile_img'
     ];
 
     /**
@@ -47,11 +49,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function setPasswordAttribute($password)
-    {
-        $this->attributes["password"] = bcrypt($password);
-    }
 
     public function orders ()
     {

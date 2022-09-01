@@ -20,9 +20,8 @@ const SingleItem = ({ menu }: { menu: MENU }) => {
       <motion.div className="mr-2 pb-2 block flex flex-col cursor-pointer">
         <div className="w-full h-40 relative flex justify-center items-center rounded-md overflow-hidden mb-1">
           <motion.img
-            layoutId={menu.name}
             className="object-cover w-full h-full"
-            src={menu.cover_img}
+            src={menu?.cover_img}
             alt="img"
           />
           {isDiscountActive() && (
