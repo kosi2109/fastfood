@@ -308,5 +308,35 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
+        DB::table('discounts')->insert([
+            [
+                'menu_id' => $item1->id,
+                'discount' => 10,
+                'discount_from' => "2022-01-01",
+                'discount_to' => "2024-01-01"
+            ],
+            [
+                'menu_id' => $item2->id,
+                'discount' => 9,
+                'discount_from' => "2022-01-01",
+                'discount_to' => "2024-01-01"
+            ],
+            [
+                'menu_id' => $item3->id,
+                'discount' => 15,
+                'discount_from' => "2022-01-01",
+                'discount_to' => "2024-01-01"
+            ],
+        ]);
+
+        DB::table('banners')->insert([
+            [
+                "title" => "Hot Sale",
+                "description" => $item1->name." and Other 2 items.",
+                "image_url" => $item1->cover_img,
+                "menu_id" => $item1->id
+            ]
+        ]);
+
     }
 }
