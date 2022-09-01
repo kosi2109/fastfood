@@ -3,7 +3,7 @@ import { hasCookie , getCookie } from "cookies-next";
 import { REGISTER } from "../pages/register";
 import { LOGIN } from "../types";
 
-const URL = process.env.BACKEND_URL || 'http://localhost:8000' ;
+const URL = process.env.BACKEND_URL;
 
 export const API = axios.create({
     baseURL: `${URL}/api`,
@@ -47,6 +47,10 @@ export const register = (data : any)=> API.post(`/api/register`,data);
 
 export const logout = ()=> API.post(`logout`);
 
-export const forgotPassword = (data:any)=> axios.post(`${URL}/forgot-password`,data)
+export const forgotPassword = (data:any)=> axios.post(`${URL}/forgot-password`,data);
 
-export const resetPassword = (data:any)=> axios.post(`${URL}/reset-password`,data)
+export const resetPassword = (data:any)=> axios.post(`${URL}/reset-password`,data);
+
+export const googleCallBack = ({code, scope, authuser, prompt}:any) => axios.get(`${URL}/api/google-auth/callback?code=${code}&scope=${scope}&authuser=${authuser}&prompt=${prompt}`)
+
+export const googleAuth = () => axios.get(`${URL}/api/google-auth`)

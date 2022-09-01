@@ -14,7 +14,7 @@ function ResetPassword() {
     const token = router.query['token'];
     const email = router.query['email'];
     
-    const handleSubmit = (e)=>{
+    const handleSubmit = (e : React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         if (!loading) {
             setLoading(true);
@@ -45,7 +45,7 @@ function ResetPassword() {
                 <div className='flex justify-end items-center px-5 py-2'>
                     <button type='button' className='bg-bgGray px-6 py-2 rounded-md text-textGreen border-2 font-semibold'>Cancel</button>
                     <button className='bg-bgGreen px-6 py-2 rounded-md text-white font-semibold ml-3'>
-                        {loading ? <ClipLoader size={20} color="#ffffff" /> : "login"}
+                        {loading ? <ClipLoader size={20} color="#ffffff" /> : "Confirm"}
                     </button>
                 </div>
             </form>
