@@ -1,10 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { googleAuth, register } from "../api";
+import { register } from "../api";
 import GoogleMap from "google-map-react";
 import { HiLocationMarker } from "react-icons/hi";
 import Input from "../components/Form/Input";
@@ -13,8 +12,8 @@ import { toast } from "react-toastify";
 import GuestLayout from "../components/Layouts/GuestLayout";
 import Image from "next/image";
 import image from "../public/assets/register.gif";
-import { FaFacebookF } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import SocialLogin from "../components/client/SocialLogin";
+import LoginOrRegister from "../components/Form/LoginOrRegister";
 
 const MapPointer = ({}: any) => (
   <div>
@@ -28,7 +27,7 @@ const initialForm = {
   phone: "",
   address: "",
   password: "",
-  password_confirmation: "",
+  password2: "",
   profile_img: "",
 };
 
@@ -42,6 +41,8 @@ const Register: NextPage = () => {
   const [coordinate, setCoordinate] = useState({ lat: 20.1544, lng: 94.9455 });
   const [errors, setErrors] = useState<any>([]);
   const [loading, setLoading] = useState(false);
+  const google_key : any = process.env.GOOGLE_MAP_KEY;
+
 
   useEffect(() => {
     form.address = `${coordinate.lat},${coordinate.lng}`;
@@ -56,18 +57,18 @@ const Register: NextPage = () => {
         .then((res) => {
           router.push("/login");
           toast.success("Account was scuuessfully created.");
-          console.log(res);
         })
         .catch((res) => {
-          setErrors(res.response.data);
-          setLoading(false);
-          console.log(res);
-  
-          toast.error("Register Fail.");
+          if (res.response.status !== 500) {
+            setErrors(res.response.data);
+            setLoading(false);
+            toast.error(res.response.data.message);
+          }
         });
     }
   };
 
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...form,
@@ -75,11 +76,6 @@ const Register: NextPage = () => {
     });
   };
 
-  const googleLogin = () => {
-    googleAuth()
-      .then((res) => router.push(res.data.url))
-      .catch((error) => console.error(error));
-  };
   return (
     <GuestLayout>
       <Head>
@@ -90,7 +86,7 @@ const Register: NextPage = () => {
         <div className="fixed blur-sm	md:blur-none top-20 md:top-0 md:relative md:w-1/2 flex items-center justify-center">
           <Image src={image} alt="Image" />
         </div>
-        <div className="w-full z-10 md:w-1/2 flex flex-col items-center md:p-3 py-10 h-full overflow-auto">
+        <div className="w-full z-10 md:w-1/2 flex flex-col items-center px-3 pt-20 md:pt-24 pb-4 h-full overflow-auto">
           <h1 className="text-3xl mb-3 text-textGreen font-bold">Signup</h1>
 
           <form onSubmit={handleSubmit} className="w-full md:w-2/3">
@@ -157,8 +153,8 @@ const Register: NextPage = () => {
                 <input
                   onChange={handleChange}
                   type={showPassword2 ? "text" : "password"}
-                  name="password_confirmation"
-                  id="password_confirmation"
+                  name="password2"
+                  id="password2"
                   required
                   className="w-full h-10 rounded-md border border-bgGreen px-2 focus-within:outline-textGreen"
                 />
@@ -184,7 +180,7 @@ const Register: NextPage = () => {
               />
               <GoogleMap
                 bootstrapURLKeys={{
-                  key: "AIzaSyAWiuvmnGdI7dIdMX-I7JHWVhQV-8O9OyY",
+                  key: google_key,
                 }}
                 defaultCenter={coordinate}
                 center={coordinate}
@@ -204,28 +200,10 @@ const Register: NextPage = () => {
               {loading ? <ClipLoader size={20} color="#ffffff" /> : "Register"}
             </button>
           </form>
-          <p className="mb-3">
-            Already have an Account ?
-            <Link href="/login">
-              <span className="text-textGreen font-semibold cursor-pointer">
-                Login
-              </span>
-            </Link>
-          </p>
+          
+          <LoginOrRegister login={false}/>
 
-          <div className="w-full md:w-2/3 mb-3 text-center relative flex justify-center items-center">
-            <h5 className="bg-bgWhite z-10 w-10">OR</h5>
-            <div className="z-1 border-b border-textGreen w-full h-1/2 absolute top-0"></div>
-          </div>
-
-          <div className="w-full md:w-2/3 flex items-center justify-center">
-            <div onClick={()=> toast.warn("Sorry! , This Feature isn't available now.")} className="border-2 p-2 rounded-full mx-2 cursor-pointer">
-              <FaFacebookF size={22}/>
-            </div>
-            <div onClick={googleLogin} className="border-2 p-2 rounded-full mx-2 cursor-pointer">
-              <FcGoogle size={22} />
-            </div>
-          </div>
+          <SocialLogin/>
 
         </div>
       </div>

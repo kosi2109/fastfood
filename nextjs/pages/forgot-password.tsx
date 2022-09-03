@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react'
 import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
@@ -7,6 +8,7 @@ import GuestLayout from '../components/Layouts/GuestLayout'
 function ForgotPassword() {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const handleSubmit = (e : React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
@@ -27,7 +29,7 @@ function ForgotPassword() {
     }
     
   return (
-    <GuestLayout>
+    <GuestLayout back={true}>
         <div className='w-full h-screen flex items-center justify-center'>
             <form onSubmit={handleSubmit} className='border-2 flex flex-col rounded-sm shadow'>
                 <div className='p-5 border-b-2'>
@@ -38,7 +40,7 @@ function ForgotPassword() {
                     <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Email' className='h-10 w-80 border-2 p-2 focus:outline-bgGreen' />
                 </div>
                 <div className='flex justify-end items-center px-5 py-2'>
-                    <button type='button' className='bg-bgGray px-6 py-2 rounded-md text-textGreen border-2 font-semibold'>Cancel</button>
+                    <button onClick={()=> router.back()} type='button' className='bg-bgGray px-6 py-2 rounded-md text-textGreen border-2 font-semibold'>Cancel</button>
                     <button disabled={loading && true} className='bg-bgGreen px-6 py-2 rounded-md text-white font-semibold ml-3'>
                         {loading ? <ClipLoader size={20} color="#ffffff" /> : "Send"}
                     </button>

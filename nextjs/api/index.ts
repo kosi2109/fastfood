@@ -1,6 +1,5 @@
 import axios from "axios";
 import { hasCookie , getCookie } from "cookies-next";
-import { REGISTER } from "../pages/register";
 import { LOGIN } from "../types";
 
 const URL = process.env.BACKEND_URL;
@@ -38,12 +37,15 @@ export const allBanners = ()=> API.get(`/banners`);
 export const storeOrder = (data:any)=> API.post(`/orders`,data);
 export const getOrders = (status:string)=> API.get(`/orders?status=${status}`);
 
+// user 
+export const updateUser = (data:any)=> API.put(`/user`, data);
+
 // auth
 export const login = (data : LOGIN)=> {
         axios.get(`/sanctum/csrf-cookie`)
         return API.post(`/login`,data)
 };
-export const register = (data : any)=> API.post(`/api/register`,data);
+export const register = (data : any)=> API.post(`/register`,data);
 
 export const logout = ()=> API.post(`logout`);
 

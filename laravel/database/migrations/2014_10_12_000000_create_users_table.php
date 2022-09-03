@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('google_id');
+            $table->string('google_id')->nullable();
             $table->string('password')->nullable();
-            $table->string('address')->default('20.149152,94.935711');
+            $table->string('address')->nullable();
             $table->string('profile_img')->nullable();
             $table->enum('role',[1, 2, 3])->default(1)->comment('1 = normal,2 = delivery,3 = admin');
             $table->rememberToken();

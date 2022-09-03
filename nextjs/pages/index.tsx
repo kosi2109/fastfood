@@ -17,22 +17,23 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ categories, banners }) => {
-  const router = useRouter().query;
+  const router = useRouter();
   const { setUser } = AppState();
 
   useEffect(() => {
-    if (router.code) {
-      googleCallBack({code:router.code,scope:router.scope,authuser:router.authuser,prompt:router.prompt})
+    if (router.query.code) {
+      googleCallBack({code:router.query.code,scope:router.query.scope,authuser:router.query.authuser,prompt:router.query.prompt})
         .then((response) => {
+          router.replace('/');
           setUser(response.data);
+          const age = 60 * 60 * 24 * 30; //1month
           setCookie("jwt", response.data.token, {
-            maxAge: 60 * 60 * 24 * 30, //1month
+            maxAge: age
           });
           setCookie("fastfood_auth", response.data.user, {
-            maxAge: 60 * 60 * 24 * 30, //1month
+            maxAge: age
           });
         })
-        .catch((error) => console.log(error));
     }
   }, []);
 
