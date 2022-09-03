@@ -10,10 +10,8 @@ import { HiLocationMarker } from "react-icons/hi";
 import {
   caculateDeliPricePerDistance,
   calcCrow,
-  findCenter,
 } from "../utils/mapCaculation";
 import { storeOrder } from "../api";
-import { useRouter } from "next/router";
 import { MENU, SIZE } from "../types";
 import test from "../public/assets/delivery.gif";
 import EmptyCart from "../components/client/EmptyCart";
@@ -44,36 +42,32 @@ const order: NextPage = () => {
   const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
   const [showAnimation, setShowAnimation] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [shopCoordinate, setShopCoordinate] = useState({
+  const google_key: any = process.env.GOOGLE_MAP_KEY;
+
+  const shopCoordinate = {
     lat: 20.14505605784014,
     lng: 94.91828780720611,
-  });
+  };
   const [deliFee, setDelifee] = useState(0);
-  const [mapCenter, setMapCenter] = useState({
-    lat: 20.14505605784014,
-    lng: 94.91828780720611,
-  });
 
   const { user } = AppState();
 
-  useEffect(() => {
-    if (user?.address?.split(",")[0]) {
-      const userAddress = {
-        lat: Number(user?.address?.split(",")[0]),
-        lng: Number(user?.address?.split(",")[1]),
-      };
-      setCoordinate(userAddress);
-      setMapCenter(findCenter([shopCoordinate, userAddress]));
-      const d = calcCrow(
-        shopCoordinate.lat,
-        shopCoordinate.lng,
-        userAddress.lat,
-        userAddress.lng
-      );
-      setDelifee(Math.floor(caculateDeliPricePerDistance(d)));
-    }
-  }, [user]);
+  useEffect(()=>{
+    navigator.geolocation.getCurrentPosition((data) => {
+      setCoordinate({ lat: data.coords.latitude, lng: data.coords.longitude });
+    });
+  },[])
 
+  useEffect(() => {
+    const d = calcCrow(
+      shopCoordinate.lat,
+      shopCoordinate.lng,
+      coordinate.lat,
+      coordinate.lng
+    );
+    setDelifee(Math.floor(caculateDeliPricePerDistance(d)));
+
+  }, [coordinate]);
   let subTotal = 0;
 
   const makeOrder = async () => {
@@ -92,11 +86,13 @@ const order: NextPage = () => {
       }),
     };
 
-    storeOrder(data).then(() => {
-      clearCart();
-      setLoading(false);
-      setShowAnimation(true);
-    }).catch((res) => toast.error(res.data.message));
+    storeOrder(data)
+      .then(() => {
+        clearCart();
+        setLoading(false);
+        setShowAnimation(true);
+      })
+      .catch((res) => toast.error(res.data.message));
   };
 
   const getPrice = (size: SIZE, menu: any) => {
@@ -130,18 +126,20 @@ const order: NextPage = () => {
       <Auth>
         {cartItems.length > 0 ? (
           <div className="w-full py-2 mx-auto md:w-2/3 lg:w-1/2 2xl:w-1/3 flex flex-col">
-            <div className="mb-3 w-full h-40 rounded-md bg-textGray z-2">
+            <div className="mb-3 w-full h-40 md:h-60 rounded-md bg-textGray z-2">
               <GoogleMap
                 bootstrapURLKeys={{
-                  key: "AIzaSyAWiuvmnGdI7dIdMX-I7JHWVhQV-8O9OyY",
+                  key: google_key,
                 }}
                 defaultCenter={coordinate}
-                center={mapCenter}
-                resetBoundsOnResize={true}
-                defaultZoom={15}
+                center={coordinate}
+                defaultZoom={14}
                 margin={[50, 50, 50, 50]}
                 options={{ disableDefaultUI: true, zoomControl: true }}
                 yesIWantToUseGoogleMapApiInternals
+                onChange={(e) =>
+                  setCoordinate({ lat: e.center.lat, lng: e.center.lng })
+                }
               >
                 <MapPointer lat={coordinate.lat} lng={coordinate.lng} />
                 <Shop lat={shopCoordinate.lat} lng={shopCoordinate.lng} />
@@ -213,7 +211,11 @@ const order: NextPage = () => {
               onClick={makeOrder}
               className="mt-3 w-full h-10 rounded-md bg-bgGreen text-textWhite"
             >
-              {loading ? <ClipLoader size={20} color="#ffffff" /> : "Comfirm Order"}
+              {loading ? (
+                <ClipLoader size={20} color="#ffffff" />
+              ) : (
+                "Comfirm Order"
+              )}
             </button>
           </div>
         ) : (

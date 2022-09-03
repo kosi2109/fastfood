@@ -32,7 +32,7 @@ function ResetPassword() {
     }
     
   return (
-    <GuestLayout>
+    <GuestLayout back={true}>
         <div className='w-full h-screen flex items-center justify-center'>
             <form onSubmit={handleSubmit} className='border-2 flex flex-col rounded-sm shadow'>
                 <div className='p-5 border-b-2'>

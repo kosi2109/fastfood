@@ -50,16 +50,11 @@ class ApiAuthController extends Controller
 
         if ($validate->fails()) return response($validate->errors(), 400);
 
-        $user = User::create($request->all());
+        $user = User::create($request->input());
 
         Mail::to($user)->send(new WelcomeMail(['name' => $user->name]));
 
         return response($user, 201);
-    }
-
-    public function user(Request $request)
-    {
-        return response($request->header(), 201);
     }
 
     public function logout(Request $request)
