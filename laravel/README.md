@@ -1,19 +1,9 @@
 # Fastfood API Reference
 
-#### Get all menus
+### Menus
 
-```http
-  GET /api/menus
-```
-
-#### Get menus
-
-```http
-  GET /api/menus/${slug}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `slug`      | `string` | **Required**. Slug of item to fetch |
-
+| Endpoint  | Parameter | Type     | Description                       |
+| :-------- | :-------- | :------- | :-------------------------------- |
+| /api/menus |          |          | Get All menus                     |
+| /api/menus/{slug} | `slug`   | `string` | slug (**Required**). Slug of item to fetch |
 
