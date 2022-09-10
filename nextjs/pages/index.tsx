@@ -22,26 +22,29 @@ const Home: NextPage<Props> = ({ categories, banners }) => {
 
   useEffect(() => {
     if (router.query.code) {
-      googleCallBack({code:router.query.code,scope:router.query.scope,authuser:router.query.authuser,prompt:router.query.prompt})
-        .then((response) => {
-          router.replace('/');
-          setUser(response.data);
-          const age = 60 * 60 * 24 * 30; //1month
-          setCookie("jwt", response.data.token, {
-            maxAge: age
-          });
-          setCookie("fastfood_auth", response.data.user, {
-            maxAge: age
-          });
-        })
+      googleCallBack({
+        code: router.query.code,
+        scope: router.query.scope,
+        authuser: router.query.authuser,
+        prompt: router.query.prompt,
+      }).then((response) => {
+        router.replace("/");
+        setUser(response.data);
+        const age = 60 * 60 * 24 * 30; //1month
+        setCookie("jwt", response.data.token, {
+          maxAge: age,
+        });
+        setCookie("fastfood_auth", response.data.user, {
+          maxAge: age,
+        });
+      });
     }
   }, []);
 
   return (
     <AppLayout>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Fastfood</title>
       </Head>
       <Search />
       <div className="w-full md:mx-auto md:w-2/3">

@@ -10,6 +10,7 @@ export const defaultUser = {
   phone: "",
   email: "",
   address: "",
+  profile_img : ""
 };
 
 export enum CART_ACTION {

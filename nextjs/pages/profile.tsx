@@ -8,15 +8,10 @@ import Detail from "../components/client/Profile/Detail";
 import ProfileImage from "../components/client/Profile/ProfileImage";
 import { AppState, defaultUser } from "../context/AppProvider";
 import GoogleMap from "google-map-react";
-import { HiLocationMarker } from "react-icons/hi";
 import { useRouter } from "next/router";
 import InformationMiss from "../components/client/InformationMiss";
-
-const MapPointer = ({}: any) => (
-  <div>
-    <HiLocationMarker size={30} />
-  </div>
-);
+import Head from "next/head";
+import MapPointer from "../components/MapPointer";
 
 const profile: NextPage = () => {
   const { user, setUser } = AppState();
@@ -49,11 +44,14 @@ const profile: NextPage = () => {
   
   return (
     <AppLayout>
+      <Head>
+        <title>Fastfood | {user?.name ? user?.name : 'Profile'}</title>
+      </Head>
       <Auth>
         {user?.phone && (user?.address !== "0,0" && user?.address) ? (
           <div className="py-1 flex items-center flex-col w-full">
             <div className="w-3/5 flex items-center justify-center mb-3">
-              <ProfileImage />
+              <ProfileImage image_url={user?.profile_img} />
             </div>
             <Detail title="Full Name" value={user?.name} />
             <Detail title="Email" value={user?.email} />

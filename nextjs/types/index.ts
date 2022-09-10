@@ -8,7 +8,8 @@ export type USER = {
     name : string,
     phone : string,
     email : string,
-    address : string
+    address : string,
+    profile_img : string
 }
 
 
@@ -82,3 +83,11 @@ export type ORDER_USER = {
   phone: string;
   address: string;
 }
+
+export type CREATE_ORDER = {
+  user_id: number;
+  grand_total: number;
+  deli_fee: number;
+  address: string;
+  items: any;
+};

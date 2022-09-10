@@ -43,8 +43,7 @@ const menu: NextPage<Props> = ({ categories, featureCate }) => {
   return (
     <AppLayout>
       <Head>
-        <title>Menu</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Fastfood | Menus</title>
       </Head>
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/6 md:fixed md:top-20">

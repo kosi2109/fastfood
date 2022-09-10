@@ -72,7 +72,7 @@ const Menu: NextPage<Props> = ({ menu }) => {
   return (
     <AppLayout back={true}>
       <Head>
-        <title>{menu?.name}</title>
+        <title>Fastfood | {menu.name}</title>
       </Head>
       <motion.div exit={{ opacity: 0 }} className="pt-2 w-full md:flex">
         <div className="mb-2 relative w-full md:w-1/2 h-60 flex justify-center items-center">
@@ -152,6 +152,7 @@ const Menu: NextPage<Props> = ({ menu }) => {
 
 export async function getStaticPaths() {
   const menus = await allMenus();
+  
   return {
     paths: menus.data.data.map((menu: any) => ({
       params: { slug: menu.slug },

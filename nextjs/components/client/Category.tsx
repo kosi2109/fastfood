@@ -1,4 +1,4 @@
-import React, { SetStateAction } from "react";
+import React from "react";
 import { CATEGORY } from "../../types";
 
 const selected =
