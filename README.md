@@ -1,7 +1,7 @@
 
 # FastFood
 
-Cinema Booking App build with Laravel and NextJs .
+Restraunt App build with Laravel and NextJs .
 
 ## Main Feature
 - Delivery Fee calculate based on restraunt and user location
