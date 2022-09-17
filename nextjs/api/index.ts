@@ -46,11 +46,9 @@ export const getOrders = (status : string)=> API.get(`/api/orders?status=${statu
 export const updateUser = (data : any)=> API.put(`/api/user`, data);
 
 // auth
-export const login = (data : LOGIN)=> {
-        axios.get(`${URL}/sanctum/csrf-cookie`)
-        return axios.post(`${URL}/login`,data)
-};
-export const register = (data : any)=> axios.post(`${URL}/register`,data);
+export const login = (data : LOGIN)=> axios.post(`${URL}/api/login`,data);
+
+export const register = (data : any)=> axios.post(`${URL}/api/register`,data);
 
 export const logout = ()=> API.post(`/api/logout`);
 

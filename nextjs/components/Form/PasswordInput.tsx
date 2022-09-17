@@ -8,6 +8,7 @@ const PasswordInput = ({
   name,
   handleChange,
   forgotPassword = false,
+  error = null
 }: any) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -32,7 +33,7 @@ const PasswordInput = ({
           type={showPassword ? "text" : "password"}
           name={name}
           id={id}
-          className="w-full h-10 rounded-md border border-bgGreen px-2 focus-within:outline-textGreen"
+          className={`w-full h-10 rounded-md border ${(error ? 'border-red' : 'border-bgGreen')} px-2 focus-within:outline-textGreen`}
           required
         />
         <div
@@ -46,6 +47,11 @@ const PasswordInput = ({
           )}
         </div>
       </div>
+      {error && 
+        <div className="py-2 text-center text-start text-red">
+            <p>{error}</p>
+        </div>
+        }
     </div>
   );
 };

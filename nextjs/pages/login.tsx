@@ -11,8 +11,6 @@ import { toast } from "react-toastify";
 import GuestLayout from "../components/Layouts/GuestLayout";
 import image from "../public/assets/login.gif";
 import Image from "next/image";
-import { HiOutlineMail } from "react-icons/hi";
-import { BsKey } from "react-icons/bs";
 import SocialLogin from "../components/client/SocialLogin";
 import LoginOrRegister from "../components/Form/LoginOrRegister";
 import Input from "../components/Form/Input";
@@ -20,7 +18,6 @@ import PasswordInput from "../components/Form/PasswordInput";
 import FormButton from "../components/Form/FormButton";
 
 const Login: NextPage = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<LOGIN>({ email: "", password: "" });
   const route = useRouter();
@@ -38,7 +35,7 @@ const Login: NextPage = () => {
     if (!loading) {
       setLoading(true);
       login(form)
-        .then((response: any) => {
+        .then((response: any) => {          
           setUser(response.data);
           setCookie("jwt", response.data.token, {
             maxAge: 60 * 60 * 24 * 30, //1month

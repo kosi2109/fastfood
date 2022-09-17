@@ -11,15 +11,19 @@ require __DIR__. "/size/api.php";
 require __DIR__. "/order/api.php";
 
 Route::group(["middleware"=>"auth:sanctum"],function() {
+    
     Route::post('/logout',[ApiAuthController::class,'logout']);
+
     Route::get('/user',[UserController::class,'show']);
+
     Route::put('/user',[UserController::class,'update']);
 });
 
 // auth
+Route::post('/login',[ApiAuthController::class,'login'])->name('login');
 
-Route::get('/login',function () {
-    return "success";
-})->name('login');
+Route::post('/register',[ApiAuthController::class,'register']);
+
 Route::get('/google-auth', [ApiAuthController::class, 'redirectToAuth']);
+
 Route::get('/google-auth/callback', [ApiAuthController::class, 'handleAuthCallback']);

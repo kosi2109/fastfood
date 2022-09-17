@@ -1,6 +1,13 @@
 import React from "react";
 
-const Input = ({title, id, name,type = 'text', handleChange , errors ,showError=true} : any) => {    
+const Input = ({
+  title,
+  id,
+  name,
+  type = "text",
+  handleChange,
+  error = null,
+}: any) => {
   return (
     <div className="flex flex-col w-full mb-2">
       <label className="mb-2 text-textGray" htmlFor={id}>
@@ -11,16 +18,16 @@ const Input = ({title, id, name,type = 'text', handleChange , errors ,showError=
         name={name}
         id={id}
         className={`h-10 rounded-md border w-full px-2 focus:outline-textGreen 
-        ${showError ? (name in errors ? 'border-red' : 'border-bgGreen') : 'border-bgGreen' }
+        ${error ? "border-red" : "border-bgGreen"}
         `}
         onChange={handleChange}
         required
       />
-        {showError && 
+      {error && (
         <div className="py-2 text-center text-start text-red">
-            <p>{name in errors && errors[name]}</p>
+          <p>{error}</p>
         </div>
-        }
+      )}
     </div>
   );
 };

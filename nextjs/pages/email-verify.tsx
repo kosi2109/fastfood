@@ -17,7 +17,7 @@ function EmailVerify() {
             .then((res)=> {                
                 toast.success(res.data.message);
                 setLoading(false);
-                router.back();
+                router.push('/');
             })
             .catch((res)=> {    
                 toast.error(res?.response?.data?.message);

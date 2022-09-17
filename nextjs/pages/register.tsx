@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { register } from "../api";
 import GoogleMap from "google-map-react";
-import { HiLocationMarker } from "react-icons/hi";
 import Input from "../components/Form/Input";
 import { toast } from "react-toastify";
 import GuestLayout from "../components/Layouts/GuestLayout";
@@ -56,17 +55,16 @@ const Register: NextPage = () => {
           toast.success("Account was scuuessfully created.");
           setTimeout(()=> router.push("/login"), 500)
         })
-        .catch((res) => {
+        .catch((res) => {                    
           if (res.response.status !== 500) {
-            setErrors(res.response.data.errors);
-            toast.error(res.response.data.message);
+            setErrors(res.response.data);
           }
-          setLoading(false);          
+          setLoading(false);                    
         });
     }
   };
 
-  
+    
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...form,
@@ -121,7 +119,7 @@ const Register: NextPage = () => {
               id="name"
               name="name"
               handleChange={handleChange}
-              errors={errors}
+              errors={errors?.name ? errors.name[0] : null }
             />
 
             <Input
@@ -130,7 +128,7 @@ const Register: NextPage = () => {
               name="email"
               type="email"
               handleChange={handleChange}
-              errors={errors}
+              error={errors?.email ? errors.email[0] : null }
             />
 
             <Input
@@ -139,7 +137,7 @@ const Register: NextPage = () => {
               name="phone"
               type="phone"
               handleChange={handleChange}
-              errors={errors}
+              error={errors?.phone ? errors.phone[0] : null }
             />
 
             <PasswordInput
@@ -147,6 +145,7 @@ const Register: NextPage = () => {
               name="password"
               handleChange={handleChange}
               id="password"
+              error={errors?.password ? errors.password[0] : null }
             />
 
             <PasswordInput
@@ -154,6 +153,7 @@ const Register: NextPage = () => {
               name="password_confirmation"
               handleChange={handleChange}
               id="password_confirmation"
+              error={errors?.password_confirmation ? errors.password_confirmation : null }
             />
 
             <div className="w-full h-60 md:h-80 mb-3 bg-bgGray border-2 rounded-md px-3 py-2">
