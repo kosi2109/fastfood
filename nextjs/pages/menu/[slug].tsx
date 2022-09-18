@@ -52,17 +52,17 @@ const Menu: NextPage<Props> = ({ menu }) => {
   );
 
   useEffect(() => {
-    getRandomMenus(menu.id).then((res) => {
+    getRandomMenus(menu?.id).then((res) => {
       setRandomMenus(res.data.data);
     });
     setSize(menu?.sizes[0]);
     setPrice(getPrice(menu?.sizes[0]), false);
-  }, [menu.id]);
+  }, [menu?.id]);
 
   return (
     <AppLayout back={true}>
       <Head>
-        <title>Fastfood | {menu.name}</title>
+        <title>Fastfood | {menu?.name}</title>
       </Head>
       <motion.div exit={{ opacity: 0 }} className="pt-2 w-full">
         <div className="w-full md:flex">
