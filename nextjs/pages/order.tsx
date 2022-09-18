@@ -135,7 +135,7 @@ const order: NextPage = () => {
             </div>
             <div className="mb-3 w-full flex px-5 py-4 rounded-md bg-bgGray border-2 items-center justify-start py-3">
               <div className="w-1/6 flex items-center justify-start">
-                <ProfileImage />
+                <ProfileImage image_url={user.profile_img} />
               </div>
               <div className="w-5/6 pl-2 flex flex-col">
                 <h4 className="font-bold text-textBlack text-lg">

@@ -29,7 +29,7 @@ const Banner: NextPage<Props> = ({ banners }) => {
       autoPlaySpeed={5000}
     >
       {banners.map((banner: any, i: number) => (
-        <div key={i} className="w-full h-40 md:h-80 px-5 md:px-20 py-2 mb-3 bg-bgLightGreen flex items-start rounded-md shadow-sm">
+        <div key={i} className="w-full h-40 md:h-80 px-5 lg:px-20 py-2 mb-3 bg-bgLightGreen flex items-center rounded-md shadow-sm">
           <div className="w-4/6 flex flex-col items-start justify-center">
             <h4 className="font-semibold mb-3 text-xl md:text-4xl text-textBlack">
               {banner.title}

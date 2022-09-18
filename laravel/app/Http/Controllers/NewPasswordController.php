@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\UserRepository;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Support\Responsable;
@@ -12,7 +13,6 @@ use Laravel\Fortify\Actions\CompletePasswordReset;
 use Laravel\Fortify\Contracts\FailedPasswordResetResponse;
 use Laravel\Fortify\Contracts\PasswordResetResponse;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
-use Laravel\Fortify\Contracts\ResetsUserPasswords;
 use Laravel\Fortify\Fortify;
 
 class NewPasswordController extends Controller
@@ -22,7 +22,6 @@ class NewPasswordController extends Controller
      *
      * @var \Illuminate\Contracts\Auth\StatefulGuard
      */
-    protected $guard;
 
     /**
      * Create a new controller instance.
@@ -30,9 +29,11 @@ class NewPasswordController extends Controller
      * @param  \Illuminate\Contracts\Auth\StatefulGuard  $guard
      * @return void
      */
-    public function __construct(StatefulGuard $guard)
-    {
-        $this->guard = $guard;
+    public function __construct(
+        protected StatefulGuard $guard,
+        private UserRepository $respository
+    ) {
+        //
     }
 
     /**
@@ -66,8 +67,8 @@ class NewPasswordController extends Controller
         $status = $this->broker()->reset(
             $request->only(Fortify::email(), 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
-                $user->password = $request->password;
-                $user->save();
+
+                $this->respository->update($user,$request);
 
                 app(CompletePasswordReset::class)($this->guard, $user);
             }
@@ -77,8 +78,8 @@ class NewPasswordController extends Controller
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
         return $status == Password::PASSWORD_RESET
-                    ? app(PasswordResetResponse::class, ['status' => $status])
-                    : app(FailedPasswordResetResponse::class, ['status' => $status]);
+            ? app(PasswordResetResponse::class, ['status' => $status])
+            : app(FailedPasswordResetResponse::class, ['status' => $status]);
     }
 
     /**

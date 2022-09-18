@@ -1,4 +1,4 @@
-export interface LOGIN{
+export type LOGIN = {
     email : string,
     password : string
 }
@@ -19,7 +19,7 @@ export type CART_ITEM = {
     quantity : number
 }
 
-export interface BANNER{
+export type BANNER = {
     id: number,
     title: string,
     description: string,

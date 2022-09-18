@@ -2,8 +2,8 @@ import React from "react";
 import { CATEGORY } from "../../types";
 
 const selected =
-  "flex items-center min-w-fit md:mb-2 justify-center md:justify-start cursor-pointer mr-4 border-b-2 border-textGreen font-bold text-lg";
-const list = "flex min-w-fit md:mb-2 items-center justify-center md:justify-start cursor-pointer mr-4 font-semibold text-md";
+  "flex items-center min-w-fit md:h-10 md:mb-2 justify-center md:justify-start cursor-pointer mr-4 border-b-2 border-textGreen font-bold text-lg";
+const list = "flex min-w-fit md:h-10 md:mb-2 items-center justify-center md:justify-start cursor-pointer mr-4 font-semibold text-md";
 
 
 const Category = ({

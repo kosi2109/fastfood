@@ -6,26 +6,37 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\WelcomeMail;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 
 class ApiAuthController extends Controller
 {
+    public function __construct(
+        private UserRepository $respository
+    )
+    {
+        //
+    }
+
+    /**
+     * Login
+     * @param LoginRequest $request
+     * 
+     * @return response
+     */
     public function login(LoginRequest $request)
     {
-        $user = User::where('email', request('email'))->first();
+        $user = $this->respository->findByEmail(request('email'));
 
         if (!auth()->attempt($request->only('email', 'password'))) {
             return response([
                 "message" => "Wrong User crenditial."
             ], 401);
         }
-
-        $user = $request->user();
 
         $token = $user->createToken(env('JWT_SECRET'))->plainTextToken;
 
@@ -41,6 +52,12 @@ class ApiAuthController extends Controller
         return response($response_data, 201);
     }
 
+    /**
+     * Register
+     * @param Request $request
+     * 
+     * @return response
+     */
     public function register(Request $request)
     {
         $register_request = new RegisterRequest();
@@ -51,17 +68,7 @@ class ApiAuthController extends Controller
 
         if ($validate->fails()) return response($validate->errors(), 400);
 
-        $data = $request->input();
-
-        if (isset($data['profile_img'])) {
-            @list($type, $file_data) = explode(';', $data['profile_img']);
-            @list(, $file_data) = explode(',', $file_data); 
-            $imageName = time().'.'.explode('/',$type)[1];   
-            Storage::disk('local')->put('public/profile/'.$imageName, base64_decode($file_data));
-            $data['profile_img'] = env('APP_URL').'/storage/profile/'.$imageName;
-        }
-
-        $user = User::create($data);
+        $user = $this->respository->create($request);
 
         Mail::to($user)->send(new WelcomeMail(['name' => $user->name]));
 
@@ -77,6 +84,7 @@ class ApiAuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
+
         return response("Logout complete", 200);
     }
 

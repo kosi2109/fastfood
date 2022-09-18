@@ -20,13 +20,19 @@ API.interceptors.request.use((req : any) => {
 });
 
 // get menus by catagory or all
-export const allMenus = (category? : string)=> category ? axios.get(`/api/menus?category=${category}`) : API.get(`/api/menus`);
+export const allMenus = (category? : string)=> category ? API.get(`/api/menus?category=${category}`) : API.get(`/api/menus`);
+
+// get menus that has discount
+export const getDiscountMenus = ()=> API.get(`/api/menus/discount`);
 
 // search menu
 export const searchMenus = (keyword? : string)=>  API.get(`/api/menus?name=${keyword}`);
 
 // single menu
 export const showMenus = (slug : string)=>  API.get(`/api/menus/${slug}`);
+
+// random menu
+export const getRandomMenus = (id : number)=>  API.get(`/api/menus/random/${id}`);
 
 // get all categories
 export const allCategory = ()=> API.get(`/api/categories`);
