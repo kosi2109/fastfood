@@ -7,10 +7,7 @@ import Auth from "../components/Auth";
 import { AppState } from "../context/AppProvider";
 import GoogleMap from "google-map-react";
 import { HiLocationMarker } from "react-icons/hi";
-import {
-  caculateDeliPricePerDistance,
-  calcCrow,
-} from "../utils/mapCaculation";
+import { caculateDeliPricePerDistance, calcCrow } from "../utils/mapCaculation";
 import { storeOrder } from "../api";
 import { CREATE_ORDER, MENU, SIZE } from "../types";
 import test from "../public/assets/delivery.gif";
@@ -25,6 +22,8 @@ const order: NextPage = () => {
   const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
   const [showAnimation, setShowAnimation] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [mapLoading, setmapLoading] = useState(true);
+
   const google_key: any = process.env.GOOGLE_MAP_KEY;
 
   const shopCoordinate = {
@@ -35,11 +34,12 @@ const order: NextPage = () => {
 
   const { user } = AppState();
 
-  useEffect(()=>{
+  useEffect(() => {
     navigator.geolocation.getCurrentPosition((data) => {
       setCoordinate({ lat: data.coords.latitude, lng: data.coords.longitude });
+      setmapLoading(false);
     });
-  },[])
+  }, []);
 
   useEffect(() => {
     const d = calcCrow(
@@ -49,7 +49,6 @@ const order: NextPage = () => {
       coordinate.lng
     );
     setDelifee(Math.floor(caculateDeliPricePerDistance(d)));
-
   }, [coordinate]);
   let subTotal = 0;
 
@@ -115,23 +114,29 @@ const order: NextPage = () => {
         {cartItems.length > 0 ? (
           <div className="w-full py-2 mx-auto md:w-2/3 lg:w-1/2 2xl:w-1/3 flex flex-col">
             <div className="mb-3 w-full h-40 md:h-60 rounded-md bg-textGray z-2">
-              <GoogleMap
-                bootstrapURLKeys={{
-                  key: google_key,
-                }}
-                defaultCenter={coordinate}
-                center={coordinate}
-                defaultZoom={14}
-                margin={[50, 50, 50, 50]}
-                options={{ disableDefaultUI: true, zoomControl: true }}
-                yesIWantToUseGoogleMapApiInternals
-                onChange={(e) =>
-                  setCoordinate({ lat: e.center.lat, lng: e.center.lng })
-                }
-              >
-                <MapPointer lat={coordinate.lat} lng={coordinate.lng} />
-                <MapPointer color="green" lat={shopCoordinate.lat} lng={shopCoordinate.lng} />
-              </GoogleMap>
+              {!mapLoading && (
+                <GoogleMap
+                  bootstrapURLKeys={{
+                    key: google_key,
+                  }}
+                  defaultCenter={coordinate}
+                  center={coordinate}
+                  defaultZoom={14}
+                  margin={[50, 50, 50, 50]}
+                  options={{ disableDefaultUI: true, zoomControl: true }}
+                  yesIWantToUseGoogleMapApiInternals
+                  onChange={(e) =>
+                    setCoordinate({ lat: e.center.lat, lng: e.center.lng })
+                  }
+                >
+                  <MapPointer lat={coordinate.lat} lng={coordinate.lng} />
+                  <MapPointer
+                    color="green"
+                    lat={shopCoordinate.lat}
+                    lng={shopCoordinate.lng}
+                  />
+                </GoogleMap>
+              )}
             </div>
             <div className="mb-3 w-full flex px-5 py-4 rounded-md bg-bgGray border-2 items-center justify-start py-3">
               <div className="w-1/6 flex items-center justify-start">
@@ -152,7 +157,6 @@ const order: NextPage = () => {
             <h2 className="font-bold text-start text-lg mb-3">Order Detail</h2>
             <div className="p-2 border-2 bg-bgGray rounded-md">
               <div className="border-b py-3">
-
                 {cartItems.map((item, i) => {
                   const total =
                     item.quantity *
@@ -171,7 +175,6 @@ const order: NextPage = () => {
                     />
                   );
                 })}
-
               </div>
 
               <div className="w-full flex py-1">
@@ -207,12 +210,9 @@ const order: NextPage = () => {
                 "Comfirm Order"
               )}
             </button>
-
           </div>
         ) : (
-
           <EmptyCart />
-        
         )}
       </Auth>
     </AppLayout>
