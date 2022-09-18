@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react'
 import { ClipLoader } from 'react-spinners';
@@ -11,12 +12,11 @@ function ResetPassword() {
     const [password2, setPassword2] = useState("");
     const [loading, setLoading] = useState(false)
 
-    const token = router.query['token'];
-    const email = router.query['email'];
+    const {token ,email} = router.query;
     
     const handleSubmit = (e : React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
-        if (!loading) {
+        if (!loading && token && email) {
             setLoading(true);
             resetPassword({email,token,password,password_confirmation:password2})
             .then((res) => {
@@ -33,12 +33,15 @@ function ResetPassword() {
     
   return (
     <GuestLayout back={true}>
+        <Head>
+            <title>Fastfood | Reset Password</title>
+        </Head>
         <div className='w-full h-screen flex items-center justify-center'>
-            <form onSubmit={handleSubmit} className='border-2 flex flex-col rounded-sm shadow'>
+            <form onSubmit={handleSubmit} className='border-2 flex flex-col rounded-sm shadow w-full md:w-2/3 lg:w-1/3'>
                 <div className='p-5 border-b-2'>
                     <h5 className='text-lg font-semibold'>Reset Password</h5>
                 </div>
-                <div className='p-5'>
+                <div className='p-5 flex flex-col'>
                     <input onChange={(e) => setPassword(e.target.value)} type="text" placeholder='Password' className='h-10 w-80 border-2 p-2 focus:outline-bgGreen mb-3' />
                     <input onChange={(e) => setPassword2(e.target.value)} type="text" placeholder='Comfirm Password' className='h-10 w-80 border-2 p-2 focus:outline-bgGreen' />
                 </div>

@@ -12,30 +12,13 @@ import {
   calcCrow,
 } from "../utils/mapCaculation";
 import { storeOrder } from "../api";
-import { MENU, SIZE } from "../types";
+import { CREATE_ORDER, MENU, SIZE } from "../types";
 import test from "../public/assets/delivery.gif";
 import EmptyCart from "../components/client/EmptyCart";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
-
-const MapPointer = ({}: any) => (
-  <div>
-    <HiLocationMarker size={30} />
-  </div>
-);
-const Shop = ({}: any) => (
-  <div>
-    <HiLocationMarker color="green" size={30} />
-  </div>
-);
-
-export type CREATE_ORDER = {
-  user_id: number;
-  grand_total: number;
-  deli_fee: number;
-  address: string;
-  items: any;
-};
+import Head from "next/head";
+import MapPointer from "../components/MapPointer";
 
 const order: NextPage = () => {
   const { cartItems, clearCart } = AppState();
@@ -115,6 +98,10 @@ const order: NextPage = () => {
 
   return (
     <AppLayout back={true}>
+      <Head>
+        <title>Fastfood | Order</title>
+      </Head>
+
       {showAnimation && (
         <div className="fixed left-0 top-0 z-10 w-screen h-screen flex flex-col items-center justify-center bg-bgWhite">
           <img src={test.src} alt="" className="object-contain" />
@@ -123,6 +110,7 @@ const order: NextPage = () => {
           </h5>
         </div>
       )}
+
       <Auth>
         {cartItems.length > 0 ? (
           <div className="w-full py-2 mx-auto md:w-2/3 lg:w-1/2 2xl:w-1/3 flex flex-col">
@@ -142,12 +130,12 @@ const order: NextPage = () => {
                 }
               >
                 <MapPointer lat={coordinate.lat} lng={coordinate.lng} />
-                <Shop lat={shopCoordinate.lat} lng={shopCoordinate.lng} />
+                <MapPointer color="green" lat={shopCoordinate.lat} lng={shopCoordinate.lng} />
               </GoogleMap>
             </div>
             <div className="mb-3 w-full flex px-5 py-4 rounded-md bg-bgGray border-2 items-center justify-start py-3">
               <div className="w-1/6 flex items-center justify-start">
-                <ProfileImage />
+                <ProfileImage image_url={user.profile_img} />
               </div>
               <div className="w-5/6 pl-2 flex flex-col">
                 <h4 className="font-bold text-textBlack text-lg">
@@ -164,6 +152,7 @@ const order: NextPage = () => {
             <h2 className="font-bold text-start text-lg mb-3">Order Detail</h2>
             <div className="p-2 border-2 bg-bgGray rounded-md">
               <div className="border-b py-3">
+
                 {cartItems.map((item, i) => {
                   const total =
                     item.quantity *
@@ -182,6 +171,7 @@ const order: NextPage = () => {
                     />
                   );
                 })}
+
               </div>
 
               <div className="w-full flex py-1">
@@ -217,9 +207,12 @@ const order: NextPage = () => {
                 "Comfirm Order"
               )}
             </button>
+
           </div>
         ) : (
+
           <EmptyCart />
+        
         )}
       </Auth>
     </AppLayout>

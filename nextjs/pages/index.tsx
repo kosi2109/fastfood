@@ -1,10 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { allBanners, featureCategory, googleCallBack } from "../api";
+import {
+  allBanners,
+  featureCategory,
+  getDiscountMenus,
+  googleCallBack,
+} from "../api";
 import ItemContainer from "../components/client/Items/ItemContainer";
 import AppLayout from "../components/Layouts/AppLayout";
 import Search from "../components/client/Search";
-import { BANNER, CATEGORY } from "../types";
+import { BANNER, CATEGORY, MENU } from "../types";
 import Banner from "../components/client/Banner";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
@@ -14,39 +19,44 @@ import { setCookie } from "cookies-next";
 interface Props {
   categories: CATEGORY[];
   banners: BANNER[];
+  discountMenus: MENU[];
 }
 
-const Home: NextPage<Props> = ({ categories, banners }) => {
+const Home: NextPage<Props> = ({ categories, banners, discountMenus }) => {
   const router = useRouter();
   const { setUser } = AppState();
 
   useEffect(() => {
     if (router.query.code) {
-      googleCallBack({code:router.query.code,scope:router.query.scope,authuser:router.query.authuser,prompt:router.query.prompt})
-        .then((response) => {
-          router.replace('/');
-          setUser(response.data);
-          const age = 60 * 60 * 24 * 30; //1month
-          setCookie("jwt", response.data.token, {
-            maxAge: age
-          });
-          setCookie("fastfood_auth", response.data.user, {
-            maxAge: age
-          });
-        })
+      googleCallBack({
+        code: router.query.code,
+        scope: router.query.scope,
+        authuser: router.query.authuser,
+        prompt: router.query.prompt,
+      }).then((response) => {
+        router.replace("/");
+        setUser(response.data);
+        const age = 60 * 60 * 24 * 30; //1month
+        setCookie("jwt", response.data.token, {
+          maxAge: age,
+        });
+        setCookie("fastfood_auth", response.data.user, {
+          maxAge: age,
+        });
+      });
     }
   }, []);
 
   return (
     <AppLayout>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Fastfood</title>
       </Head>
       <Search />
-      <div className="w-full md:mx-auto md:w-2/3">
+      <div className="w-full lg:mx-auto lg:w-2/3">
         <Banner banners={banners} />
-        <div className="w-full md:w">
+        <div className="w-full">
+          <ItemContainer title="Discount Items" menus={discountMenus} />
           {categories.map((category: any) => (
             <ItemContainer
               key={category.slug}
@@ -62,12 +72,14 @@ const Home: NextPage<Props> = ({ categories, banners }) => {
 
 export async function getServerSideProps() {
   const categories = await featureCategory();
+  const discountMenus = await getDiscountMenus();
   const banners = await allBanners();
 
   return {
     props: {
       categories: categories.data.data,
       banners: banners.data.data,
+      discountMenus: discountMenus.data.data,
     },
   };
 }

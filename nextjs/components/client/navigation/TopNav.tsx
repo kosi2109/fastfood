@@ -64,7 +64,7 @@ const TopNav: NextPage<Props> = ({ title, back = false }) => {
       <div className="hidden md:flex justify-between h-20 bg-white z-20 shadow fixed top-0 w-full items-center px-10">
         <div className="flex w-1/5 h-full justify-start">
           <Link href="/">
-            <div className="h-full flex items-center">
+            <div className="h-full flex items-center select-none cursor-pointer">
               <img src={logo.src} className="h-full" alt="logo" />
               <h3 className="text-textGreen text-xl font-semibold">Fastfood</h3>
             </div>

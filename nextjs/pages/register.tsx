@@ -1,25 +1,21 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import React, { useEffect, useRef, useState } from "react";
 import { register } from "../api";
 import GoogleMap from "google-map-react";
-import { HiLocationMarker } from "react-icons/hi";
 import Input from "../components/Form/Input";
-import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import GuestLayout from "../components/Layouts/GuestLayout";
 import Image from "next/image";
 import image from "../public/assets/register.gif";
 import SocialLogin from "../components/client/SocialLogin";
 import LoginOrRegister from "../components/Form/LoginOrRegister";
-
-const MapPointer = ({}: any) => (
-  <div>
-    <HiLocationMarker size={30} />
-  </div>
-);
+import PasswordInput from "../components/Form/PasswordInput";
+import FormButton from "../components/Form/FormButton";
+import MapPointer from "../components/MapPointer";
+import { AiFillCloseCircle } from "react-icons/ai";
+import { BsUpload } from "react-icons/bs";
 
 const initialForm = {
   name: "",
@@ -27,20 +23,20 @@ const initialForm = {
   phone: "",
   address: "",
   password: "",
-  password2: "",
+  password_confirmation: "",
   profile_img: "",
 };
 
 export type REGISTER = typeof initialForm;
 
 const Register: NextPage = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showPassword2, setShowPassword2] = useState<boolean>(false);
   const router = useRouter();
+  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const [form, setForm] = useState<typeof initialForm>(initialForm);
   const [coordinate, setCoordinate] = useState({ lat: 20.1544, lng: 94.9455 });
   const [errors, setErrors] = useState<any>([]);
   const [loading, setLoading] = useState(false);
+  const imageUploadRef = useRef<any>(null);
   const google_key : any = process.env.GOOGLE_MAP_KEY;
 
 
@@ -55,20 +51,20 @@ const Register: NextPage = () => {
       setLoading(true);
       register(form)
         .then((res) => {
-          router.push("/login");
+          setLoading(false);
           toast.success("Account was scuuessfully created.");
+          setTimeout(()=> router.push("/login"), 500)
         })
-        .catch((res) => {
+        .catch((res) => {                    
           if (res.response.status !== 500) {
             setErrors(res.response.data);
-            setLoading(false);
-            toast.error(res.response.data.message);
           }
+          setLoading(false);                    
         });
     }
   };
 
-  
+    
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...form,
@@ -76,11 +72,39 @@ const Register: NextPage = () => {
     });
   };
 
+  const imageUpload = async (e : React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      let image = await convertToBase64(e.target.files[0]); 
+      setImagePreviewUrl(image);    
+      setForm({...form,profile_img : image})
+    }
+  }
+
+  const removePreview = ()=> {
+    if (imageUploadRef) {
+      setImagePreviewUrl("");
+      imageUploadRef.current.value = null;
+      setForm({...form,profile_img : ""})
+    }
+  }
+
+  function convertToBase64(file : File) : any {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+  
   return (
     <GuestLayout>
       <Head>
-        <title>Register</title>
-        <link rel="icon" href="/favicon.ico" />
+      <title>Fastfood | Register</title>
       </Head>
       <div className="w-full h-screen flex">
         <div className="fixed blur-sm	md:blur-none top-20 md:top-0 md:relative md:w-1/2 flex items-center justify-center">
@@ -95,7 +119,7 @@ const Register: NextPage = () => {
               id="name"
               name="name"
               handleChange={handleChange}
-              errors={errors}
+              errors={errors?.name ? errors.name[0] : null }
             />
 
             <Input
@@ -104,7 +128,7 @@ const Register: NextPage = () => {
               name="email"
               type="email"
               handleChange={handleChange}
-              errors={errors}
+              error={errors?.email ? errors.email[0] : null }
             />
 
             <Input
@@ -113,65 +137,26 @@ const Register: NextPage = () => {
               name="phone"
               type="phone"
               handleChange={handleChange}
-              errors={errors}
+              error={errors?.phone ? errors.phone[0] : null }
             />
 
-            <div className="flex flex-col w-full mb-2 ">
-              <label className="mb-2 text-textGray" htmlFor="password">
-                Password
-              </label>
-              <div className="w-full relative">
-                <input
-                  onChange={handleChange}
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  id="password"
-                  className="w-full h-10 rounded-md border border-bgGreen px-2 focus-within:outline-textGreen"
-                  required
-                />
-                <div
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="flex items-center justify-center absolute top-0 right-0 w-10 h-full"
-                >
-                  {showPassword ? (
-                    <AiOutlineEye size={20} />
-                  ) : (
-                    <AiOutlineEyeInvisible size={20} />
-                  )}
-                </div>
-              </div>
-            </div>
+            <PasswordInput
+              title="Password"
+              name="password"
+              handleChange={handleChange}
+              id="password"
+              error={errors?.password ? errors.password[0] : null }
+            />
 
-            <div className="flex flex-col w-full mb-5">
-              <label
-                className="mb-2 text-textGray"
-                htmlFor="password_confirmation"
-              >
-                Password Comfirm
-              </label>
-              <div className="w-full relative">
-                <input
-                  onChange={handleChange}
-                  type={showPassword2 ? "text" : "password"}
-                  name="password2"
-                  id="password2"
-                  required
-                  className="w-full h-10 rounded-md border border-bgGreen px-2 focus-within:outline-textGreen"
-                />
-                <div
-                  onClick={() => setShowPassword2(!showPassword2)}
-                  className="flex items-center justify-center absolute top-0 right-0 w-10 h-full"
-                >
-                  {showPassword2 ? (
-                    <AiOutlineEye size={20} />
-                  ) : (
-                    <AiOutlineEyeInvisible size={20} />
-                  )}
-                </div>
-              </div>
-            </div>
+            <PasswordInput
+              title="Password Comfirm"
+              name="password_confirmation"
+              handleChange={handleChange}
+              id="password_confirmation"
+              error={errors?.password_confirmation ? errors.password_confirmation : null }
+            />
 
-            <div className="w-full h-40 md:h-80 mb-3 bg-bgGray border-2 rounded-md px-3 py-2">
+            <div className="w-full h-60 md:h-80 mb-3 bg-bgGray border-2 rounded-md px-3 py-2">
               <input
                 type="hidden"
                 name="address"
@@ -196,9 +181,29 @@ const Register: NextPage = () => {
               </GoogleMap>
             </div>
 
-            <button className="mb-5 bg-bgGreen w-full h-10 rounded-md text-textWhite font-bold hover:bg-textGreen">
-              {loading ? <ClipLoader size={20} color="#ffffff" /> : "Register"}
-            </button>
+            <input ref={imageUploadRef} type="file" className="hidden" onChange={imageUpload} accept="image/*" />
+
+            {imagePreviewUrl !== "" ?
+              <div className="w-full h-60 md:h-80 mb-3 bg-bgGray border-2 rounded-md px-3 py-2 flex items-center justify-center relative">
+                <img src={imagePreviewUrl} alt="" className="h-full w-auto" />
+                <button onClick={removePreview} className="absolute top-0 right-0 p-3">
+                  <AiFillCloseCircle size={25}/>
+                </button>
+              </div>
+             : 
+                <div className="w-full h-60 md:h-80 mb-3 bg-bgGray border-2 rounded-md px-3 py-2 flex items-center justify-center">
+                  <button type="button" className="flex flex-col items-center" onClick={() => imageUploadRef.current.click()}>
+                    <BsUpload className="text-textGreen mb-3" size={25}/>
+                    Upload Profile
+                  </button>
+                </div>
+             }
+            
+            <FormButton 
+              loading={loading} 
+              text="Register" 
+            />
+
           </form>
           
           <LoginOrRegister login={false}/>
