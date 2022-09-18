@@ -51,7 +51,7 @@ const menu: NextPage<Props> = ({ categories, featureCate, discountMenus }) => {
         <title>Fastfood | Menus</title>
       </Head>
       <div className="flex flex-col md:flex-row">
-        <div className="md:w-1/6 md:fixed md:top-20 md:h-screen border-r">
+        <div className="md:w-1/6 md:fixed md:top-20 md:h-screen md:border-r">
           <h1 className="text-md font-bold text-textGray">Our Food</h1>
           <h2 className="text-xl mb-2 font-bold text-textGreen">
             Special For You
