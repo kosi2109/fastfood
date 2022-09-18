@@ -59,6 +59,42 @@ class MenuRepository extends BaseRepository
     }
 
     /**
+     * get discount menus
+     */
+    public function getDiscountMenus()
+    {
+        if(Cache::has(self::CACHE_KEY."discount")) {
+            $menus = Cache::get(self::CACHE_KEY."discount");
+        } else {
+            $menus = Cache::rememberForever(self::CACHE_KEY."discount", function(){
+                return Menu::all()->filter(function ($item, $key) {
+                    return $item->discount != null;
+                });
+            });
+        }
+
+        return $menus;
+    }
+
+    /**
+     * get random menus
+     * @param int $id
+     */
+    public function getRandomMenus($id)
+    {
+
+        if(Cache::has(self::CACHE_KEY."random.".$id)) {
+            $menus = Cache::get(self::CACHE_KEY."random.".$id);
+        } else {
+            $menus = Cache::rememberForever(self::CACHE_KEY."random".$id, function() use($id) {
+                return Menu::where('id', '!=' , $id)->inRandomOrder()->take(5)->get();
+            });
+        }
+
+        return $menus;
+    }
+
+    /**
      * Create : Menu
      * @param $attribute
      * 

@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\WelcomeMail;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -14,15 +15,22 @@ use Laravel\Socialite\Facades\Socialite;
 
 class ApiAuthController extends Controller
 {
+    public function __construct(
+        private UserRepository $respository
+    )
+    {
+        //
+    }
+
+    /**
+     * Login
+     * @param LoginRequest $request
+     * 
+     * @return response
+     */
     public function login(LoginRequest $request)
     {
-        $user = User::where('email', request('email'))->first();
-
-        if (!$user->email_verified_at) {
-            return response([
-                "message" => "Your Email is not verified yet."
-            ], 401);
-        }
+        $user = $this->respository->findByEmail(request('email'));
 
         if (!auth()->attempt($request->only('email', 'password'))) {
             return response([
@@ -30,44 +38,59 @@ class ApiAuthController extends Controller
             ], 401);
         }
 
-        $user = $request->user();
-
         $token = $user->createToken(env('JWT_SECRET'))->plainTextToken;
 
-        return response([
+        $response_data = [
             "user" => $user,
             "token" =>  $token
-        ], 201);
+        ];
+
+        if (!$user->email_verified_at) {
+            $response_data['not_verified'] = "Email not verified yet." ;
+        }
+
+        return response($response_data, 201);
     }
 
+    /**
+     * Register
+     * @param Request $request
+     * 
+     * @return response
+     */
     public function register(Request $request)
     {
-        if ($request->password != $request->password2) return response(["message" => "Password not match"], 400);
-
         $register_request = new RegisterRequest();
-
+        
+        if ($request->password != $request->password_confirmation) return response(["password_confirmation" => "Password not match"], 400);
+        
         $validate = Validator::make($request->all(), $register_request->rules(), $register_request->messages());
 
         if ($validate->fails()) return response($validate->errors(), 400);
 
-        $user = User::create($request->all());
+        $user = $this->respository->create($request);
 
         Mail::to($user)->send(new WelcomeMail(['name' => $user->name]));
 
         return response($user, 201);
     }
 
-    public function user(Request $request)
-    {
-        return response($request->header(), 201);
-    }
-
+    /**
+     * Logout
+     * @param Request $request
+     * 
+     * @return response
+     */
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
+
         return response("Logout complete", 200);
     }
 
+    /**
+     * Google Login
+     */
     public function redirectToAuth()
     {
         return response()->json([
@@ -78,16 +101,17 @@ class ApiAuthController extends Controller
         ]);
     }
 
+    /**
+     * Google login success callback to home
+     */
     public function handleAuthCallback()
     {
         try {
-            /** @var SocialiteUser $socialiteUser */
             $socialiteUser = Socialite::driver('google')->stateless()->user();
         } catch (ClientException $e) {
             return response()->json(['error' => 'Invalid credentials provided.'], 422);
         }
 
-        /** @var User $user */
         $user = User::firstOrCreate(
             [
                 'email' => $socialiteUser->getEmail(),

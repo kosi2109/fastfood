@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class LoginRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +25,8 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            "email" => ["required"],
-            "password" => ["required"]
+            "email" => [Rule::unique('users','email')],
+            "phone" => [Rule::unique('users','phone')],
         ];
     }
 }

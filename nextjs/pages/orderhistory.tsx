@@ -5,15 +5,14 @@ import Auth from "../components/Auth";
 import AppLayout from "../components/Layouts/AppLayout";
 import MenuLoading from "../components/client/MenuLoading";
 import OrderHistoryCard from "../components/client/OrderHistory/OrderHistoryCard";
-import { AppState } from "../context/AppProvider";
 import { ORDER } from "../types";
+import Head from "next/head";
 
 interface Props {
   orders: ORDER[];
 }
 
 const orderhistory: NextPage<Props> = () => {
-  const { user } = AppState();
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState<ORDER[]>([]);
   const [status, setStatus] = useState('1');
@@ -31,6 +30,9 @@ const orderhistory: NextPage<Props> = () => {
 
   return (
     <AppLayout back={true}>
+      <Head>
+        <title>Fastfood | Orderhistory</title>
+      </Head>
       <Auth>
         <div className="flex w-full md:mx-auto md:w-2/3 lg:w-1/2 mb-3 border-2">
           <button onClick={()=> setStatus('1')} className={`w-1/2 h-10 ${status == '1' && "bg-bgGreen text-white"}`}>In Progress</button>
