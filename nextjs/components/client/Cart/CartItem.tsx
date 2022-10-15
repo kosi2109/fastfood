@@ -1,10 +1,11 @@
 import React from 'react'
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
-import { AppState, CART_ACTION } from '../../../context/AppProvider'
+import { useDispatch } from 'react-redux'
+import { addToCart, removeFromCart } from '../../../store/slices/cartSlice'
 import { MENU, SIZE } from '../../../types'
 
 const CartItem = ({menu,size,quantity}:{menu:MENU,size:SIZE,quantity:number})=> {
-    const {increaseItem} = AppState();
+  const dispatch = useDispatch();
 
     const getPrice = (size: SIZE) => {
         let price = size?.price;
@@ -33,13 +34,13 @@ const CartItem = ({menu,size,quantity}:{menu:MENU,size:SIZE,quantity:number})=> 
             <h2 className='text-lg font-semibold'>{menu.name} ({size.name})</h2>
             <div className='w-full flex justify-between'>
                 <div className='mr-5 flex justify-between items-center bg-bgLightGreen rounded-xl h-7'>
-                    <div onClick={()=>increaseItem(menu,size,CART_ACTION.DECREASE)} className='flex items-center justify-center p-1 text-center font-semibold text-lg cursor-pointer rounded-full bg-textGray text-textWhite'>
+                    <div onClick={()=> dispatch(removeFromCart({menu,size}))} className='flex items-center justify-center p-1 text-center font-semibold text-lg cursor-pointer rounded-full bg-textGray text-textWhite'>
                         <AiOutlineMinus size={15}/>
                     </div>
                     <span className='px-2 w-8 text-center'>
                         {quantity}
                     </span>
-                    <div onClick={()=>increaseItem(menu,size,CART_ACTION.INCREASE)} className='flex items-center justify-center p-1 text-center font-semibold text-lg cursor-pointer rounded-full bg-bgGreen text-textWhite'>
+                    <div onClick={()=> dispatch(addToCart({menu,size}))} className='flex items-center justify-center p-1 text-center font-semibold text-lg cursor-pointer rounded-full bg-bgGreen text-textWhite'>
                         <AiOutlinePlus size={15}/>
                     </div>
                 </div>

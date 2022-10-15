@@ -5,9 +5,10 @@ import React, { useState } from "react";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { logout, updateUser } from "../../api";
-import { AppState, defaultUser } from "../../context/AppProvider";
 import GoogleMap from "google-map-react";
 import { HiLocationMarker } from "react-icons/hi";
+import { useDispatch, useSelector } from "react-redux";
+import { login, logout as authLogout } from "../../store/slices/authSlice";
 
 const MapPointer = ({}: any) => (
   <div>
@@ -19,7 +20,9 @@ const InformationMiss = () => {
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState("");
   const router = useRouter();
-  const { user, setUser } = AppState();
+  const user = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch();
+
   const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
   const google_key: any = process.env.GOOGLE_MAP_KEY;
 
@@ -41,7 +44,7 @@ const InformationMiss = () => {
 
     updateUser(data)
       .then((response) => {
-        setUser(response.data);
+        dispatch(login(response.data));
         setCookie("fastfood_auth", response.data, {
           maxAge: 60 * 60 * 24 * 30, //1month
         });
@@ -55,7 +58,7 @@ const InformationMiss = () => {
 
   const logoutController = async () => {
     await logout();
-    setUser(defaultUser);
+    dispatch(authLogout());
     deleteCookie("fastfood_auth");
     deleteCookie("jwt");
   };

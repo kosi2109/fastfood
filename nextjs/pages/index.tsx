@@ -13,8 +13,10 @@ import { BANNER, CATEGORY, MENU } from "../types";
 import Banner from "../components/client/Banner";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { AppState } from "../context/AppProvider";
 import { setCookie } from "cookies-next";
+import { useDispatch } from "react-redux";
+import {login as authLogin} from "../store/slices/authSlice"
+
 
 interface Props {
   categories: CATEGORY[];
@@ -24,7 +26,7 @@ interface Props {
 
 const Home: NextPage<Props> = ({ categories, banners, discountMenus }) => {
   const router = useRouter();
-  const { setUser } = AppState();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (router.query.code) {
@@ -35,7 +37,7 @@ const Home: NextPage<Props> = ({ categories, banners, discountMenus }) => {
         prompt: router.query.prompt,
       }).then((response) => {
         router.replace("/");
-        setUser(response.data);
+        dispatch(authLogin(response.data));
         const age = 60 * 60 * 24 * 30; //1month
         setCookie("jwt", response.data.token, {
           maxAge: age,

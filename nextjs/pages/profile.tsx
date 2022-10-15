@@ -6,23 +6,28 @@ import Auth from "../components/Auth";
 import AppLayout from "../components/Layouts/AppLayout";
 import Detail from "../components/client/Profile/Detail";
 import ProfileImage from "../components/client/Profile/ProfileImage";
-import { AppState, defaultUser } from "../context/AppProvider";
 import GoogleMap from "google-map-react";
 import { useRouter } from "next/router";
 import InformationMiss from "../components/client/InformationMiss";
 import Head from "next/head";
 import MapPointer from "../components/MapPointer";
+import { useSelector, useDispatch } from 'react-redux'
+import {logout as authLogout} from "../store/slices/authSlice"
+import { USER } from "../types";
+
 
 const profile: NextPage = () => {
-  const { user, setUser } = AppState();
   const router = useRouter();
   const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
   const google_key: any = process.env.GOOGLE_MAP_KEY;
-  const [mapLoading, setmapLoading] = useState(true);
+  const [mapLoading, setmapLoading] = useState(false);
+  const user = useSelector((state : any) => state.auth);
+  
+  const dispatch = useDispatch();
 
   const logoutController = async () => {
     await logout();
-    setUser(defaultUser);
+    dispatch(authLogout());
     deleteCookie("fastfood_auth");
     deleteCookie("jwt");
   };

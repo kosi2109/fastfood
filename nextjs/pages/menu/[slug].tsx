@@ -2,13 +2,14 @@ import { NextPage } from "next";
 import React, { useCallback, useEffect, useState } from "react";
 import { allMenus, getRandomMenus, showMenus } from "../../api";
 import AppLayout from "../../components/Layouts/AppLayout";
-import { AppState, CART_ACTION } from "../../context/AppProvider";
 import { MENU, SIZE } from "../../types";
 import useAnimateNumber from "use-animate-number";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import ItemContainer from "../../components/client/Items/ItemContainer";
 import { checkDiscountActive } from "../../utils/discount";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/slices/cartSlice"
 
 interface Props {
   menu: MENU;
@@ -23,7 +24,7 @@ const animateOption = {
 };
 
 const Menu: NextPage<Props> = ({ menu }) => {
-  const { increaseItem } = AppState();
+  const dispatch = useDispatch();
   const [randomMenus, setRandomMenus] = useState<MENU[]>([]);
   const [originalPrice, setOriginalPrice] = useState(menu?.sizes[0]?.price);
   const [size, setSize] = useState<SIZE>(menu?.sizes[0]);
@@ -132,7 +133,7 @@ const Menu: NextPage<Props> = ({ menu }) => {
               </h5>
               <button
                 className="w-full md:w-4/6 h-10 bg-bgGreen text-textWhite rounded-md"
-                onClick={() => increaseItem(menu, size, CART_ACTION.INCREASE)}
+                onClick={() => dispatch(addToCart({menu, size}))}
               >
                 Add To Cart
               </button>

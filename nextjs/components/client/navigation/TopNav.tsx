@@ -7,7 +7,7 @@ import { FaShoppingCart, FaUserAlt } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { ImHome } from "react-icons/im";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { AppState } from "../../../context/AppProvider";
+import { useSelector } from "react-redux";
 import logo from "../../../public/assets/logo.png"
 
 interface Props {
@@ -22,14 +22,15 @@ const active =
 
 const TopNav: NextPage<Props> = ({ title, back = false }) => {
   const router = useRouter();
-  const { cartItemTotal } = AppState();
+  const {cartQuantity} = useSelector((state : any) => state.cart);
+
   const [animate, setAnimate] = useState("w-5 h-5");
   useEffect(() => {
     setAnimate("w-6 h-6");
     setTimeout(() => {
       setAnimate("w-5 h-5");
     }, 1000);
-  }, [cartItemTotal]);
+  }, [cartQuantity]);
 
   return (
     <>
@@ -104,7 +105,7 @@ const TopNav: NextPage<Props> = ({ title, back = false }) => {
                       animate
                     }
                   >
-                    <h5 className="text-xs font-semibold">{cartItemTotal}</h5>
+                    <h5 className="text-xs font-semibold">{cartQuantity}</h5>
                   </div>
                 )}
               </div>
