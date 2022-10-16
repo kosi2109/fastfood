@@ -29,7 +29,8 @@ class RegisterRequest extends FormRequest
             "email" => ["required",Rule::unique('users','email')],
             "phone" => ["required",Rule::unique('users','phone')],
             "address" => ["required"],
-            "password" => ['required']
+            "password" => ['required'],
+            "password_confirmation" => ['required']
         ];
     }
 }

@@ -144,7 +144,7 @@ class OrderRepository extends BaseRepository
      */
     public function delete($order)
     {
-        if (!$order->delete()) return throw new GeneralJsonException("Order Delete Fail.");
+        if (!$order->delete()) return new GeneralJsonException("Order Delete Fail.");
 
         if (Cache::has(self::CACHE_KEY.$order->id)) {
             Cache::forget(self::CACHE_KEY.$order->id);

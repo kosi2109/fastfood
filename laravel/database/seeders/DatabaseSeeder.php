@@ -28,12 +28,6 @@ class DatabaseSeeder extends Seeder
             "feature" => true
         ]);
 
-        $dis = Category::factory()->create([
-            "name" => "Discount Items",
-            "slug" => "discount-items",
-            "feature" => true
-        ]);
-
         $new = Category::factory()->create([
             "name" => "New Items",
             "slug" => "new-items",
@@ -144,14 +138,6 @@ class DatabaseSeeder extends Seeder
             [
                 "menu_id" => $item4->id,
                 "category_id" => $bubble->id
-            ],
-            [
-                "menu_id" => $item3->id,
-                "category_id" => $dis->id
-            ],
-            [
-                "menu_id" => $item4->id,
-                "category_id" => $dis->id
             ],
             [
                 "menu_id" => $item5->id,
@@ -306,6 +292,36 @@ class DatabaseSeeder extends Seeder
                 "size_id" => 2,
                 "price" => 9000
             ],
+        ]);
+
+        DB::table('discounts')->insert([
+            [
+                'menu_id' => $item1->id,
+                'discount' => 10,
+                'discount_from' => "2022-01-01",
+                'discount_to' => "2024-01-01"
+            ],
+            [
+                'menu_id' => $item2->id,
+                'discount' => 9,
+                'discount_from' => "2022-01-01",
+                'discount_to' => "2024-01-01"
+            ],
+            [
+                'menu_id' => $item3->id,
+                'discount' => 15,
+                'discount_from' => "2022-01-01",
+                'discount_to' => "2024-01-01"
+            ],
+        ]);
+
+        DB::table('banners')->insert([
+            [
+                "title" => "Hot Sale",
+                "description" => $item1->name." and Other 2 items.",
+                "image_url" => $item1->cover_img,
+                "menu_id" => $item1->id
+            ]
         ]);
 
     }

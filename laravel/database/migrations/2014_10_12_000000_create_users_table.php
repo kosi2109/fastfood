@@ -17,10 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('phone')->unique();
+            $table->string('phone')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('address');
+            $table->string('google_id')->nullable();
+            $table->string('password')->nullable();
+            $table->string('address')->nullable();
             $table->string('profile_img')->nullable();
             $table->enum('role',[1, 2, 3])->default(1)->comment('1 = normal,2 = delivery,3 = admin');
             $table->rememberToken();

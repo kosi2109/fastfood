@@ -1,14 +1,10 @@
-import { AppState, defaultUser } from "../context/AppProvider";
-import Loading from "./Loading";
 import LoginRequire from "./client/LoginRequire";
+import { useSelector } from "react-redux";
 
 const Auth = ({ children }: any) => {
-  const {user , loading} = AppState();
+  const user = useSelector((state:any) => state.auth);
   
-  if(loading){
-    return <Loading/>
-  }
-  if (user === defaultUser ){
+  if (!user ){
     return <LoginRequire/>
   }
   

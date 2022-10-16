@@ -40,6 +40,40 @@ class MenuController extends Controller
     }
 
     /**
+     * Display a menu listing of the resource that has discount.
+     *
+     * @return ResourceCollection
+     */
+    public function discountMenus()
+    {
+        try {
+
+            return MenuResource::collection($this->repository->getDiscountMenus());
+
+        } catch (\Throwable $th) {
+
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Display a random menu listing of the resource.
+     *
+     * @return ResourceCollection
+     */
+    public function randomMenus($id)
+    {
+        try {
+
+            return MenuResource::collection($this->repository->getRandomMenus($id));
+
+        } catch (\Throwable $th) {
+
+            return new GeneralJsonException($th->getMessage(), 500);
+        }
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

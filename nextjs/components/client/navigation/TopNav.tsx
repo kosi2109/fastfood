@@ -3,12 +3,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { AiOutlineUnorderedList } from "react-icons/ai";
-import { BsBell } from "react-icons/bs";
 import { FaShoppingCart, FaUserAlt } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { ImHome } from "react-icons/im";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { AppState } from "../../../context/AppProvider";
+import { useSelector } from "react-redux";
+import logo from "../../../public/assets/logo.png"
 
 interface Props {
   title?: string;
@@ -22,14 +22,15 @@ const active =
 
 const TopNav: NextPage<Props> = ({ title, back = false }) => {
   const router = useRouter();
-  const { cartItemTotal } = AppState();
+  const {cartQuantity} = useSelector((state : any) => state.cart);
+
   const [animate, setAnimate] = useState("w-5 h-5");
   useEffect(() => {
     setAnimate("w-6 h-6");
     setTimeout(() => {
       setAnimate("w-5 h-5");
     }, 1000);
-  }, [cartItemTotal]);
+  }, [cartQuantity]);
 
   return (
     <>
@@ -47,28 +48,27 @@ const TopNav: NextPage<Props> = ({ title, back = false }) => {
         ) : (
           <div className="w-1/5"></div>
         )}
-        <div className="w-3/5 justify-center">
+        <div className="w-3/5 h-full flex overflow-hidden items-center justify-center">
           <Link href="/">
-            <h5 className="text-textGreen text-center text-2xl font-bold">
-              FastFood
-            </h5>
+            <img src={logo.src} className="h-24  m-0 p-0" alt="logo" />
           </Link>
         </div>
         <div className="w-1/5 flex justify-end">
-          <div className="cursor-pointer relative w-10 h-10 flex items-center justify-end">
-            {/* <BsBell size={20} />
-            <div className="w-2 h-2 rounded-full absolute top-1 right-0 bg-red"></div> */}
-          </div>
+          {/* <div className="cursor-pointer relative w-10 h-10 flex items-center justify-end">
+            <BsBell size={20} />
+            <div className="w-2 h-2 rounded-full absolute top-1 right-0 bg-red"></div>
+          </div> */}
         </div>
       </div>
 
       {/* for larger screen */}
-      <div className="hidden md:flex justify-between h-16 bg-white z-20 shadow fixed top-0 w-full items-center px-10">
-        <div className="flex w-1/5 justify-start">
+      <div className="hidden md:flex justify-between h-20 bg-white z-20 shadow fixed top-0 w-full items-center px-10">
+        <div className="flex w-1/5 h-full justify-start">
           <Link href="/">
-            <h5 className="text-textGreen text-2xl font-bold mr-10">
-              FastFood
-            </h5>
+            <div className="h-full flex items-center select-none cursor-pointer">
+              <img src={logo.src} className="h-full" alt="logo" />
+              <h3 className="text-textGreen text-xl font-semibold">Fastfood</h3>
+            </div>
           </Link>
         </div>
 
@@ -105,7 +105,7 @@ const TopNav: NextPage<Props> = ({ title, back = false }) => {
                       animate
                     }
                   >
-                    <h5 className="text-xs font-semibold">{cartItemTotal}</h5>
+                    <h5 className="text-xs font-semibold">{cartQuantity}</h5>
                   </div>
                 )}
               </div>
