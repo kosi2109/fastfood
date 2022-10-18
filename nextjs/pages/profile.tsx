@@ -13,7 +13,6 @@ import Head from "next/head";
 import MapPointer from "../components/MapPointer";
 import { useSelector, useDispatch } from 'react-redux'
 import {logout as authLogout} from "../store/slices/authSlice"
-import { USER } from "../types";
 
 
 const profile: NextPage = () => {

@@ -14,7 +14,9 @@ import AppLayout from "../../components/Layouts/AppLayout";
 import MenuLoading from "../../components/client/MenuLoading";
 import Search from "../../components/client/Search";
 import { CATEGORY, MENU } from "../../types/index";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import logo from "../public/assets/textlogo.png"
+
 
 interface Props {
   categories: CATEGORY[];
@@ -48,6 +50,12 @@ const menu: NextPage<Props> = ({ categories, featureCate, discountMenus }) => {
     <AppLayout>
       <Head>
         <title>Fastfood | Menus</title>
+        <meta name="description" content="Discover our menus" />
+        <meta property="og:title" content="Fastfood | Menus" />
+        <meta property="og:description" content="Discover our menus" />
+        <meta property="og:image" content={logo.src} />
+        <meta property="og:type" content="website" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/6 md:fixed md:top-20 md:h-screen md:border-r">
