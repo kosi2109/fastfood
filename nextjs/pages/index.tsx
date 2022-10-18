@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import { setCookie } from "cookies-next";
 import { useDispatch } from "react-redux";
 import {login as authLogin} from "../store/slices/authSlice"
-
+import logo from "../public/assets/textlogo.png"
 
 interface Props {
   categories: CATEGORY[];
@@ -53,6 +53,12 @@ const Home: NextPage<Props> = ({ categories, banners, discountMenus }) => {
     <AppLayout>
       <Head>
         <title>Fastfood</title>
+        <meta name="description" content="Fastfood delivery app by kosi" />
+        <meta property="og:title" content="Fastfood" />
+        <meta property="og:description" content="Fastfood delivery app by kosi" />
+        <meta property="og:image" content={logo.src} />
+        <meta property="og:type" content="website" />
+        <link rel="icon" href="/favicon.ico" />    
       </Head>
       <Search />
       <div className="w-full lg:mx-auto lg:w-2/3">

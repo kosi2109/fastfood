@@ -16,6 +16,7 @@ import PasswordInput from "../components/Form/PasswordInput";
 import FormButton from "../components/Form/FormButton";
 import {login as authLogin} from "../store/slices/authSlice"
 import { useDispatch } from 'react-redux'
+import logo from "../public/assets/textlogo.png"
 
 
 const Login: NextPage = () => {
@@ -62,6 +63,12 @@ const Login: NextPage = () => {
     <GuestLayout>
       <Head>
         <title>Fastfood | Login</title>
+        <meta name="description" content="Please Login to make order" />
+        <meta property="og:title" content="Fastfood | Login" />
+        <meta property="og:description" content="Please Login to make order" />
+        <meta property="og:image" content={logo.src} />
+        <meta property="og:type" content="website" />
+        <link rel="icon" href="/favicon.ico" />    
       </Head>
       
       <div className="w-full h-screen flex items-center px-3">

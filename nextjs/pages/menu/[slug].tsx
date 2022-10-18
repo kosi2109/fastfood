@@ -64,6 +64,12 @@ const Menu: NextPage<Props> = ({ menu }) => {
     <AppLayout back={true}>
       <Head>
         <title>Fastfood | {menu?.name}</title>
+        <meta name="description" content={menu?.description} />
+        <meta property="og:title" content={menu?.name} />
+        <meta property="og:description" content={menu?.description} />
+        <meta property="og:image" content={menu?.cover_img} />
+        <meta property="og:type" content="website" />
+        <link rel="icon" href="/favicon.ico" />  
       </Head>
       <motion.div exit={{ opacity: 0 }} className="pt-2 w-full">
         <div className="w-full md:flex">
@@ -155,7 +161,7 @@ export async function getStaticPaths() {
     paths: menus.data.data.map((menu: any) => ({
       params: { slug: menu.slug },
     })),
-    fallback: true,
+    fallback: false,
   };
 }
 

@@ -16,6 +16,7 @@ import Head from "next/head";
 import MapPointer from "../components/MapPointer";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "../store/slices/cartSlice";
+import logo from "../public/assets/textlogo.png"
 
 const order: NextPage = () => {
   const {items} = useSelector((state : any) => state.cart);
@@ -99,6 +100,12 @@ const order: NextPage = () => {
     <AppLayout back={true}>
       <Head>
         <title>Fastfood | Order</title>
+        <meta name="description" content="Comfirm your order" />
+        <meta property="og:title" content="Fastfood | Order" />
+        <meta property="og:description" content="Please Login to make order" />
+        <meta property="og:image" content={logo.src} />
+        <meta property="og:type" content="website" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       {showAnimation && (
