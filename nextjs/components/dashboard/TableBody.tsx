@@ -5,7 +5,7 @@ import { FiEdit } from "react-icons/fi";
 function TableBody({ colNames, data, onDataEmmit,checkBox = false, action = false }: any) {
   return (
     <tbody>
-      {data.map((d: any) => (
+      {data?.map((d: any) => (
         <tr key={d.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
           {checkBox && (
             <td className="p-4 w-4">
@@ -21,7 +21,7 @@ function TableBody({ colNames, data, onDataEmmit,checkBox = false, action = fals
               </div>
             </td>
           )}
-          {colNames.map((col: any, i : number) => (
+          {colNames?.map((col: any, i : number) => (
             <td key={`row-${d.id}-${i}`} className="py-4 px-6">{d[col.key]}</td>
           ))}
           {action && (

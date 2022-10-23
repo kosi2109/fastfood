@@ -7,7 +7,7 @@ function DashboardLayout({children} : any) {
         <div className='w-1/6 h-full'>
             <SideBar />
         </div>
-        <div className='w-5/6 h-full overflow-auto p-2'>
+        <div className='w-5/6 h-full overflow-auto p-3'>
             {children}
         </div>
     </div>

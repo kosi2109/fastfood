@@ -19,9 +19,9 @@ function TableHeader({ colNames, checkBox = false, action = false }: any) {
           </th>
         )}
 
-        {colNames.map((col : any,i : number) => (
+        {colNames?.map((col : any,i : number) => (
             <th scope="col" key={i} className="py-3 px-6">
-            {col.name}
+            {col?.name}
             </th>
         ))}
 

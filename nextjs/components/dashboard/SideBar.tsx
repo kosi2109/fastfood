@@ -6,7 +6,7 @@ const sidebars = [
     {
         name : "Dashboard",
         icon : <AiFillDashboard size={20} />,
-        url : "/"
+        url : "/dashboard"
     },
     {
         name : "Menu Management",
