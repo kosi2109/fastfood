@@ -7,6 +7,7 @@ const Input = ({
   type = "text",
   handleChange,
   error = null,
+  value = ''
 }: any) => {
   return (
     <div className="flex flex-col w-full mb-2">
@@ -14,6 +15,7 @@ const Input = ({
         {title}
       </label>
       <input
+        value={value}
         type={type}
         name={name}
         id={id}

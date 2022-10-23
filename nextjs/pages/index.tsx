@@ -78,7 +78,7 @@ const Home: NextPage<Props> = ({ categories, banners, discountMenus }) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const categories = await featureCategory();
   const discountMenus = await getDiscountMenus();
   const banners = await allBanners();
