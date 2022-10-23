@@ -3,7 +3,7 @@ import Overlay from "./Overlay";
 import { MdOutlineClose } from "react-icons/md";
 import { motion } from "framer-motion";
 
-function Modal({ title, children }: any) {
+function Modal({ title, children, onClose}: any) {
   return (
     <Overlay>
       <motion.div
@@ -14,7 +14,7 @@ function Modal({ title, children }: any) {
       >
         <div className="border-b-2 p-2 flex justify-between items-center">
           <h2 className="font-semibold text-xl">{title}</h2>
-          <button>
+          <button onClick={() => onClose(false)}>
             <MdOutlineClose size={25} />
           </button>
         </div>
