@@ -2,9 +2,9 @@ import React from "react";
 import TableBody from "./TableBody";
 import TableHeader from "./TableHeader";
 
-function Table({ data, paginate, onDataEmmit }: any) {
+function Table({ data, tableData, paginate, onDataEmmit,onDeleteEmmit, isLoading = false }: any) {
   return (
-    <div className="overflow-x-auto relative">
+    <div className="overflow-x-auto z-1">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <TableHeader
           colNames={data?.colNames}
@@ -13,10 +13,12 @@ function Table({ data, paginate, onDataEmmit }: any) {
         />
         <TableBody
           colNames={data?.colNames}
-          data={data?.data}
+          data={tableData}
           action={data?.action}
           checkBox={data?.checkBox}
           onDataEmmit={onDataEmmit}
+          onDeleteEmmit={onDeleteEmmit}
+          isLoading={isLoading}
         />
       </table>
 
