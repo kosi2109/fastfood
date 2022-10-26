@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\GeneralJsonException;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Repository : Menu
@@ -133,25 +134,27 @@ class MenuRepository extends BaseRepository
      */
     public function update($menu, $attributes)
     {
-        if (!$menu->update($attributes->except(['categories', 'prices']))) return new GeneralJsonException("Update Fail.", 400);
-
-        $menu->categories()->sync($attributes->categories);
-        
-        $menu->sizes()->detach();
-
-        $menu->sizes()->attach($attributes->prices);
-
-        $menu = $menu->fresh();
-        
-        // clear menus cache list
-        $this->cacheListClear($menu->categories,$menu->name);
-
-        // cache update menu (overwrite on key)
-        $menu = Cache::rememberForever(self::CACHE_KEY.$menu->slug, function() use($menu) {
-            return $menu; 
-        });
+        return DB::transaction(function() use ($menu, $attributes) {
+            if (!$menu->update($attributes->except(['categories', 'prices', 'sizes','discount']))) return new GeneralJsonException("Update Fail.", 400);
     
-        return $menu;
+            $menu->categories()->sync($attributes->categories);
+            
+            $menu->sizes()->detach();
+    
+            $menu->sizes()->attach($attributes->prices);
+    
+            $menu = $menu->fresh();
+            
+            // clear menus cache list
+            $this->cacheListClear($menu->categories,$menu->name);
+    
+            // cache update menu (overwrite on key)
+            $menu = Cache::rememberForever(self::CACHE_KEY.$menu->slug, function() use($menu) {
+                return $menu; 
+            });
+        
+            return $menu;
+        });
     }
 
 
