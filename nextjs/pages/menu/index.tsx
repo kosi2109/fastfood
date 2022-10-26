@@ -11,11 +11,12 @@ import Category from "../../components/client/Category";
 import ItemContainer from "../../components/client/Items/ItemContainer";
 import ItemGridContainer from "../../components/client/Items/ItemGridContainer";
 import AppLayout from "../../components/Layouts/AppLayout";
-import Loading from "../../components/Loading";
 import MenuLoading from "../../components/client/MenuLoading";
 import Search from "../../components/client/Search";
-import { AppState } from "../../context/AppProvider";
 import { CATEGORY, MENU } from "../../types/index";
+import { useSelector } from "react-redux";
+import logo from "../public/assets/textlogo.png"
+
 
 interface Props {
   categories: CATEGORY[];
@@ -24,9 +25,9 @@ interface Props {
 }
 
 const menu: NextPage<Props> = ({ categories, featureCate, discountMenus }) => {
-  const { selectedCategory, setSelectedCategory } = AppState();
   const [menus, setMenus] = useState<MENU[]>([]);
   const [loading, setLoading] = useState(false);
+  const { selectedCategory } = useSelector((state : any) => state.common)
 
   const getMenuByCategory = async (category: string) => {
     const menu = await allMenus(category);
@@ -49,6 +50,12 @@ const menu: NextPage<Props> = ({ categories, featureCate, discountMenus }) => {
     <AppLayout>
       <Head>
         <title>Fastfood | Menus</title>
+        <meta name="description" content="Discover our menus" />
+        <meta property="og:title" content="Fastfood | Menus" />
+        <meta property="og:description" content="Discover our menus" />
+        <meta property="og:image" content={logo.src} />
+        <meta property="og:type" content="website" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/6 md:fixed md:top-20 md:h-screen md:border-r">
@@ -60,7 +67,6 @@ const menu: NextPage<Props> = ({ categories, featureCate, discountMenus }) => {
           <Category
             categories={categories}
             selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
           />
         </div>
         <div className="hidden md:block w-1/6"></div>

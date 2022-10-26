@@ -4,9 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { login } from "../api";
-import { AppState } from "../context/AppProvider";
 import { LOGIN } from "../types";
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import GuestLayout from "../components/Layouts/GuestLayout";
 import image from "../public/assets/login.gif";
@@ -16,12 +14,16 @@ import LoginOrRegister from "../components/Form/LoginOrRegister";
 import Input from "../components/Form/Input";
 import PasswordInput from "../components/Form/PasswordInput";
 import FormButton from "../components/Form/FormButton";
+import {login as authLogin} from "../store/slices/authSlice"
+import { useDispatch } from 'react-redux'
+import logo from "../public/assets/textlogo.png"
+
 
 const Login: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<LOGIN>({ email: "", password: "" });
   const route = useRouter();
-  const { setUser } = AppState();
+  const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
@@ -35,8 +37,9 @@ const Login: NextPage = () => {
     if (!loading) {
       setLoading(true);
       login(form)
-        .then((response: any) => {          
-          setUser(response.data);
+        .then((response: any) => {   
+          dispatch(authLogin(response.data));
+
           setCookie("jwt", response.data.token, {
             maxAge: 60 * 60 * 24 * 30, //1month
           });
@@ -60,6 +63,12 @@ const Login: NextPage = () => {
     <GuestLayout>
       <Head>
         <title>Fastfood | Login</title>
+        <meta name="description" content="Please Login to make order" />
+        <meta property="og:title" content="Fastfood | Login" />
+        <meta property="og:description" content="Please Login to make order" />
+        <meta property="og:image" content={logo.src} />
+        <meta property="og:type" content="website" />
+        <link rel="icon" href="/favicon.ico" />    
       </Head>
       
       <div className="w-full h-screen flex items-center px-3">

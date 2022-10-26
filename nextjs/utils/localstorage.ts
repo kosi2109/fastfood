@@ -4,10 +4,11 @@ export const setLocalStorage = (key : string ,data : any)=>{
     }
 }
 
-export const getLocalStorage = (key : string)=>{
+export const getLocalStorage : any = (key : string)=>{
     if (typeof window !== "undefined"){
         const data = window.localStorage.getItem(key);
+        
         if (!data) return null;
-        return JSON.parse(data || "");
+        return JSON.parse(data);
     }
 }

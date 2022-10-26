@@ -4,9 +4,7 @@ import OrderItem from "../components/client/Order/OrderItem";
 import AppLayout from "../components/Layouts/AppLayout";
 import ProfileImage from "../components/client/Profile/ProfileImage";
 import Auth from "../components/Auth";
-import { AppState } from "../context/AppProvider";
 import GoogleMap from "google-map-react";
-import { HiLocationMarker } from "react-icons/hi";
 import { caculateDeliPricePerDistance, calcCrow } from "../utils/mapCaculation";
 import { storeOrder } from "../api";
 import { CREATE_ORDER, MENU, SIZE } from "../types";
@@ -16,14 +14,18 @@ import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import Head from "next/head";
 import MapPointer from "../components/MapPointer";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart } from "../store/slices/cartSlice";
+import logo from "../public/assets/textlogo.png"
 
 const order: NextPage = () => {
-  const { cartItems, clearCart } = AppState();
+  const {items} = useSelector((state : any) => state.cart);
+  const {auth : user} = useSelector((state : any) => state.auth);
   const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
   const [showAnimation, setShowAnimation] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mapLoading, setmapLoading] = useState(true);
-
+  const dispatch = useDispatch();
   const google_key: any = process.env.GOOGLE_MAP_KEY;
 
   const shopCoordinate = {
@@ -32,7 +34,6 @@ const order: NextPage = () => {
   };
   const [deliFee, setDelifee] = useState(0);
 
-  const { user } = AppState();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((data) => {
@@ -59,7 +60,7 @@ const order: NextPage = () => {
       grand_total: deliFee + subTotal,
       deli_fee: deliFee,
       address: `${coordinate.lat},${coordinate.lng}`,
-      items: cartItems.map((item) => {
+      items: items.map((item : any) => {
         return {
           menu_id: item.item.id,
           size_id: item.size.id,
@@ -70,7 +71,7 @@ const order: NextPage = () => {
 
     storeOrder(data)
       .then(() => {
-        clearCart();
+        dispatch(clearCart());
         setLoading(false);
         setShowAnimation(true);
       })
@@ -99,6 +100,12 @@ const order: NextPage = () => {
     <AppLayout back={true}>
       <Head>
         <title>Fastfood | Order</title>
+        <meta name="description" content="Comfirm your order" />
+        <meta property="og:title" content="Fastfood | Order" />
+        <meta property="og:description" content="Please Login to make order" />
+        <meta property="og:image" content={logo.src} />
+        <meta property="og:type" content="website" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       {showAnimation && (
@@ -111,7 +118,7 @@ const order: NextPage = () => {
       )}
 
       <Auth>
-        {cartItems.length > 0 ? (
+        {items.length > 0 ? (
           <div className="w-full py-2 mx-auto md:w-2/3 lg:w-1/2 2xl:w-1/3 flex flex-col">
             <div className="mb-3 w-full h-40 md:h-60 rounded-md bg-textGray z-2">
               {!mapLoading && (
@@ -157,11 +164,11 @@ const order: NextPage = () => {
             <h2 className="font-bold text-start text-lg mb-3">Order Detail</h2>
             <div className="p-2 border-2 bg-bgGray rounded-md">
               <div className="border-b py-3">
-                {cartItems.map((item, i) => {
+                {items.map((item : any, i : number) => {
                   const total =
                     item.quantity *
                     getPrice(
-                      item.item.sizes.filter((s) => s.id == item.size.id)[0],
+                      item.item.sizes.filter((s : any) => s.id == item.size.id)[0],
                       item.item
                     );
                   subTotal += total;

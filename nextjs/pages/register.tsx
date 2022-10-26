@@ -16,6 +16,8 @@ import FormButton from "../components/Form/FormButton";
 import MapPointer from "../components/MapPointer";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { BsUpload } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { clearFormError, getErrors } from "../store/slices/formErrorSlice";
 
 const initialForm = {
   name: "",
@@ -34,10 +36,11 @@ const Register: NextPage = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const [form, setForm] = useState<typeof initialForm>(initialForm);
   const [coordinate, setCoordinate] = useState({ lat: 20.1544, lng: 94.9455 });
-  const [errors, setErrors] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const imageUploadRef = useRef<any>(null);
   const google_key : any = process.env.GOOGLE_MAP_KEY;
+  const dispatch = useDispatch();
+  const errors = useSelector((state : any) => state.formError);
 
 
   useEffect(() => {
@@ -46,7 +49,8 @@ const Register: NextPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    dispatch(clearFormError());
+    
     if (!loading) {
       setLoading(true);
       register(form)
@@ -57,7 +61,7 @@ const Register: NextPage = () => {
         })
         .catch((res) => {                    
           if (res.response.status !== 500) {
-            setErrors(res.response.data);
+            dispatch(getErrors(res.response.data));
           }
           setLoading(false);                    
         });
