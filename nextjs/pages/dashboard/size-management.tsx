@@ -6,24 +6,14 @@ import { BiSearch } from "react-icons/bi";
 import { menuApi } from "../../store/rtk/menus";
 import TableDialog from "../../components/Dialog/TableDialog";
 import { categoryApi } from "../../store/rtk/category";
+import { sizeApi } from "../../store/rtk/sizes";
 import ConfirmDialog from "../../components/Dialog/ConfirmDialog";
 
-const menuTable = {
+const sizeTable = {
   colNames: [
     {
-      name: "Image",
-      key: "cover_img",
-      image: true,
-    },
-    {
-      name: "Name",
+      name: "Size",
       key: "name",
-    },
-    {
-      name: "Sizes",
-      key: "sizes",
-      nusted: true,
-      nustedKey: "name",
     },
   ],
   data: [],
@@ -36,57 +26,26 @@ const initialDialogData: { fields: any[]; initial: any; title: string } = {
       name: "name",
       category: "input",
       type: "text",
-      title: "Menu Name",
-    },
-    {
-      name: "slug",
-      category: "input",
-      type: "text",
-      title: "Slug",
-    },
-    {
-      name: "description",
-      category: "input",
-      type: "text",
-      title: "Description",
-    },
-    {
-      name: "cover_img",
-      category: "input",
-      type: "text",
-      title: "Image",
-    },
-    {
-      name: "categories",
-      category: "select",
-      title: "Category",
-      keyField: "id",
-      nameField: "name",
-      select: [],
+      title: "Size",
     },
   ],
   initial: {
     name: "",
-    slug: "",
-    description: "",
-    cover_img: "",
-    categories: [],
   },
   title: "Menus",
 };
 
-function MenuManagement() {
-  const { data: menus, isLoading } = menuApi.useGetAllQuery({});
-  const { data: categories } = categoryApi.useGetAllQuery({});
-  const [addMenu, {isLoading : createLoading , error}] = menuApi.useAddMenuMutation();
-  const [editMenu, {isLoading : editLoading}] = menuApi.useEditMenuMutation();
-  const [deleteMenu, {isLoading : deleteLoading}] = menuApi.useDeleteMenuMutation();
+function SizeManagement() {
+  const { data: sizes, isLoading } = sizeApi.useGetAllQuery({});
+  const [addSize, { isLoading: createLoading }] = sizeApi.useAddSizeMutation();
+  const [editSize, { isLoading: editLoading }] = sizeApi.useEditSizeMutation();
+  const [deleteSize, { isLoading: deleteLoading }] =
+    sizeApi.useDeleteSizeMutation();
   const [dialogData, setDialogData] = useState(initialDialogData);
-  const [oldData, setOldData] = useState(null);
+  const [oldData, setOldData] = useState<any>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState<any>(null);
-  console.log(error);
-  
+
   useEffect(() => {
     if (oldData) {
       setOpenDialog(true);
@@ -95,40 +54,35 @@ function MenuManagement() {
     }
   }, [oldData]);
 
-  useEffect(() => {
-    let newField = dialogData.fields;
-    newField[4].select = categories?.data;
-
-    setDialogData({
-      ...dialogData,
-      fields: newField,
-    });
-  }, [categories]);
-
-  const onAddMenu = useCallback((data : any)=> {
-    addMenu(data)
-  },[addMenu])
-
-  const onEditMenu = useCallback((data : any)=> {
-    editMenu(data)
-  },[editMenu])
-
-  const onDeleteMenu = useCallback(
-    (id: any) => {
-      deleteMenu(id);
+  const onAddSize = useCallback(
+    (data: any) => {
+      addSize(data);
     },
-    [deleteMenu]
+    [addSize]
+  );
+
+  const onEditSize = useCallback(
+    (data: any) => {
+      editSize(data);
+    },
+    [editSize]
+  );
+
+  const onDeleteSize = useCallback(
+    (id: any) => {
+      deleteSize(id);
+    },
+    [deleteSize]
   );
 
   return (
     <DashboardLayout>
-      <button onClick={onAddMenu}>Click</button>
       {openDialog && (
         <TableDialog
           onClose={oldData ? setOldData : setOpenDialog}
           dialogData={dialogData}
           oldData={oldData}
-          formAction={oldData ? onEditMenu : onAddMenu}
+          formAction={oldData ? onEditSize : onAddSize}
           isLoading={createLoading || editLoading}
         />
       )}
@@ -137,7 +91,7 @@ function MenuManagement() {
           title="Selete Confirm"
           id={openDeleteDialog?.id}
           onClose={setOpenDeleteDialog}
-          formAction={onDeleteMenu}
+          formAction={onDeleteSize}
           isLoading={deleteLoading}
         />
       )}
@@ -157,9 +111,10 @@ function MenuManagement() {
           </div>
         </div>
         <Table
-          data={menuTable}
-          tableData={menus?.data}
+          data={sizeTable}
+          tableData={sizes?.data}
           onDataEmmit={setOldData}
+          onDeleteEmmit={setOpenDeleteDialog}
           isLoading={isLoading}
         />
       </ContentWrapper>
@@ -167,4 +122,4 @@ function MenuManagement() {
   );
 }
 
-export default MenuManagement;
+export default SizeManagement;

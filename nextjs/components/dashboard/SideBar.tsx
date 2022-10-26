@@ -1,5 +1,6 @@
 import React from 'react'
 import { AiFillDashboard, AiOutlineMenu } from 'react-icons/ai'
+import { CgSize } from 'react-icons/cg'
 import SideBarItem from './SideBarItem'
 
 const sidebars = [
@@ -12,6 +13,11 @@ const sidebars = [
         name : "Menu Management",
         icon : <AiOutlineMenu size={20} />,
         url : "/dashboard/menu-management"
+    },
+    {
+        name : "Size Management",
+        icon : <CgSize size={20} />,
+        url : "/dashboard/size-management"
     },
     {
         name : "Order Management",
