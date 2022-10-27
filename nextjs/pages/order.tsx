@@ -20,7 +20,7 @@ import logo from "../public/assets/textlogo.png"
 
 const order: NextPage = () => {
   const {items} = useSelector((state : any) => state.cart);
-  const {auth : user} = useSelector((state : any) => state.auth);
+  const auth = useSelector((state : any) => state.auth);
   const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
   const [showAnimation, setShowAnimation] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ const order: NextPage = () => {
   const makeOrder = async () => {
     setLoading(true);
     const data: CREATE_ORDER = {
-      user_id: user.id,
+      user_id: auth?.id,
       grand_total: deliFee + subTotal,
       deli_fee: deliFee,
       address: `${coordinate.lat},${coordinate.lng}`,
@@ -147,16 +147,16 @@ const order: NextPage = () => {
             </div>
             <div className="mb-3 w-full flex px-5 py-4 rounded-md bg-bgGray border-2 items-center justify-start py-3">
               <div className="w-1/6 flex items-center justify-start">
-                <ProfileImage image_url={user.profile_img} />
+                <ProfileImage image_url={auth?.profile_img} />
               </div>
               <div className="w-5/6 pl-2 flex flex-col">
                 <h4 className="font-bold text-textBlack text-lg">
-                  {user.name.split(" ")[0]}
+                  {auth?.name.split(" ")[0]}
                 </h4>
                 <h4 className="font-semibold">
-                  {user.name
+                  {auth?.name
                     .split(" ")
-                    .splice(1, user.name.length - 1)
+                    .splice(1, auth?.name.length - 1)
                     .join(" ")}
                 </h4>
               </div>

@@ -29,7 +29,7 @@ const Login: NextPage = () => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
-    });
+    });    
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -86,6 +86,7 @@ const Login: NextPage = () => {
               id="email"
               name="email"
               type="email"
+              value={form.email}
               handleChange={handleChange}
               showError={false}
             />

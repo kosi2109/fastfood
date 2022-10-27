@@ -124,6 +124,7 @@ const Register: NextPage = () => {
               name="name"
               handleChange={handleChange}
               errors={errors?.name ? errors.name[0] : null }
+              value={form.name}
             />
 
             <Input
@@ -133,6 +134,7 @@ const Register: NextPage = () => {
               type="email"
               handleChange={handleChange}
               error={errors?.email ? errors.email[0] : null }
+              value={form.email}
             />
 
             <Input
@@ -142,6 +144,7 @@ const Register: NextPage = () => {
               type="phone"
               handleChange={handleChange}
               error={errors?.phone ? errors.phone[0] : null }
+              value={form.phone}
             />
 
             <PasswordInput
