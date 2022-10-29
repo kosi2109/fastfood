@@ -18,12 +18,11 @@ Restraunt App build with Laravel and NextJs .
 - Can order items
 - Can watch order histories
 
-### For Admin
-I'll implement with laravel react with initia or something .
-
-
 ## Langauges And Technologies
 - Laravel (Repository Pattern)
 - NextJs
 - Tailwind
 
+
+Video Link
+https://drive.google.com/file/d/1MMHHneHhP6l9L9V60HjSxe4wzRS2N_ip/view?usp=sharing
