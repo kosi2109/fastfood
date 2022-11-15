@@ -3,6 +3,9 @@
 
 Restraunt App build with Laravel and NextJs .
 
+![cover](https://cdn.sanity.io/images/4c770ksx/production/646e6dd2e96055e9fe9804948788262d06a5333e-1351x635.png?w=1280)
+
+
 ## Main Feature
 - Delivery Fee calculate based on restraunt and user location
 
